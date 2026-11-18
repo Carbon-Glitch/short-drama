@@ -1,0 +1,31 @@
+{
+  "repository": "https://github.com/kajisho5/ffmpeg-skill",
+  "commit": "f1c97cbffeac71b8fdfca2f790ceb00db3bcce65",
+  "package_version": "3.10.1",
+  "imported_on": "2026-11-16",
+  "scope": "Six optional post-production tools and their unchanged shared runtime; no skill entrypoint, installer, MCP or platform export presets.",
+  "files": {
+    "_common/__init__.py": "7b085c5d4499981d29b3958f5e436b2eae5e2ca7fbbf9bb20b95f063c6886a5e",
+    "_common/alpha.py": "d015dccb4dfb9cd8043f36d1f3c1a49024af464e531ad840ad64b6b8f9956bb6",
+    "_common/asr.py": "f00e5278414657f4d56016735576e29886cf0800f0f6c2ae9ad2c202c343ca7c",
+    "_common/color.py": "3232a43bbb339d55e1a44f16ac65c9ad4c52f91aec0c1cd7028d0c04521fcf5b",
+    "_common/decision.py": "01e4907443547da71a96bb124b07d22e968a970d7aa2538cdeabfee11d4bae0e",
+    "_common/drawtext.py": "185ee57e6534bf291b298382b732559fa3886ca18529a1417e46267b804be580",
+    "_common/emit.py": "617de44b33f5736db4d395d2ddc1bcc29285d6dbd88f9df8b272c191264565a6",
+    "_common/emoji.py": "74dcabc0a344bdb2aad63ee34c6aebb9d95059b035f9002dcc41389f3bb68fb3",
+    "_common/fonts.py": "051845f4849614a91f862c6eab71093e232b779bc8bb841c0e43efdc9963e737",
+    "_common/probe.py": "73d549b8ddfe4e6fa6a796b96f73a86a6e3039e2ffe724fc94ba1bea2e9cf9b4",
+    "_common/runner.py": "9657139937ac7d780351a58d94cbd97a4996d4234ad55949c660ef11a0fa3e56",
+    "_common/text.py": "613775394199b2a8b3a5fa2d180863e543e7e8edeeb2f6b1441dd67b58a942ea",
+    "_common/timeline.py": "4ee5049dc98fa94930e2ba3ed5c5f21722515569832db672cf3bb34c9ef89978",
+    "_common/wrap.py": "c556966ecb1b6d5cfa5a02b5fcf720e5926a713729373cb9cfee3a0750233c6c",
+    "_platforms.py": "f517dfbe9f098b1c521a51ad9e2159436d63f32f1f77366eb098f6019522b080",
+    "audio.py": "f4799069321bbbc00a88d8e03e946bcee04d8b0f97ea2fd2a1920bced9237330",
+    "color.py": "895a83205e5116104ec3974364f0b5cdd580bac31f2c1e7992e27da4150163bc",
+    "fit.py": "3180663e48bcb6b908bdfb97bc117b639dcbc93955265ec6e504db7618d2cb50",
+    "LICENSE": "3d2b0f1a8bf684d1298643c4adb5ea7b0de08f50b3a891b40e11e7b0cf428157",
+    "look.py": "a8aabaa14189c16a09bb51011012ef0c8ced07de2e65e119dfb97eaccf598c25",
+    "loudness.py": "aef2a3a3e13b4ed85f2a5c94dd6959d0e8cf2224e14e36aa39a3899732e27b13",
+    "probe.py": "c7cd42c3815304fc5fdb5a2fea0fc707c50232f926103bfe2a19292eef3855dd"
+  }
+}

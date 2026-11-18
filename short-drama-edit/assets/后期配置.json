@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "subtitle_timing": "exact",
+  "subtitles": {
+    "preset": "cinema",
+    "font": "Noto Sans CJK SC",
+    "size": 0.036,
+    "bottom": 0.17,
+    "color": "#F4F1EA",
+    "accent": "#E4C78E",
+    "fade_ms": 0,
+    "cues": {}
+  }
+}
