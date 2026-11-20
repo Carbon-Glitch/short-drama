@@ -12,13 +12,13 @@
 
 | ID | Class | Knowledge |
 |---|---|---|
-| REV-01 | structural_invariant | Run mechanical checks before spending creative review attention. |
+| REV-01 | structural_invariant | Evaluate the viewing experience and use relevant mechanical checks to support it. |
 | REV-02 | structural_invariant | A finding names a visible file and heading/shot/prompt ID, and includes evidence, impact, required fix, owner, severity and status. |
 | REV-03 | reviewed_invariant | Semantic invention cites the source fact and conflicting downstream fact. |
-| REV-04 | craft_default | Prefer a reviewer who did not author the current targets; disclose self-review, and keep reviewer findings separate from owner edits. |
+| REV-04 | craft_default | Use in-task self-review by default and state the actual observation basis; separate independent review follows an explicit request. |
 | REV-05 | craft_default | Diagnose repeated structure or generic language with location and impact; do not label output merely "AI-ish". |
 | REV-06 | taste_option | Alternatives remain notes unless they violate an accepted creator constraint. |
-| REV-07 | structural_invariant | An end-to-end drafting request cannot impersonate creator acceptance; preview chains remain provisional and undeliverable. |
+| REV-07 | structural_invariant | Progress through an authorized end-to-end task; distinguish the Agent's creative decisions, actual user choices, and observed production results. |
 | REV-08 | craft_default | When authorized text notes report production defects, trace text/subtitle residue, music-boundary violations, wardrobe drift, axis breaks, or lip-sync mismatch to the exact prompt/spec text and keep unobserved outcomes unknown. |
 | REV-09 | reviewed_invariant | After prompt revision or repackaging, recheck source coverage and every applicable accepted directive; correct asset bindings alone do not prove compliance. |
 | REV-10 | reviewed_invariant | A project-calibration finding distinguishes input-reference from generated-result observation, binds the exact project, the prompt/spec records it observed, stable reference slots, production configuration, method and limits, and—when its disposition calls for a change (see REV-11)—proposes the smallest owner-routed one with a preserve set; it does not generalize across projects or infer quality from task state. |

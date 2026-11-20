@@ -462,6 +462,7 @@ def initialize_project(
     )
     project["format"]["aspect_ratio"] = aspect_ratio
     project["format"]["prompt_language"] = prompt_language
+    project['postproduction'] = {'backend': 'openfilm', 'authority': 'film.html', 'report': '剪辑单.md'}
     if episode_count is not None:
         project["format"]["episode_count"] = episode_count
     if target_seconds_per_episode is not None:

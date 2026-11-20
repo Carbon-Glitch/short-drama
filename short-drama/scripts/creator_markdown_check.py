@@ -508,8 +508,10 @@ def _check_project_file(
 
 
 def _han_key(value: str) -> str:
-    """Only the Han characters, so quoting and language tags do not decide identity."""
-    return "".join(re.findall(r"[\u3400-\u9fff]+", value))
+    """Dialogue identity across Chinese, English and mixed-language lines."""
+    import unicodedata
+    value = re.sub(r'^\s*\[(?:English|Chinese|Mandarin|Japanese|Korean|Spanish|French|German|中文|英语|英文|日语|韩语)\]\s*', '', value, flags=re.I)
+    return ''.join(c for c in unicodedata.normalize('NFKC', value).casefold() if c.isalnum())
 
 
 class SpokenLine(NamedTuple):

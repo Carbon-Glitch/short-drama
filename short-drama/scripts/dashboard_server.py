@@ -1961,11 +1961,33 @@ def main(argv: list[str] | None = None) -> int:
         type=Path,
         help=f"where to record the running dashboard (default: {SESSION_RELATIVE})",
     )
+    parser.add_argument('--episode', help='Open a particular episode in the unified film workspace')
+    parser.add_argument('--legacy', action='store_true', help='Use the previous document dashboard for an unmigrated project')
     args = parser.parse_args(argv)
     if args.status and args.stop:
         parser.error("--status and --stop cannot be combined")
 
     workspace = args.workspace.expanduser().resolve()
+    if not (args.legacy or args.status or args.stop):
+        manifest_path = workspace / 'short-drama.json'
+        manifest = json.loads(manifest_path.read_text(encoding='utf-8')) if manifest_path.exists() else {}
+        if args.episode or (workspace / 'film.html').exists() or manifest.get('postproduction', {}).get('backend') == 'openfilm':
+            episode = workspace / '剧集' / args.episode if args.episode else workspace
+            if not args.episode and (workspace / '剧集').exists():
+                episodes = sorted(p for p in (workspace / '剧集').iterdir() if p.is_dir())
+                if len(episodes) == 1: episode = episodes[0]
+                elif len(episodes) > 1:
+                    print(json.dumps({'episodes': [p.name for p in episodes], 'next': '指定 --episode 打开本次处理的剧集'}, ensure_ascii=False)); return 0
+                else:
+                    print(json.dumps({'episodes': [], 'next': '先创建本次要写的剧集目录，再用 --episode 打开；项目级开发沿用当前文件'}, ensure_ascii=False)); return 0
+            bridge_dir = Path(__file__).resolve().parents[2] / 'short-drama-edit/scripts'
+            sys.path.insert(0, str(bridge_dir))
+            import openfilm_bridge
+            if not (episode / 'film.html').exists():
+                if (episode / '剪辑单.md').exists():
+                    raise ValueError('旧剪辑单需要先迁移，或使用 --legacy 打开原创作台')
+                openfilm_bridge.run('init', episode)
+            print(json.dumps(openfilm_bridge.run('open', episode), ensure_ascii=False)); return 0
     session_path = session_file_for(workspace, args.session_file)
     if not (args.status or args.stop) and not workspace.is_dir():
         # Creating a mistyped --workspace and serving it as an empty dashboard

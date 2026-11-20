@@ -9,24 +9,22 @@
 
 ## Governing know-how
 
-- `REV-01` — Run mechanical checks before spending attention on taste.
+- `REV-01` — Start from the audience experience and use the relevant integrity checks alongside the creative review.
 - `REV-02` — Every finding names a bounded target, evidence, impact, required outcome, owner and severity.
 - `REV-03` — A semantic-invention finding pairs the authoritative fact with the conflicting downstream fact.
-- `REV-04` — Prefer a reviewer who did not author the version; disclose self-review and keep owner editing separate.
+- `REV-04` — Use in-task self-review by default; identify it honestly. Arrange separate independent review when the user requests it.
 - `REV-05` — Diagnose repeated/generic mechanisms at exact locations rather than applying an “AI-ish” label.
 - `REV-06` — Alternative preferences remain notes unless the current choice violates an accepted constraint.
-- `REV-07` — An end-to-end drafting request does not imply creator acceptance.
+- `REV-07` — An end-to-end task authorizes responsible creative decisions; distinguish actual user choices from the Agent's design choices.
 
 ## Review scope
 
-Start from the current creator-visible files and the constraints the creator has explicitly chosen. Prefer an
-uninvolved reviewer or isolated context when available; otherwise perform an honest self-check and say so in the
-review Markdown. A reviewer label is disclosure, not authenticated identity.
+Start from the current creator-visible files and the constraints the creator has explicitly chosen. Use a focused in-task review, identifying what was actually read, seen or heard. Preserve the user's requested scope.
 
 If a target changes during review, reread that target before recording the verdict. Do not recursively invalidate
 unrelated findings.
 
-## Mechanical before taste
+## Creative outcomes and mechanical support
 
 Mechanical examples:
 

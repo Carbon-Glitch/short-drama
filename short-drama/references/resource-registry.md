@@ -33,7 +33,7 @@ short-drama引用为自包含的方法转译，不依赖另一skill的安装或�
 
 | 方法来源 | 按需技巧卡 | 吸收边界 |
 |---|---|---|
-| Judith Weston《Directing Actors》；Michael Rabiger《Directing: Film Techniques and Aesthetics》；《Actions: The Actors’ Thesaurus》 | [表演导演](../../short-drama-video-prompts/references/performance-direction.md) | 行动动词、现场目标、听者、adjustment；不新增人物事实，不做情绪强度排队 |
+| Judith Weston《Directing Actors》；Michael Rabiger《Directing: Film Techniques and Aesthetics》；《Actions: The Actors’ Thesaurus》 | [表演导演](../../short-drama-video-prompts/references/performance-direction.md) | 行动动词、现场目标、听者、adjustment；沿用人物内核，主动发展具体行为与可读细节 |
 | Bruce Block《The Visual Story》；Vincent LoBrutto《The Filmmaker’s Guide to Production Design》；Deborah Nadoolman Landis 服装设计资料 | [视觉结构与美术叙事](visual-structure-and-art-direction.md) | 空间、服装、陈设、道具和色彩关系；不把颜色含义或美术风格当跨项目公式 |
 | Michel Chion《Audio-Vision》；David Sonnenschein《Sound Design》；John Purcell《Dialogue Editing for Motion Pictures》；Fred Karlin / Rayburn Wright《On the Track》 | [叙事声音、对白后期与音乐](../../short-drama-edit/references/sound-narrative-and-music.md) | 声源/听者/时间/质感、音乐 spotting、对白和终混；不强制声轨、曲风或插件 |
 | Walter Murch《In the Blink of an Eye》；Ken Dancyger《The Technique of Film and Video Editing》；《The Cutting Edge》 | [剪辑决策库](../../short-drama-edit/references/editing-decision-library.md) | 候选剪法、单变量比较和代价；不把某种剪法当高级标志 |

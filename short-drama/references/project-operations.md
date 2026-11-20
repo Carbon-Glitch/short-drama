@@ -18,7 +18,9 @@ python3 {技能目录}/scripts/project_tool.py init ./my-drama --title "示例�
 节奏档案写入 `creator_authority.rhythm_profile`，只在创作者接受后供下游算术核对。缺失或未接受时不核对；
 不要把套件默认数值当成跨项目门槛。
 
-## Dashboard
+## 创作台与旧 Dashboard
+
+新项目默认打开 OpenFilm 短剧创作台；多集时传 `--episode EP001` 选本次处理的集。已有 film.html 的集也可直接用剪辑技能的 `edit_tool.py open`。原文档台以 `--legacy` 显式打开，生产仍走现有 helper。
 
 ```bash
 python3 {技能目录}/scripts/dashboard_server.py --workspace <workspace> --port 0 --detach --open

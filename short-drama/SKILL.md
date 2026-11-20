@@ -1,10 +1,21 @@
 ---
 name: short-drama
-description: 基于文件系统初始化和继续短剧或漫剧项目，提供 creator-first 五文档路由、本地 Dashboard、制作形态与 Look Development 决策。用户提出“创建/继续短剧项目”“看进度/下一步”“做 Look Development”“打开 dashboard/短剧创作台”“导出制作资料”，或任务跨多个创作阶段时使用；明确的写作、资产、提示词、分镜、剪辑或审查请求由对应子 skill 直接处理。
+description: 以观众爱看、愿意停留统筹短剧全流程，初始化或继续项目，默认接续美术、分镜、生成与 OpenFilm 后期；支持创作台、视觉开发、进度与交付。
 license: MIT
 ---
 
 # 短剧创作路由
+
+## 创作目标与默认阅读
+
+以“观众爱看、愿意停留”为第一性原理。先读[共同创作方式](references/viewer-first.md)和[影视工业核心](references/film-craft-core.md)，以及本阶段核心知识：
+
+- [创作流程](references/creator-workflow.md)
+- [主动美术与视觉结构](references/visual-structure-and-art-direction.md)
+
+- [成像风格与感官质感](references/image-look-and-finishing.md)
+
+以上默认读取；同一轮已读且未变化的内容直接复用。按场面选择手法，接口和专门故障资料用到再查。
 
 本技能负责项目初始化、跨阶段路由、制作形态与 Dashboard。各阶段正文由对应技能完成。
 
@@ -24,22 +35,22 @@ license: MIT
 | 已有多集完整剧本/散稿识别分集 | `$short-drama-develop` 按实际边界建立临时索引 |
 | 分析长篇原著 | `$short-drama-novel-analyze`，仅在用户需要时 |
 | 写或改单集剧本、改预期差节奏 | `$short-drama-write` → `剧本.md` |
-| 拆人物、造型、地点、道具 | `$short-drama-assets` → `视觉设定.md` |
+| 主动设计人物妆造、空间陈设、道具与环境生命 | `$short-drama-assets` → `视觉设定.md` |
 | 写资产图片提示词 | `$short-drama-image-prompts` → `图片提示词.md` |
 | 做镜头和冻结关键帧 | `$short-drama-storyboard` → `分镜.md` |
 | 写视频/时间线音乐提示词 | `$short-drama-video-prompts` → `视频提示词.md` |
 | 实际生成媒体 | `$short-drama-produce`，先预览，再显式确认，最后运行 |
-| 把已生产的素材剪成成片 | `$short-drama-edit` → `剪辑单.md` 与 `制作成果/成片/` |
+| 把已生产的素材剪成成片 | `$short-drama-edit` → `film.html`、VTT/镜头页与 `制作成果/成片/` |
 | 审稿或校验 | `$short-drama-review`，仅在用户点名时 |
 | 初始化、Dashboard、归档点名文档 | 本技能 |
 
 `项目开发/` 中的长材料分析与分集索引是可选分析工作区，不参与单集布局判定；写任何一集仍只维护
 该集的五份 creator-first Markdown。
 
-现成剧本可直接拆资产；已有视觉事实可直接写图片提示词或分镜；已有分镜可直接写视频提示词。
+现成剧本默认进入主动美术与资产设计：沿用故事内核，补足人物妆造、空间陈设、光色、生活趣味与环境声音。已有成熟设计直接复用，缺口在所属文档补齐后继续图片、分镜与视频。
 不要为补齐名义流水线伪造上游。
 
-五份创作文档记录剧本、视觉与提示词；剪辑单在素材生产后记录取舍和后期处理。
+五份创作文档记录剧本、视觉与提示词；新项目的后期主稿是 OpenFilm 的 `film.html` 与引用文件，剪辑单自动生成。打开创作台使用同一 Studio 的前期面板、素材与时间线；原 Dashboard 仅为未迁移项目保留。
 修改故事、镜头职责或上游时长声明时，回到负责该内容的文档。
 
 ## 执行请求
@@ -73,11 +84,10 @@ license: MIT
 
 ## 项目级创作决定
 
-制作形态、视觉方向、播放面和集长目标确实约束多个阶段时，展示选择及影响后由用户决定；Look Development
-仍是可选分支。项目档案、节奏档案和接受状态按[项目操作、配置与交付](references/project-operations.md)
+沿用用户已定的制作形态、视觉方向、播放面和集长；未定的普通视觉选择由 Agent 主动设计。每个新场景默认做轻量视觉开发与角色入景判断，成熟方向复用；需要比较时展开 Look Development。项目档案、节奏档案和接受状态按[项目操作、配置与交付](references/project-operations.md)
 处理，下游只读取已接受值，不把套件默认数值当成质量门槛。
 
-按问题只读取一份相关知识：
+核心知识按默认阅读入口载入；下列索引定位具体问题：
 
 - 规则分级与 owner 路由：[规则与路由索引](references/knowhow-index.md)
 - 影视工业优先、导演判断、分遍剪辑、声音、灯光、色彩与精品质量门：[影视工业核心](references/film-craft-core.md)

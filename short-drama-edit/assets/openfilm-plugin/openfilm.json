@@ -1,0 +1,16 @@
+{
+  "order": 0,
+  "title": {"en":"Short-drama","zh-CN":"短剧创作台"},
+  "summary": {"en":"Story, shots and one editable film.","zh-CN":"剧本、分镜与同一份可编辑成片。"},
+  "icon":"clapperboard",
+  "workbench":"short-drama",
+  "blocks":[
+    {"id":"story","title":{"en":"Story & shots","zh-CN":"前期与镜头"},"edge":"left","size":340},
+    "edit:viewer","edit:timeline","edit:inspector"
+  ],
+  "on":true,
+  "skills":[],
+  "requires":[],
+  "category":"recipe",
+  "cost":"free"
+}

@@ -1,6 +1,6 @@
 # 叙事声音、对白后期与音乐
 
-本页只在声音要承担叙事、空间或人物策略，音乐需要 spotting，或对白/混音需要精品精修时读取。
+本页是剪辑与声音设计的默认核心知识：用声音、音乐和静默组织空间、注意力、人物策略与情绪。
 它补充 [场次声音戏剧](../../short-drama-write/references/scene-sound-dramaturgy.md)、[声音、字幕与音乐](sound-and-subtitles.md)
 和 [精剪与后期精修](finishing-craft.md)，不要求对白、环境、拟音、设计音和音乐五层齐全。
 

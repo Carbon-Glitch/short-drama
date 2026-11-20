@@ -695,10 +695,15 @@ def _scope_list(value: object, *, label: str) -> list[str]:
     return normalized
 
 
-def _canonical_creator_source_modality(source: str | None) -> str | None:
+def _canonical_creator_source_modality(source: str | None, root: Path | None = None) -> str | None:
     if source is None:
         return None
     path = PurePosixPath(source)
+    # A migrated standalone OpenFilm episode keeps the same five document owners at its root.
+    if len(path.parts) == 1 and root is not None and (root / 'film.html').is_file():
+        settings = root / '.short-drama/project.json'
+        if settings.is_file() and json.loads(settings.read_text(encoding='utf-8')).get('backend') == 'openfilm':
+            return CREATOR_SOURCE_NAMES.get(path.name)
     if (
         len(path.parts) != 3
         or path.parts[0] not in {"剧集", "episodes"}
@@ -1036,7 +1041,7 @@ def _normalize_job(root: Path, raw: object) -> dict[str, Any]:
         raise ValueError("source_entry must be a visible uppercase Markdown entry ID")
     if source_entry is not None and source is None:
         raise ValueError("source_entry requires source")
-    creator_source_modality = _canonical_creator_source_modality(source)
+    creator_source_modality = _canonical_creator_source_modality(source, root)
     if creator_source_modality == modality and source_entry is None:
         raise ValueError("creator Markdown source requires source_entry")
     if creator_source_modality is not None and modality != creator_source_modality and not (
@@ -1194,7 +1199,7 @@ def _validate_stored_job(
     ):
         raise ValueError("stored job source entry has the wrong modality")
     creator_source_modality = _canonical_creator_source_modality(
-        str(source) if source is not None else None
+        str(source) if source is not None else None, root
     )
     if not legacy and creator_source_modality == modality and source_entry is None:
         raise ValueError("stored creator Markdown job has no source entry")

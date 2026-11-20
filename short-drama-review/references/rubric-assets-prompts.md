@@ -2,8 +2,8 @@
 
 ## Occurrence and decision
 
-- Can every production-relevant appearance be traced to a scene ID and a necessary action/dialogue quotation in `剧本.md`?
-- Is it production-relevant rather than every noun in the screenplay?
+- Does each designed item identify its scene and its basis: established story fact or the current art-design choice in `视觉设定.md`?
+- Does the design create character, believable space, sensory detail, visual interest or performance opportunities?
 - Is the decision explicit: reuse, new identity, new variant, or unresolved?
 - Were pronouns, aliases, groups, memories, portraits, and screen content handled
   without guessing?
@@ -21,8 +21,7 @@ prompt without story reason.
 
 Relationship labels may guide current blocking, gaze, and social presentation,
 but they do not prove beauty, ugliness, body type, skin tone, or facial morality.
-Fail when protagonist/antagonist status silently invents those identity traits;
-creator-approved idealization or deliberate counter-casting remains a taste choice.
+Judge the chosen casting and visual traits against the actual character and story. Idealization, restraint, exaggeration and counter-casting are available design choices.
 
 ### Voice direction (optional, `AST-07`–`AST-12`)
 
@@ -77,8 +76,7 @@ Fail when a prop teleports, changes scale/material, or readable evidence is eras
 
 The era comes from source facts: devices, platforms, slang, stated years. Fail
 when the era shown in `视觉设定.md`, `图片提示词.md` or `视频提示词.md` contradicts
-them, or when a retro or aged descriptor (旧/老式/复古/褪色/斑驳, old, worn, dusty,
-period, CRT) has neither a source basis nor an explicit creator choice (`AST-14`).
+them. Newness, age, repair and wear may be deliberately developed by production design within that world (`AST-14`).
 This is the visual layer of the source-fidelity check (`STY-07`): cite the source
 fact and the conflicting line. A visual direction with
 no era anchors, or entries that leave the era-specific form unstated, is a craft

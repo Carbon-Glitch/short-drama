@@ -3129,7 +3129,7 @@ def _emit(payload: dict[str, Any]) -> None:
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
     parser = argparse.ArgumentParser(description="短剧剪辑：核对剪辑单、分镜时码对照、渲染成片、测量成片")
-    parser.add_argument("command", choices=("check", "conform", "plan", "preview", "render", "verify"))
+    parser.add_argument("command", choices=("check", "conform", "plan", "preview", "render", "verify", "open", "init"))
     parser.add_argument("episode", help="剧集/<EP> 目录")
     parser.add_argument("--project-root", default=".", help="项目根目录（解析素材相对路径）")
     parser.add_argument("--no-subtitles", action="store_true", help="render 时不烧字幕")
@@ -3153,6 +3153,17 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     episode = Path(arguments.episode).resolve()
     project_root = Path(arguments.project_root).resolve()
     try:
+        if (episode / 'film.html').exists() or arguments.command in {'init', 'open'}:
+            if hasattr(sys.stdout, 'reconfigure'): sys.stdout.reconfigure(encoding='utf-8')
+            import openfilm_bridge
+            command = {'conform':'sync', 'plan':'state', 'preview':'render'}.get(arguments.command, arguments.command)
+            if arguments.command == 'open' and not (episode / 'film.html').exists():
+                if (episode / CUT_LIST_NAME).exists():
+                    raise ValueError('旧集先显式迁移剪辑单，再打开 OpenFilm；原剪辑可继续使用现有命令')
+                openfilm_bridge.run('init', episode)
+            result = openfilm_bridge.run(command, episode, preview=arguments.command == 'preview')
+            _emit(result)
+            return 1 if any(i.get('severity') == 'error' for i in result.get('issues', [])) else 0
         config = post_settings(episode)
         source_text = (episode / CUT_LIST_NAME).read_text(encoding="utf-8")
         layered = config.get("execution") == "layered" or "### 后期执行" in source_text

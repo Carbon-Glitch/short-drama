@@ -1,124 +1,52 @@
 ---
 name: short-drama-review
-description: 审查短剧项目中的原著分析、故事、剧本、视觉设定、图片提示词、分镜、冻结关键帧、视频提示词和已有媒体。用户提出“审稿/检查剧本”“检查资产或连续性”“检查图片/视频提示词”“检查原著分析”“审查模板感”“根据生产观察做项目校准”时使用；只写审查问题、结论和修订要求，不代替负责人修改来源文件。
+description: 按观众体验检查故事、美术、资产图、分镜、视频和成片，结合实际证据给出明确修订；用于审稿、连续性检查、质量诊断和制作内自检。
 license: MIT
 ---
 
 # 短剧审查
 
-优先由未参与当前版本创作的 reviewer 执行；条件不允许时可以自检并如实说明。本技能定位问题、影响和
-必须达到的修订结果，将修改交回负责技能；审查与修改分开执行。
+## 创作目标与默认阅读
 
-用户要求精品、电影感、模板感诊断或成片精修时，先读取 `$short-drama` 的[影视工业核心](../short-drama/references/film-craft-core.md)
-和本技能的[影视精品质量梯度](references/quality-ladder.md)，按观众体验、表演、声画、剪辑和交付证据排序，
-不要把字段齐全或提示词很长当作高级完成度。
+以“观众爱看、愿意停留”为第一性原理。先读[共同创作方式](../short-drama/references/viewer-first.md)和[影视工业核心](../short-drama/references/film-craft-core.md)，以及本阶段核心知识：
 
-## Quick Start
+- [作品质量证据](references/quality-ladder.md)
+- [审查方法](references/review-method.md)
+- [反模板与具体修订](references/anti-template-repair.md)
 
-直接读取用户点名的当前文件。单集审查需要落盘时写 `审查/EP001-审查.md`；独立文件审查使用
-`审查/<主题>-审查.md`。用户只要口头结论时直接回复，不为“完整”创建审查文件。
+- [首次观看与反馈判断](references/fresh-viewer-review.md)
 
-审查 Markdown 建议结构：
+- [成像风格与感官质感](../short-drama/references/image-look-and-finishing.md)
 
-```markdown
-# EP001 审查
+以上默认读取；同一轮已读且未变化的内容直接复用。按场面选择手法，接口和专门故障资料用到再查。
 
-- 范围：剧本、分镜、视频提示词
-- 结论：REVISE
-- 复核方式：独立 reviewer / 自检
+围绕观众体验检查实际作品，指出具体位置、影响和最有价值的修订。制作内自检交相应 owner 修复并接续；单独审查请求交付结论与建议。
 
-## Blocker · REV-001 · 画面文字未被镜头承载
-- 位置：剧本.md / EP001-SC002；分镜.md / SHOT-EP001-004
-- 证据：……
-- 影响：……
-- 修订结果：由 short-drama-storyboard 补入准确文字及可读条件。
-- 规则：SHT-01 · structural_invariant
-```
+## 检查顺序
 
-引用只使用文件名、标题 ID、行号或短引文；不建立 sources 声明、哈希、record ID 或第二套状态。
+1. **观看动力**：第一拍的进入理由、持续期待、人物选择、反应与兑现是否成立。
+2. **人物与美术**：妆造有性格，场景有层次和生活趣味，设计在真实画幅中可读，人物与环境共同成立。
+3. **表演与空间**：行动有触发和落点，听者有反应，空间可供表演，物体接触与重要状态连续。
+4. **声音与剪辑**：对白、物体反馈、环境、画外声、音乐、静默和剪点共同服务情绪。
+5. **实际交付**：来源、引用、版本、素材覆盖与输出规格由现有检查器核对；实际看听评价成片。
 
-## 选择审查范围
+## 做法
 
-- `source_analysis`
-- `story_script`
-- `assets_continuity`
-- `image_prompts`
-- `storyboard_keyframes`
-- `video_prompts`
-- `production_outputs`
-- `full_episode`
-- `delivery_privacy`
-- `project_calibration`
+读取当前任务的直接来源与默认核心知识，先跑相关机械检查，再对具体画面、声音与文字作判断。已有输出就观察实际输出；只有设计稿时给出可落实的创作修订与待验证项。
 
-只读对应资料，不预加载整个项目：
+每个问题写位置、证据、观众影响、负责阶段和明确修订结果。优先解决会导致观众看不懂、不想看、感受不到或明显出戏的问题。美术设计可以发展原文未规定的视觉细节，按角色、世界与观看体验判断其价值。
 
-- 原著分析：[原著分析审查表](references/rubric-source-analysis.md)
-- 故事、场景、行动与对白，改编是否守住原著人物与主线，已接受节奏档案的核对，开场、结尾与中段的局部检查：[故事剧本审查表](references/rubric-story-script.md)；判断整体优劣或爆款潜力时，按其中的[导演视角](references/rubric-story-script.md#导演视角按输入范围判断)区分作品质量与市场证据
-- 身份、变体、连续性、时代与图片提示词：[资产提示词审查表](references/rubric-assets-prompts.md)
-- 原文落实、镜头、关键帧与视频运动：[视觉运动审查表](references/rubric-visual-motion.md)
-- 完整审查方法：[审查方法](references/review-method.md)
-- 制作端常见缺陷：[生产质量门](references/production-quality-gates.md)
-- 精品质量梯度与实际媒体证据：[影视精品质量梯度](references/quality-ladder.md)
-- 独立首看、非诱导提问与真人试映证据边界：[首次观看与观众证据](references/fresh-viewer-review.md)
-- 生成风险测试与项目级回归：[AI 生成风险测试矩阵](../short-drama-produce/references/generation-test-matrix.md)
-- 授权生产观察的项目内校准：[项目校准](references/project-calibration.md)
-- 模板感、重复手法或 AI 味，以及微创新是否保住内核、预期差是否成立：[反模板修订](references/anti-template-repair.md)；微创新专项见[对应章节](references/anti-template-repair.md#微创新与预期差专项)
-- 阶段边界、参考媒体与规则表：[阶段契约](references/stage-contract.md)
+重要设计通过现有条目、参考图、镜头与 bindings 追踪；缺失时回填对应来源并继续。复用、定向修改、补覆盖或重做某段按实际问题选择。
 
-## 工作流
+## 输出
 
-### 1. 确定范围
+口头结论直接回答；需要落盘时用 `审查/<主题>-审查.md`，写清范围、实际观察方式与结论：
 
-写清当前要审哪些文件、章节、镜头或提示词，以及创作者已经明确的限制。目标在审查中发生变化时，
-重新读取再下结论。
+- `APPROVE`：本轮检查通过。
+- `APPROVE_WITH_NOTES`：已完成，另有可选提升。
+- `REVISE`：存在明确待修问题，并给出具体方案。
+- `PROVISIONAL`：关键证据尚缺，先交付可完成部分与补证方向。
 
-### 2. 先查可证明事实
+问题严重度按观众与交付影响区分 blocker、major、minor、note。创作选择通过作品与既定目标讨论，不以条款数量或装饰数量评分。
 
-- 五文档的可见 ID、引用和时长是否一致；
-- 剧本对白、动作、声音、画面文字是否都有画面/声音承载；
-- 人物、地点、道具状态和镜头起止是否连续；
-- 提示词是否从准确起点到准确终点；
-- 目标模型画音同轨时，声音内容、时序和发声边界是否与来源一致；无对白镜是否交代底声或静默
-  （`VID-22`、`VID-23`，见 [视觉运动审查表](references/rubric-visual-motion.md)）；
-- 私有输入、凭据、绝对路径或内部流程文字是否泄漏。
-
-缺少必要输入时只停止依赖它的判断，其他问题可以继续汇总。
-
-### 3. 带证据审内容
-
-审新方向、重大改编或核心反转时，先核对[现实观众基线](../short-drama-develop/references/audience-expectation-calibration.md)是否有相关来源、日期、适用范围及其对写法的影响；检查是否以模型常识替代当下人群证据、是否只挑支持既定套路的评论。
-未完成校准时，将当前受众适配/新鲜感结论列为暂定，不据此否定作品内部因果或阻断无关交付；只要求补足相应依据或明确降为假设。本轮审查不自动扩大成联网调研、真人招募或市场测试。
-
-每个 finding 包含位置、必要短引文或冲突事实、观众/制作影响、必须达到的修订结果、负责技能、严重
-程度、规则等级和 `open` / `closed` 状态。“AI 味”“不够电影感”或无证据分数不能替代这些内容。
-
-### 4. 跨文档综合
-
-```text
-剧本事实 -> 视觉设定 -> 镜头职责与边界 -> 冻结关键帧 -> 视频运动 -> 下一状态
-```
-
-优先守住原意、知情时机与连续性，不奖励脱离来源的华丽提示词。
-
-### 5. 结论与分派
-
-- `APPROVE`：没有阻断问题；
-- `APPROVE_WITH_NOTES`：只有不阻断的改进；
-- `REVISE`：存在阻断交付的结构缺陷、经证据确认的内容缺陷或已接受限制冲突；
-- `PROVISIONAL`：关键输入不足，暂时无法完成判断。
-
-按负责技能分组修订要求。本轮完成后交还控制权；修改和复审只有用户明确请求时开始。
-
-## 严重程度
-
-- `blocker`：不安全、不可交付或会让流程走错；
-- `major`：明显破坏剧情理解、连续性或制作结果；
-- `minor`：有具体影响但不阻断；
-- `note`：创作选择或可选润色。
-
-## 边界
-
-- 不提交图片、视频、TTS 或音乐任务，不配置 adapter，不把 Dashboard 操作当生产授权。
-- 无法读取媒体时明确限制，不从文字或 adapter 状态推断脸部一致、表演、口型、混音或市场表现。
-- 生产观察必须绑定准确输入、提示词、参考、配置和结果版本；不能泛化成通用规则。
-- 审查文件只保留修订所需的最小证据，不复制完整私有输入。
+按对象补充：[故事](references/rubric-story-script.md)、[资产图](references/rubric-assets-prompts.md)、[视觉运动](references/rubric-visual-motion.md)、[原著分析](references/rubric-source-analysis.md)、[生成素材](references/production-quality-gates.md)、[项目校准](references/project-calibration.md)。
