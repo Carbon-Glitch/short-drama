@@ -27,7 +27,7 @@ async function sourceIdentity(root,target){
   return {src,sourceHash:await fileHash(path)};
 }
 export async function collect(root){
-  const upstream={},requirements=[],references=[];
+  const upstream={},requirements=[],references=[],productionNotes=[];
   let project=root;
   const settings=await readJson(join(root,'.short-drama/project.json'),{});
   if(settings.projectRoot)project=resolve(root,settings.projectRoot);
@@ -40,6 +40,10 @@ export async function collect(root){
       const heading=line.match(/^##\s+([^\s·]+)(?:\s*·)?/);if(heading)section=heading[1];
       if(heading&&document==='视觉设定.md')section=line.replace(/^##\s+/,'').trim();
       let kind=null,content=line.trim(),role;
+      if(['分镜.md','视频提示词.md'].includes(document)){
+        const note=content.match(/^[-*]\s*(生成安排|接镜)[：:]\s*(.+)$/);
+        if(note)productionNotes.push({document,section,line:index+1,field:note[1],text:note[2]});
+      }
       if(document==='剧本.md'){
         const tagged=content.match(/^\[(画面文字|SFX|转场|连续性|声音制作)\]\s*(.+)/);
         const dialogue=content.match(/^(?:\[(?:VO|OS)\]\s*)?([\p{L}][\p{L}\p{N}_·-]{0,39})(?:[（(][^）)]*[）)])?[：:]\s*(.+)$/u);
@@ -63,7 +67,7 @@ export async function collect(root){
     }
   }
   for(const ref of references)if(ref.exists)upstream['ref:'+ref.path]=await fileHash(join(project,ref.path));
-  return {upstream,revision:hash(JSON.stringify(upstream)),requirements,references,projectRoot:project};
+  return {upstream,revision:hash(JSON.stringify(upstream)),requirements,references,productionNotes,projectRoot:project};
 }
 
 async function targetsOf(root,film){

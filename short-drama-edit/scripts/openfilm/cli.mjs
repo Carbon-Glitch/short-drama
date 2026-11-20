@@ -21,6 +21,11 @@ try{
   else if(command==='import-asset')result=await sd.importAsset(root,payload.file);
   else if(command==='replace-source')result=await sd.replaceSource(root,payload);
   else if(command==='handoff')result=(await sd.state(root)).handoff;
+  else if(command==='seams'){
+    const receipt=await sd.readJson(join(root,'.short-drama',values.preview?'preview-result.json':'render-result.json'));
+    if(!receipt)throw Error('Render a preview or final film first');
+    const {writeReview}=await import('./seams.mjs');result=await writeReview(root,receipt);
+  }
   else if(command==='bind-handoff'){
     const {bindHandoff}=await import('./handoff.mjs');const current=await sd.read(root);
     if(payload.filmRev&&payload.filmRev!==current.rev)throw Error('时间线已变化，请读取最新版本后更新交接');
@@ -52,6 +57,8 @@ try{
     if((await sd.snapshot(root)).identity!==inputs.identity)throw Error('Project changed during export; rendered file is stale, no delivery receipt written');
     result={output:out,filmRevision:state.rev,inputs,outputHash:sd.hash(await readFile(out)),engine:'OpenFilm '+sd.VERSION,preview:!!values.preview,issues:state.issues,nativeReport,artisticAccepted:false};
     await sd.saveJson(join(root,'.short-drama',values.preview?'preview-result.json':'render-result.json'),result);
+    try{const {writeReview}=await import('./seams.mjs');result.seamReview=await writeReview(root,result);}
+    catch(error){result.seamReview={error:String(error.message),purpose:'导出已保存；接点页可用 seams 命令重建'};}
   }else throw Error('Commands: init, state, patch, sync, check, report, import-asset, open, render');
   console.log('SHORT_DRAMA_RESULT='+JSON.stringify(result));
 }catch(error){console.error(String(error.stack||error));process.exitCode=1;}

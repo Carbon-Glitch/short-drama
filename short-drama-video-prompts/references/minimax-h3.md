@@ -337,6 +337,8 @@ The camera holds a static shot as the runner exits the frame.
 
 ## 连续段
 
+先按[模型与接镜](../../short-drama/references/model-aware-coverage-and-joins.md)决定是否真的需要同镜续段。H3 分段默认优先设计自然切镜或动作匹配切；单帧承接描述真实动作阶段与运镜惯性。下述双输入仅用于已启用视频参考的执行端，本机 RunningHub 空视频槽策略照常保留。
+
 H3 的首/尾帧模式与 full-reference 模式互斥，不能在同一请求混用 `first_frame`/`last_frame` 和
 `reference_image`/`reference_video`/`reference_audio`。连续段需要上一段实际视频和实际尾帧时，统一走
 full-reference：
@@ -350,7 +352,7 @@ full-reference：
 
 **`structural_invariant`（执行端契约）**：MiniMax-H3 的 `duration` 必填，为 4–15 的任一整数秒，
 并非只有 5/10/15 三档。网页界面或 job 的时长设置要与分镜时长和正文终点一致；写在提示词里的秒数
-不能替代生成设置。短动作在合法镜长内完成并保持已接受终点；超过 15 秒的镜头回分镜按闭合状态拆开。
+不能替代生成设置。短动作完成后按接法安排反应、环境运动或继续中的动作，避免为凑满时长统一停住；超过单次上限时回分镜按接镜方案排调用。
 本阶段不偷改镜头秒数。
 
 `MiniMax-H3-Max` 是另一型号：5–15 秒、480P/768P，仅支持文生和首/尾帧，不支持 full-reference。

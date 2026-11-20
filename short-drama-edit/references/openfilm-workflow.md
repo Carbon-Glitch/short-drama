@@ -76,6 +76,12 @@ python scripts/openfilm_migrate.py <旧集目录> <全新目标目录> --project
 
 迁移器读取已有 parser，拷贝真实源文件、CUT/来源、独立配音音效、cue 与基本淡变，原剪辑单存入 `.short-drama/legacy/`。特殊图形、调色、运镜和复杂循环先做对应镜头页/音轨映射后用 seed 初始化；工具会指出未映射字段，不静默丢掉。外部工程的图层以其实际文件为准，Markdown 中的描述不是已完成映射。
 
+## 接点回看
+
+预览/正式渲染后自动生成同目录 `预览-接点.html` / `成片-接点.html` 与 JSON，直接播放该次导出，在当前可见画面层的起止边界附近循环。它保留真实叠化、字幕与混音，边界只是候选，不把叠层出现都判成坏切。页中同时展示上游「生成安排／接镜」与 clip 来源。
+
+已有有效导出可运行 `python scripts/openfilm_bridge.py seams <集目录> --preview` 重建（正式版省略 `--preview`）；输入或视频变更时先重做预览。回看结论写既有制作记录，实际修剪仍改 film.html。自动页不做光流评分或审美通过判定。
+
 ## 验证与交付
 
 `edit_tool.py preview/render` 先同步并列出交接缺口，预览允许探索未决版本，正式 render 收齐后调用一次原生 renderer。交付 receipt 保存渲染图的输入哈希和输出哈希；导出期间输入变化不记为有效交付，`verify` 识别过期成果。预览记录使用 `openfilm_bridge.py verify <集目录> --preview`。

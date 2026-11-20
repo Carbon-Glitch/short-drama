@@ -68,7 +68,7 @@ def run(command, root, *, payload=None, out=None, preview=False):
 def main():
     if hasattr(sys.stdout, 'reconfigure'): sys.stdout.reconfigure(encoding='utf-8')
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('command', choices=['setup','init','state','check','sync','patch','import-asset','replace-source','handoff','bind-handoff','open','render','verify'])
+    p.add_argument('command', choices=['setup','init','state','check','sync','patch','import-asset','replace-source','handoff','bind-handoff','open','render','verify','seams'])
     p.add_argument('root', nargs='?', default='.')
     p.add_argument('--input'); p.add_argument('--out'); p.add_argument('--preview', action='store_true')
     a = p.parse_args()

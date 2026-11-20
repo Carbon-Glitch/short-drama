@@ -59,6 +59,14 @@ Writing and analysis use the current Agent model. Media production follows the p
 
 No additional standalone WebUI or separate writing/listening model subscription is required by this workflow. Production records support status checks and result collection. When direct listening is unavailable, waveform data can assist—but is not reported as completed listening review.
 
+## 🎞️ Plan the join before generating the clip
+
+Storyboarding now separates a **SHOT (the viewer's camera shot)** from a **clip (one generation call)**. Plan call counts, content, generation budgets and joins around the actual model and provider capabilities. Framing changes, the 30-degree guideline, match-on-action, reaction shots, breathing room and sound bridges are creative options, not blanket restrictions.
+
+Generation and join notes travel into prompting, production and OpenFilm handoffs. Preview and final export automatically create a **join-review page** that plays the same rendered film, with boundary-window looping, frame stepping and source-window/shot information. It assists review without claiming automatic aesthetic approval.
+
+Rebuild a review for an existing preview with `python scripts/openfilm_bridge.py seams <episode-directory> --preview` from `short-drama-edit` (omit `--preview` for a final export). See the [model-aware coverage and joins guide](short-drama/references/model-aware-coverage-and-joins.md). This update validates planning handoffs and review tooling; it does not yet establish seam-quality improvements through new H3 generations. Existing RunningHub calls and video-reference policy remain unchanged.
+
 ## 🧭 Story to screen, with continuity between stages
 
 ```mermaid
