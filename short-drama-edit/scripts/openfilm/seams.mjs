@@ -37,7 +37,7 @@ body{background:#131820;color:#edf0f5;font:16px system-ui;margin:24px auto;max-w
 </style><h1>接点回看</h1><p>先正常速度看动作与声音，再逐帧定位。标记为画面层边界候选，叠层/叠化并不自动代表剪错。</p>
 <small>导出快照 ${escape(data.identity.slice(0,12))} · 修改工程后重新预览，本页不会自动更新。</small>
 <main><section><video id="video" controls preload="metadata" src="${escape(video)}"></video><div><button id="replay">重看本接点</button><button id="prev">前一帧</button><button id="next">后一帧</button><label><input id="loop" type="checkbox" checked>循环本窗口</label></div><p id="status"></p></section><section><div id="list"></div><pre id="detail"></pre></section></main>
-<details><summary>上游生成安排与接镜</summary><pre id="notes"></pre></details>
+<details><summary>上游参考、设计与接镜</summary><pre id="notes"></pre></details>
 <p><small>观察：动作/运镜是否重启、视线方向、重复或冻帧、光色跳变、声音断裂。结论写既有制作记录；源窗仍在 film.html 修改。本页不自动判定审美通过。</small></p>
 <script>const data=${serialized};
 const video=document.getElementById('video'),list=document.getElementById('list'),detail=document.getElementById('detail'),status=document.getElementById('status');let selected=null;

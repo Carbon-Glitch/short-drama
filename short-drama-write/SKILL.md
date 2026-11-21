@@ -8,13 +8,15 @@ license: MIT
 
 ## 创作目标与默认阅读
 
-以“观众爱看、愿意停留”为第一性原理。先读[共同创作方式](../short-drama/references/viewer-first.md)和[影视工业核心](../short-drama/references/film-craft-core.md)，以及本阶段核心知识：
+先把画面设计得漂亮、独特、有想象力，再以角色行为、表演和剪辑兑现故事。先读[共同创作方式](../short-drama/references/viewer-first.md)和[影视工业核心](../short-drama/references/film-craft-core.md)，以及本阶段核心知识：
 
 - [剧作与视听手艺](references/script-craft.md)
 - [对白与人物策略](references/dialogue-craft.md)
 - [场景声音戏剧](references/scene-sound-dramaturgy.md)
 
-以上默认读取；同一轮已读且未变化的内容直接复用。按场面选择手法，接口和专门故障资料用到再查。
+手艺资料：[按问题查影视工业知识](../short-drama/references/craft-knowledge.md)。先用本地资料，遇到方法或接口缺口再定向联网。
+
+本阶段核心资料按当前任务读取；同轮已读未变的内容复用，接口与故障资料用到再查。
 
 将本集意图写成有观看动力、可表演、可拍摄的 `剧集/<EP>/剧本.md`。
 

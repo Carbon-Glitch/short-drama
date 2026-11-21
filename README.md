@@ -4,7 +4,7 @@
 
 面向 **AI 短剧、漫剧与竖屏短视频**的 Agent Skills 工作流：把剧情开发、人物妆造、场景美术、分镜、生成提示词与 **OpenFilm 可视化剪辑**连成一条创作链。
 
-[English](README.en.md) · [快速开始](#-快速开始) · [11 个技能](#-一支装进-agent-的剧组) · [验证范围](docs/VALIDATION.md)
+[English](README.en.md) · [快速开始](#-快速开始) · [12 个技能](#-一支装进-agent-的剧组) · [验证范围](docs/VALIDATION.md)
 
 ![Short Drama — AI filmmaking, cinematic visual development and OpenFilm editing](docs/assets/hero.png)
 
@@ -63,9 +63,19 @@
 
 生产有任务记录，可继续查询与收集结果；无法直接听审时，波形等数据辅助判断，并明确声音验收尚未完成。
 
+## 🎨 剧本之后，先设计一个值得看的世界
+
+新增 **[short-drama-design：视觉创意与场面设计](short-drama-design/SKILL.md)**。近期优秀原作检索、跨作品组合、人物妆造、空间道具与新调度集中在这里，随后交给资产图和分镜落实。
+
+默认发展精致、丰盛、信息密度高的视听设计；用户明确指定极简、留白等风格时按其方向处理。写实与手机拍摄质感同样可以承载大胆的形态、色彩和物品行为。
+
+设计可以补充剧本未写的事件、环境干扰、沉默、屏幕动图与声音落点，围绕观众情绪节奏取舍。场面设计与人物/场景设定同存于 `视觉设定.md`，原剧本和新增设计一起交给下游。
+
+分镜或本次所需的实际资产图缺一项，先执行设计。`design_tool.py inspect/complete` 记录来源版本，完成后接续下游；已有设计复用，来源变化再更新，避免循环。其余阶段按具体问题查影视工业知识，集中精力实现选定方案。
+
 ## 🎞️ 在分镜时，就为下一次切镜做好准备
 
-分镜现在区分 **SHOT（观众看到的镜头）**与 **clip（一次模型调用）**：按实际模型和应用能力，提前安排调用次数、每段内容、生成预算与接法。景别变化、30°参照、动作匹配、反应镜、气口与声音桥都是导演可选手法，不是僵硬禁令。
+分镜现在区分 **SHOT（观众看到的镜头）**与 **clip（一次模型调用）**：按实际模型和应用能力，提前安排调用次数、每段内容、生成预算与接法。**默认 H3 尽量 13–15 秒一个 clip，Seedance 2.5 在内容适合时优先接近 30 秒**；同次调用内可包含多个分镜，结合实际接口、对白、动作与自然段落调整。这是制作偏好，不是时长越长效果必然越好的保证。景别变化、30°参照、动作匹配、反应镜、气口与声音桥都是导演可选手法，不是僵硬禁令。
 
 「生成安排／接镜」会传到提示词、生产和 OpenFilm 交接信息。预览与正式导出自动附带 **接点回看页**，直接播放同一成片，支持边界附近循环和逐帧查看，显示源窗与镜头来源。它帮助发现问题，不把机械检查当成审美验收。
 
@@ -76,7 +86,7 @@
 ```mermaid
 flowchart LR
   A[点子 / 小说 / 现成剧本] --> B[剧情与角色]
-  B --> C[主动美术 / 视觉设定]
+  B --> C[视觉创意 / 美术 / 新调度]
   C --> D[资产图 / 入景代表帧]
   D --> E[分镜 / 表演 / 声音设计]
   E --> F[视频提示词 / 既有生产路线]
@@ -93,7 +103,7 @@ flowchart LR
 将下面这段发给支持本地 Agent Skills、文件读写和命令执行的助手：
 
 ```text
-请安装 https://github.com/Carbon-Glitch/short-drama 的全部 11 个 short-drama* 技能，
+请安装 https://github.com/Carbon-Glitch/short-drama 的全部 12 个 short-drama* 技能，
 放到你的技能发现目录，保持这些目录互为同级。
 如果已有个性化版本，先比较并备份，保留我的修改。
 读 short-drama/SKILL.md，然后告诉我当前可用的创作与生产路线。
@@ -105,7 +115,7 @@ flowchart LR
 git clone https://github.com/Carbon-Glitch/short-drama.git
 ```
 
-把仓库根目录的 **全部 11 个 `short-drama*` 文件夹**放进宿主的技能目录。本机采用 `~/.agents/skills/` 共享安装；其他宿主以其技能发现规则为准。各阶段会引用同级目录，别只装入口。重载技能后用 `$short-drama` 开始。
+把仓库根目录的 **全部 12 个 `short-drama*` 文件夹**放进宿主的技能目录。本机采用 `~/.agents/skills/` 共享安装；其他宿主以其技能发现规则为准。各阶段会引用同级目录，别只装入口。重载技能后用 `$short-drama` 开始。
 
 ### 2. 准备执行环境
 
@@ -161,7 +171,8 @@ python scripts/edit_tool.py verify <集目录>
 | [short-drama-develop](short-drama-develop/SKILL.md) | 故事引擎、人物关系、受众证据与分集开发 |
 | [short-drama-novel-analyze](short-drama-novel-analyze/SKILL.md) | 长篇原著、改编价值与可追溯分析 |
 | [short-drama-write](short-drama-write/SKILL.md) | 可拍剧本、行动、对白与节奏 |
-| [short-drama-assets](short-drama-assets/SKILL.md) | 人物妆造、空间美术、道具与环境生命 |
+| [short-drama-design](short-drama-design/SKILL.md) | 近期参考、跨作品转译、美术细化、新调度与情绪节奏 |
+| [short-drama-assets](short-drama-assets/SKILL.md) | 图种、状态版、参考用途与实际采用资产安排 |
 | [short-drama-image-prompts](short-drama-image-prompts/SKILL.md) | 身份图、造型图、场景母版与入景帧 |
 | [short-drama-storyboard](short-drama-storyboard/SKILL.md) | 镜头调度、表演、覆盖与声画关系 |
 | [short-drama-video-prompts](short-drama-video-prompts/SKILL.md) | 目标模型提示词、动态过程与镜头交接 |

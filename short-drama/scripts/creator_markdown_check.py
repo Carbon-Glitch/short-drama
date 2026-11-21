@@ -890,11 +890,8 @@ def _visual_entries(document: str, errors: list[str]) -> list[VisualEntry]:
     entries: list[VisualEntry] = []
     seen: set[tuple[str, str]] = set()
     for index, heading in enumerate(headings):
-        end = (
-            headings[index + 1].start()
-            if index + 1 < len(headings)
-            else len(document)
-        )
+        following = re.search(r"^## ", document[heading.end():], re.MULTILINE)
+        end = heading.end() + following.start() if following else len(document)
         category, name = heading.group(1), heading.group(2).strip()
         if not name:
             errors.append(f"视觉设定.md: {category}条目缺少名称")

@@ -40,5 +40,5 @@ python3 {技能目录}/scripts/project_tool.py export <project> --out <项目外
 `export` 是当前状态快照，不声称审查或创作者接受；正式审批证据仍走 `package`/`verify`。导出排除输入、
 交付目录和 `.short-drama/`，输出 manifest 与校验文件；目标目录必须在项目外。
 
-外部生产始终遵守 `preview -> explicit confirm -> run`。归档只复制用户点名的当前文档和成品，不补造审批、
+生产保留预览与有效授权记录，按持续授权推进；范围或成本实质变化再确认。归档只复制用户点名的当前文档和成品，不补造审批、
 哈希、隐藏状态或第二套内容。

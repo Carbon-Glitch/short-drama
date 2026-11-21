@@ -5,7 +5,7 @@
 - `structural_invariant`: objectively checkable integrity; validators may block it.
 - `reviewed_invariant`: semantic integrity that needs cited evidence.
 - `craft_default`: a recommended method that may change for a stated reason.
-- `taste_option`: a creator choice that remains non-blocking.
+- `taste_option`: a chosen style is not itself a defect; weak realization of the agreed visual goal is still a valid creative finding.
 
 ## Governing know-how
 
@@ -36,6 +36,9 @@ Mechanical examples:
 - delivery containing private or unapproved material.
 
 Semantic examples:
+
+- the promised striking visual design has collapsed into generic assets, with the missing shape/material/spatial choices identified;
+- a key design or reaction exists somewhere in the footage but is unreadable at its intended payoff;
 
 - downstream action changes story meaning;
 - a conflict scene has no opposition or turn, or another kind of scene lacks a necessary state change;

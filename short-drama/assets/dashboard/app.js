@@ -66,6 +66,7 @@ const OWNER_SECTIONS = {
   "short-drama-novel-analyze": "analysis",
   "short-drama-develop": "project",
   "short-drama-write": "story",
+  "short-drama-design": "cast",
   "short-drama-assets": "cast",
   "short-drama-image-prompts": "prompts",
   "short-drama-storyboard": "storyboard",
@@ -1392,7 +1393,7 @@ function viewSettings(row, E) {
     ${problemNotices(E)}
     ${settings.era.period || settings.era.facets.length ? `<section class="card era"><div class="era-l"><div class="eyebrow">时代锚点</div><div class="p">${esc(settings.era.period)}</div><div class="f">画面里的一切都要属于这个年代</div></div>
       <div class="era-r">${settings.era.facets.map((facet) => `<div><div class="k">${esc(facet.k)}</div><div class="v">${esc(facet.v)}</div></div>`).join("")}</div></section>` : ""}
-    ${["人物", "造型", "地点", "道具"].map((category) => { const items = settings.items.filter((item) => item.cat === category); if (!items.length) return "";
+    ${["场面设计", "人物", "造型", "地点", "道具"].map((category) => { const items = settings.items.filter((item) => item.cat === category); if (!items.length) return "";
       return `<div class="section-t"><h3>${category}</h3><span class="n">${items.length}</span>${category === "人物" && C.shots.length ? '<span class="more">出场条：每格一镜，宽度按时长；朱红 = 连续性锁生效</span>' : ""}</div><div class="assets">${items.map(card).join("")}</div>`; }).join("")}
   </div>`;
 }

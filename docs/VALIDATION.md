@@ -28,3 +28,15 @@ Fresh-machine installation, broad cross-genre generated-video quality and audien
 - No new H3 generation or audience test was run. The update does not add latent-context generation, reopen video-reference inputs or promise seamless output. Private development media and local test artifacts are not included.
 
 分镜中的「生成安排／接镜」是可读制作说明，沿现有文档版本追踪；没有新增逐项审批。接点页使用已导出的原生影片，不引入第二套合成器或权威时间线。
+
+## Design-stage restructuring / 设计阶段重构 — 2026-11-21
+
+- The installed suite now contains 12 skills. The five creative Markdown documents remain the source of truth; scene design lives in the existing visual-design document.
+- 15 routing/version cases passed: missing assets/storyboards, prompt-only input, empty shot headings, design reuse, source changes, legacy projects and explicit text-to-video.
+- Three synthetic five-document cases passed existing validation and real offline H3 compilation. Four staging additions per case reached the request text; no video generation was submitted.
+- All 12 added staging events reached OpenFilm handoff. Rhythm and exit-state notes were retained; design edits invalidated the earlier handoff.
+- Scene/asset section isolation, repeated staging fields and multi-scene order were checked. The 17 existing core self-tests passed.
+- Optional Hypit writer context checks used the paired local installation: design-role messages received the design guides; H3-role messages received the selected scene design without repeating recent-work research. This separate Hypit writer change is not bundled here.
+- Rich audiovisual design and longer-clip preferences are creative defaults. Their effect on generated-video quality or audience retention has not been established by these structural checks.
+
+本次发布包含技能、资料与执行脚本，未包含私人制作工程、视频、凭据或运行时状态。近期作品搜索集中到设计阶段；其他阶段按问题查影视工业方法。

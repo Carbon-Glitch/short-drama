@@ -8,12 +8,14 @@ license: MIT
 
 ## 创作目标与默认阅读
 
-以“观众爱看、愿意停留”为第一性原理。先读[共同创作方式](../short-drama/references/viewer-first.md)和[影视工业核心](../short-drama/references/film-craft-core.md)，以及本阶段核心知识：
+先把画面设计得漂亮、独特、有想象力，再以角色行为、表演和剪辑兑现故事。先读[共同创作方式](../short-drama/references/viewer-first.md)和[影视工业核心](../short-drama/references/film-craft-core.md)，以及本阶段核心知识：
 
 - [观看价值快评](references/adaptation-triage.md)
 - [视听转译与分集价值](references/adaptation-value.md)
 
-以上默认读取；同一轮已读且未变化的内容直接复用。按场面选择手法，接口和专门故障资料用到再查。
+手艺资料：[按问题查影视工业知识](../short-drama/references/craft-knowledge.md)。先用本地资料，遇到方法或接口缺口再定向联网。
+
+本阶段核心资料按当前任务读取；同轮已读未变的内容复用，接口与故障资料用到再查。
 
 从长材料中提取可追溯的戏剧功能，说明各段如何改变角色选择、信息、权力或关系，以及这些功能怎样用于竖屏短剧改编。
 

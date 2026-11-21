@@ -231,7 +231,9 @@ def parse_settings(text: str) -> dict[str, Any]:
     era = {"period": era_parts[0] if era_parts else "", "facets": facets}
     items = []
     for index, head in enumerate(heads):
-        body = text[head.end(): heads[index + 1].start() if index + 1 < len(heads) else None]
+        following = re.search(r"^## ", text[head.end():], re.MULTILINE)
+        end = head.end() + following.start() if following else len(text)
+        body = text[head.end():end]
         category, name = head.group(1), head.group(2).strip()
         entry = entries.get((category, name))
         fields = {key.strip(): value.strip() for key, value in FIELD_RE.findall(body)}
@@ -258,6 +260,17 @@ def parse_settings(text: str) -> dict[str, Any]:
             "lock": lock,
             "overlay": bool(OVERLAY_ONLY_RE.search(body)),
         })
+    scene_items = []
+    for head in re.finditer(r"^## (场面设计) · (.+)$", text, re.MULTILINE):
+        following = re.search(r"^## ", text[head.end():], re.MULTILINE)
+        end = head.end() + following.start() if following else len(text)
+        fields = {}
+        for key, value in FIELD_RE.findall(text[head.end():end]):
+            key, value = key.strip(), value.strip()
+            fields[key] = fields.get(key, "") + ("\n" if key in fields else "") + value
+        scene_items.append({"cat": "场面设计", "name": head.group(2).strip(), "designators": [],
+                         "desc": [], "fields": fields, "lock": None, "overlay": False})
+    items = scene_items + items
     if not items:
         raise ValueError("没有找到 `## 人物 · 名称` 这样的设定条目")
     return {"form": meta.get("制作形态", "").rstrip("。"), "era": era, "items": items}

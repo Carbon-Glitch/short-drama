@@ -40,11 +40,10 @@ export async function collect(root){
       const heading=line.match(/^##\s+([^\s·]+)(?:\s*·)?/);if(heading)section=heading[1];
       if(heading&&document==='视觉设定.md')section=line.replace(/^##\s+/,'').trim();
       let kind=null,content=line.trim(),role;
-      if(['分镜.md','视频提示词.md'].includes(document)){
-        const note=content.match(/^[-*]\s*(生成安排|接镜)[：:]\s*(.+)$/);
-        if(note)productionNotes.push({document,section,line:index+1,field:note[1],text:note[2]});
-      }
-      if(document==='剧本.md'){
+      const note=content.match(/^[-*]\s*(生成安排|接镜|参考借鉴|设计转译|情绪节奏|出入状态)[：:]\s*(.+)$/);
+      if(note)productionNotes.push({document,section,line:index+1,field:note[1],text:note[2]});
+      if(note){ /* Read-only creative context, not a scene action or approval item. */ }
+      else if(document==='剧本.md'){
         const tagged=content.match(/^\[(画面文字|SFX|转场|连续性|声音制作)\]\s*(.+)/);
         const dialogue=content.match(/^(?:\[(?:VO|OS)\]\s*)?([\p{L}][\p{L}\p{N}_·-]{0,39})(?:[（(][^）)]*[）)])?[：:]\s*(.+)$/u);
         if(tagged){kind=tagged[1];content=tagged[2];role=['SFX','声音制作'].includes(kind)?'audio':kind==='画面文字'?'graphic':'picture';}
@@ -52,8 +51,8 @@ export async function collect(root){
         else if(section&&content&&!/^(#|\*\*|<!--)/.test(content)){kind='action';role='picture';}
       }else if(document==='分镜.md'&&heading&&/^SHOT-/.test(section)){kind='shot';role='picture';}
       else if(document==='视觉设定.md'&&section){
-        const design=content.match(/^[-*]\s*(设计重点|声音重点)[：:]\s*(.+)$/);
-        if(design){kind='design';role=design[1]==='声音重点'?'audio':'picture';content=design[2];}
+        const design=content.match(/^[-*]\s*(设计重点|声音重点|调度设计)[：:]\s*(.+)$/);
+        if(design){kind=design[1]==='调度设计'?'staging':'design';role=design[1]==='声音重点'?'audio':'picture';content=design[2];}
       }
       if(kind){const base=document+'|'+section+'|'+kind+'|'+norm(content);const n=occurrences.get(base)||0;occurrences.set(base,n+1);
         requirements.push({id:'REQ-'+hash(base+'|'+n).slice(0,16),document,section,line:index+1,kind,role,text:content});}

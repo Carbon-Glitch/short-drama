@@ -4,7 +4,7 @@
 
 An **Agent Skills workflow for AI short dramas, animated shorts and vertical video**. Story development, production design, storyboards, generation prompts and **OpenFilm visual editing**, connected from story to screen.
 
-[简体中文](README.md) · [Quick start](#-quick-start) · [The skills](#-eleven-skills-one-creative-workflow) · [Validation](docs/VALIDATION.md)
+[简体中文](README.md) · [Quick start](#-quick-start) · [The skills](#-twelve-skills-one-creative-workflow) · [Validation](docs/VALIDATION.md)
 
 ![Short Drama — cinematic AI filmmaking and OpenFilm editing workflow](docs/assets/hero.png)
 
@@ -59,9 +59,19 @@ Writing and analysis use the current Agent model. Media production follows the p
 
 No additional standalone WebUI or separate writing/listening model subscription is required by this workflow. Production records support status checks and result collection. When direct listening is unavailable, waveform data can assist—but is not reported as completed listening review.
 
+## 🎨 After the script, design a world worth watching
+
+Meet **[short-drama-design: visual concept and scene design](short-drama-design/SKILL.md)**. This stage concentrates recent-work research, cross-work synthesis, character styling, environments, props and new staging before assets and storyboards are produced.
+
+The default is refined, richly detailed audiovisual design with clear hierarchy and rhythm. Explicit requests for minimalism or negative space guide a different treatment. Photorealism and candid phone-camera texture can still carry imaginative forms, colors and object behavior.
+
+Design may add events, environmental interruptions, silence, animated device graphics and sound cues around the story's emotional progression. Scene design stays in `视觉设定.md` alongside the visual world; downstream stages read it together with the original script.
+
+If the required storyboard or actual asset images are missing, the workflow enters design first. `design_tool.py inspect/complete` tracks source versions, reuses a current design and advances downstream without looping. Other stages consult filmmaking craft knowledge for specific execution problems.
+
 ## 🎞️ Plan the join before generating the clip
 
-Storyboarding now separates a **SHOT (the viewer's camera shot)** from a **clip (one generation call)**. Plan call counts, content, generation budgets and joins around the actual model and provider capabilities. Framing changes, the 30-degree guideline, match-on-action, reaction shots, breathing room and sound bridges are creative options, not blanket restrictions.
+Storyboarding now separates a **SHOT (the viewer's camera shot)** from a **clip (one generation call)**. Plan call counts, content, generation budgets and joins around the actual model and provider capabilities. **Prefer 13–15-second H3 clips and, when the content fits, Seedance 2.5 clips approaching 30 seconds.** One generation can contain several storyboard shots. Adjust for dialogue, action, natural scene boundaries and the actual endpoint. This is a production preference, not a guarantee that longer is always better. Framing changes, the 30-degree guideline, match-on-action, reaction shots, breathing room and sound bridges are creative options, not blanket restrictions.
 
 Generation and join notes travel into prompting, production and OpenFilm handoffs. Preview and final export automatically create a **join-review page** that plays the same rendered film, with boundary-window looping, frame stepping and source-window/shot information. It assists review without claiming automatic aesthetic approval.
 
@@ -72,7 +82,7 @@ Rebuild a review for an existing preview with `python scripts/openfilm_bridge.py
 ```mermaid
 flowchart LR
   A[Idea / novel / script] --> B[Story and characters]
-  B --> C[Production design]
+  B --> C[Visual concept / production design / staging]
   C --> D[Assets and look-development frames]
   D --> E[Shots / performance / sound]
   E --> F[Video prompts and production]
@@ -89,7 +99,7 @@ Five readable creative documents hold the upstream work: `剧本.md` (screenplay
 Give a local Agent Skills assistant with filesystem and command access this instruction:
 
 ```text
-Install all 11 short-drama* skills from
+Install all 12 short-drama* skills from
 https://github.com/Carbon-Glitch/short-drama into your skill discovery directory.
 Keep the skill folders as siblings. If customized versions already exist,
 compare and back them up first, preserving my changes.
@@ -102,7 +112,7 @@ For manual installation:
 git clone https://github.com/Carbon-Glitch/short-drama.git
 ```
 
-Copy **all 11 root-level `short-drama*` folders** to your host's skills directory. The development setup uses `~/.agents/skills/`; other hosts may use different discovery paths. Install the whole suite because stages reference sibling folders. Reload skills and invoke `$short-drama`.
+Copy **all 12 root-level `short-drama*` folders** to your host's skills directory. The development setup uses `~/.agents/skills/`; other hosts may use different discovery paths. Install the whole suite because stages reference sibling folders. Reload skills and invoke `$short-drama`.
 
 ### 2. Prepare the runtime
 
@@ -151,7 +161,7 @@ python scripts/edit_tool.py verify <episode-directory>
 
 See the [OpenFilm workflow reference](short-drama-edit/references/openfilm-workflow.md) for initialization, bindings and legacy migration. Use the wrapper commands for formal delivery receipts; Studio's native export menu performs native export only.
 
-## 🧩 Eleven skills. One creative workflow.
+## 🧩 Twelve skills. One creative workflow.
 
 | Skill | Responsibility |
 |---|---|
@@ -159,7 +169,8 @@ See the [OpenFilm workflow reference](short-drama-edit/references/openfilm-workf
 | [short-drama-develop](short-drama-develop/SKILL.md) | Story engines, relationships, audience evidence and episode development |
 | [short-drama-novel-analyze](short-drama-novel-analyze/SKILL.md) | Long-form source analysis and traceable adaptation opportunities |
 | [short-drama-write](short-drama-write/SKILL.md) | Shootable scripts, action, dialogue and pacing |
-| [short-drama-assets](short-drama-assets/SKILL.md) | Wardrobe, production design, props and environmental life |
+| [short-drama-design](short-drama-design/SKILL.md) | Recent references, creative synthesis, visual design, staging and emotional rhythm |
+| [short-drama-assets](short-drama-assets/SKILL.md) | Asset types, state variants, reference roles and adopted files |
 | [short-drama-image-prompts](short-drama-image-prompts/SKILL.md) | Identity, wardrobe, location and look-development prompts |
 | [short-drama-storyboard](short-drama-storyboard/SKILL.md) | Blocking, framing, performance, coverage and sound relationships |
 | [short-drama-video-prompts](short-drama-video-prompts/SKILL.md) | Model-specific prompts, dynamic action and shot handoffs |

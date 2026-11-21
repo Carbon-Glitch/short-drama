@@ -1,4 +1,4 @@
 interface:
-  display_name: "短剧资产拆解"
-  short_description: "从剧本拆解人物、地点、道具及其身份、变体与连续性，写入视觉设定"
-  default_prompt: "使用 $short-drama-assets 从已接受剧本拆解并核对角色、场景、道具、变体和连续性。"
+  display_name: "短剧资产拆解与参考安排"
+  short_description: "从视觉与场面设计安排图种、状态、复用与实际采用引用"
+  default_prompt: "使用 $short-drama-assets 读取当前视觉与场面设计，安排角色、造型、场景、道具与状态图，登记实际采用引用并接续出图。"

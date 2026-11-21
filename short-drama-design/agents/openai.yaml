@@ -1,0 +1,4 @@
+interface:
+  display_name: "短剧视觉创意与场面设计"
+  short_description: "剧本后集中做近期参考、美术细化与新调度，再交给资产图和分镜"
+  default_prompt: "使用 $short-drama-design 将剧本发展为视觉设定与场面设计，选择近期优秀参考、组合微创新，明确造型、空间、物品行为与情绪节奏后接续制作。"
