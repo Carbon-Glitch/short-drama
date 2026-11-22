@@ -22,13 +22,13 @@ Or take a lonely walk in the rain: a passing car sends headlights across a wet c
 
 ### 01 / Audience attention is the creative compass
 
-Why stay for the next shot? Hold the reaction or cut now? Let sound arrive before the image? Shared filmmaking guides connect writing, storyboarding and editing through attention, emotion, expectation and payoff. New topics and major adaptations call for current audience evidence; small revisions reuse the established baseline.
+Why stay for the next shot? Hold the reaction or cut now? When does a hook pay off, and what new expectation grows from its consequence? Story events, character action and audiovisual motifs all provide returns on attention; density does not mean frantic cutting. A lightweight director-experience review follows storyboarding before assets and prompts expand the work. New topics and major adaptations call for current audience evidence; small revisions reuse the established baseline.
 
 ### 02 / Production design that builds a world
 
-Silhouette, hair, makeup, wardrobe texture, lived-in details, spatial geography, foreground and background, props with something to do: the assets stage develops them proactively. Steam, weather, passing traffic, moving light and offscreen sound give the setting a life of its own.
+Silhouette, hair, makeup, wardrobe texture, lived-in details, spatial geography, foreground and background, props with something to do: the design stage develops them proactively. Steam, weather, passing traffic, moving light and offscreen sound give the setting a life of its own.
 
-Identity sheets, wardrobe designs, location masters and **character-in-scene look-development frames** have separate jobs. Test whether the person belongs in the world before expanding production.
+The default is a **minimal set of character/wardrobe, location and key-prop references** for omnireference generation and text direction. Look-development images, critical state details and per-cut keyframes are added only for a concrete control need—not as a full set of intermediate frames.
 
 ### 03 / Cinematic craft becomes actionable choices
 
@@ -61,13 +61,13 @@ No additional standalone WebUI or separate writing/listening model subscription 
 
 ## 🎨 After the script, design a world worth watching
 
-Meet **[short-drama-design: visual concept and scene design](short-drama-design/SKILL.md)**. This stage concentrates recent-work research, cross-work synthesis, character styling, environments, props and new staging before assets and storyboards are produced.
+**[short-drama-design: experience and visual direction](short-drama-design/SKILL.md)** establishes the audience entry point, emotional core, sustained expectation and information gap before developing character styling, environments, props, staging and image texture. Recent-work research and cross-work synthesis are used for specific design questions, then realized through the text storyboard.
 
-The default is refined, richly detailed audiovisual design with clear hierarchy and rhythm. Explicit requests for minimalism or negative space guide a different treatment. Photorealism and candid phone-camera texture can still carry imaginative forms, colors and object behavior.
+The work can be rich and polished or minimal and restrained; intensity follows the content, audience and project format. Hooks connect across story, character and audiovisual layers. Each payoff changes the situation and grows the next expectation, rather than using repeated evidence or shot count to simulate density. Photorealism and candid phone-camera texture can still carry imaginative forms, colors and object behavior.
 
 Design may add events, environmental interruptions, silence, animated device graphics and sound cues around the story's emotional progression. Scene design stays in `视觉设定.md` alongside the visual world; downstream stages read it together with the original script.
 
-If the required storyboard or actual asset images are missing, the workflow enters design first. `design_tool.py inspect/complete` tracks source versions, reuses a current design and advances downstream without looping. Other stages consult filmmaking craft knowledge for specific execution problems.
+If the required storyboard or actual asset images are missing, the workflow enters design first. `design_tool.py inspect/complete` tracks source versions, reuses a current design and advances downstream without looping. A director-experience review follows storyboarding before minimal subject assets and prompts are expanded, without adding another review document.
 
 ## 🎞️ Plan the join before generating the clip
 
@@ -82,12 +82,13 @@ Rebuild a review for an existing preview with `python scripts/openfilm_bridge.py
 ```mermaid
 flowchart LR
   A[Idea / novel / script] --> B[Story and characters]
-  B --> C[Visual concept / production design / staging]
-  C --> D[Assets and look-development frames]
-  D --> E[Shots / performance / sound]
-  E --> F[Video prompts and production]
-  F --> G[OpenFilm human + Agent editing]
-  G --> H[Preview / revise / deliver]
+  B --> C[Experience / visual design / staging]
+  C --> D[Text storyboard / performance / sound]
+  D --> E[Director-experience review]
+  E --> F[Minimal subject assets / selective controls]
+  F --> G[Video prompts and production]
+  G --> H[OpenFilm human + Agent editing]
+  H --> I[Preview / revise / deliver]
 ```
 
 Five readable creative documents hold the upstream work: `剧本.md` (screenplay), `视觉设定.md` (visual design), `分镜.md` (storyboard), `图片提示词.md` (image prompts), and `视频提示词.md` (video prompts). Keep these filenames for the current parsers. OpenFilm files own postproduction. Start from an existing script, footage or an intermediate stage as appropriate.
@@ -136,8 +137,8 @@ The bridge installs pinned `openfilm@0.4.1` into an isolated runtime and deploys
 $short-drama
 Turn this script into a 45-second vertical short. Preserve the story core
 and established characters. Develop wardrobe, set dressing, environmental
-activity, moving light and sound perspective. Establish visual design and
-character-in-scene frames before expanding the shots and generation plan.
+activity, moving light and sound perspective. Design expectation and payoff,
+then complete the text storyboard, director review and minimal subject assets.
 Show an exact preview before paid generation. Edit available footage in OpenFilm.
 Project directory: <your-project-directory>
 ```
@@ -169,14 +170,14 @@ See the [OpenFilm workflow reference](short-drama-edit/references/openfilm-workf
 | [short-drama-develop](short-drama-develop/SKILL.md) | Story engines, relationships, audience evidence and episode development |
 | [short-drama-novel-analyze](short-drama-novel-analyze/SKILL.md) | Long-form source analysis and traceable adaptation opportunities |
 | [short-drama-write](short-drama-write/SKILL.md) | Shootable scripts, action, dialogue and pacing |
-| [short-drama-design](short-drama-design/SKILL.md) | Recent references, creative synthesis, visual design, staging and emotional rhythm |
-| [short-drama-assets](short-drama-assets/SKILL.md) | Asset types, state variants, reference roles and adopted files |
-| [short-drama-image-prompts](short-drama-image-prompts/SKILL.md) | Identity, wardrobe, location and look-development prompts |
-| [short-drama-storyboard](short-drama-storyboard/SKILL.md) | Blocking, framing, performance, coverage and sound relationships |
+| [short-drama-design](short-drama-design/SKILL.md) | Audience experience, visual design, staging and emotional rhythm |
+| [short-drama-assets](short-drama-assets/SKILL.md) | Minimal subject assets, reference roles and adopted files |
+| [short-drama-image-prompts](short-drama-image-prompts/SKILL.md) | Character/wardrobe, location, key-prop and selective control images |
+| [short-drama-storyboard](short-drama-storyboard/SKILL.md) | Expectation and attention paths, blocking, performance and sound |
 | [short-drama-video-prompts](short-drama-video-prompts/SKILL.md) | Model-specific prompts, dynamic action and shot handoffs |
 | [short-drama-produce](short-drama-produce/SKILL.md) | Preparation, execution, collection and adopted versions |
 | [short-drama-edit](short-drama-edit/SKILL.md) | OpenFilm editing, captions, sound and delivery |
-| [short-drama-review](short-drama-review/SKILL.md) | Evidence-based story, image, continuity and film review |
+| [short-drama-review](short-drama-review/SKILL.md) | Director-experience review and evidence-based quality checks |
 
 ## 🔬 Tested execution, clearly scoped
 

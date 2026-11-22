@@ -26,13 +26,13 @@
 
 ### 01 / 让观众愿意看，才是第一件事
 
-开场为什么停留？一个反应该多留半拍，还是直接切走？包袱何时兑现？声音什么时候先于画面出现？共同创作指南让写作、分镜与剪辑围绕注意力、情绪和预期组织表达。新选题与重大改编会要求复核现实观众证据，局部润色则沿用已有基线。
+开场为什么停留？一个反应该多留半拍，还是直接切走？钩子何时兑现，兑现后又产生什么新期待？剧情事件、人物行动与视听母题共同提供观看回报，密度不等于碎切。分镜之后、资产与提示词之前还有一轮轻量导演体验审读，保留最强处，先修最影响观看的问题。新选题与重大改编会复核现实观众证据，局部润色沿用已有基线。
 
 ### 02 / 美术会主动“加戏”，但记得自己加过什么
 
 角色有轮廓、妆发、材质与生活痕迹；空间有地理、前中后景、陈设和可表演的道具。环境也有自己的生命：蒸汽、风、雨、过路人、动态光源和画外声。
 
-身份参考、完整妆造、场景母版、**角色入景代表帧**各司其职。先看人在场景里是否成立，再展开制作，减少“脸对了，衣服和世界全没了”的脱节。
+默认以**人物/造型、场景和关键道具的最小主体资产**配合全能参考与文本导演。代表图、关键状态细节图和逐切关键帧按实际控制需要补充，不再默认生成一整套中间帧。
 
 ### 03 / 高级感拆成能执行的决定
 
@@ -65,13 +65,13 @@
 
 ## 🎨 剧本之后，先设计一个值得看的世界
 
-新增 **[short-drama-design：视觉创意与场面设计](short-drama-design/SKILL.md)**。近期优秀原作检索、跨作品组合、人物妆造、空间道具与新调度集中在这里，随后交给资产图和分镜落实。
+**[short-drama-design：体验与视觉总设计](short-drama-design/SKILL.md)**先确定观众入口、情感心脏、持续期待与知情差，再发展人物妆造、空间道具、新调度与成像。近期原作研究和跨作品组合按当前设计问题使用，随后交给文本分镜落实。
 
-默认发展精致、丰盛、信息密度高的视听设计；用户明确指定极简、留白等风格时按其方向处理。写实与手机拍摄质感同样可以承载大胆的形态、色彩和物品行为。
+画面可以精致丰盛，也可以极简克制；强度随内容、观众与项目规格选择。钩子沿剧情、人物和视听三层接力，每次兑现产生后果并形成下一期待，不靠重复证据或镜头数量制造密度。写实与手机拍摄质感同样可以承载大胆的形态、色彩和物品行为。
 
 设计可以补充剧本未写的事件、环境干扰、沉默、屏幕动图与声音落点，围绕观众情绪节奏取舍。场面设计与人物/场景设定同存于 `视觉设定.md`，原剧本和新增设计一起交给下游。
 
-分镜或本次所需的实际资产图缺一项，先执行设计。`design_tool.py inspect/complete` 记录来源版本，完成后接续下游；已有设计复用，来源变化再更新，避免循环。其余阶段按具体问题查影视工业知识，集中精力实现选定方案。
+分镜或本次所需的实际资产图缺一项，先执行设计。`design_tool.py inspect/complete` 记录来源版本，完成后接续下游；已有设计复用，来源变化再更新，避免循环。分镜后先做导演体验审读，再展开最小主体资产和提示词，不另建审查文档。
 
 ## 🎞️ 在分镜时，就为下一次切镜做好准备
 
@@ -86,12 +86,13 @@
 ```mermaid
 flowchart LR
   A[点子 / 小说 / 现成剧本] --> B[剧情与角色]
-  B --> C[视觉创意 / 美术 / 新调度]
-  C --> D[资产图 / 入景代表帧]
-  D --> E[分镜 / 表演 / 声音设计]
-  E --> F[视频提示词 / 既有生产路线]
-  F --> G[OpenFilm 人与 Agent 共编]
-  G --> H[预览 / 修订 / 成片交付]
+  B --> C[体验 / 视觉 / 新调度]
+  C --> D[文本分镜 / 表演 / 声音]
+  D --> E[导演体验审读]
+  E --> F[最小主体资产 / 按需控制图]
+  F --> G[视频提示词 / 既有生产路线]
+  G --> H[OpenFilm 人与 Agent 共编]
+  H --> I[预览 / 修订 / 成片交付]
 ```
 
 前期保留五份可读主稿：`剧本.md`、`视觉设定.md`、`分镜.md`、`图片提示词.md`、`视频提示词.md`。后期以 OpenFilm 工程为主稿。你可以从已有剧本、现成素材或中间阶段进入，不必为了走流程补写无用文档。
@@ -139,7 +140,7 @@ python scripts/openfilm_bridge.py setup
 $short-drama
 把这份剧本做成 45 秒竖屏短片。保留角色和故事内核，
 主动补充妆造、空间陈设、环境活动、动态光影和声音层次。
-先落实视觉设定与角色入景代表帧，再推进分镜和生成准备。
+先设计观众期待与兑现，再完成文本分镜、导演体验审读和最小主体资产。
 需要实际付费生成时给我精确预览；素材齐了就在 OpenFilm 里剪。
 项目放到：<你的项目目录>
 ```
@@ -171,14 +172,14 @@ python scripts/edit_tool.py verify <集目录>
 | [short-drama-develop](short-drama-develop/SKILL.md) | 故事引擎、人物关系、受众证据与分集开发 |
 | [short-drama-novel-analyze](short-drama-novel-analyze/SKILL.md) | 长篇原著、改编价值与可追溯分析 |
 | [short-drama-write](short-drama-write/SKILL.md) | 可拍剧本、行动、对白与节奏 |
-| [short-drama-design](short-drama-design/SKILL.md) | 近期参考、跨作品转译、美术细化、新调度与情绪节奏 |
-| [short-drama-assets](short-drama-assets/SKILL.md) | 图种、状态版、参考用途与实际采用资产安排 |
-| [short-drama-image-prompts](short-drama-image-prompts/SKILL.md) | 身份图、造型图、场景母版与入景帧 |
-| [short-drama-storyboard](short-drama-storyboard/SKILL.md) | 镜头调度、表演、覆盖与声画关系 |
+| [short-drama-design](short-drama-design/SKILL.md) | 观众体验、视觉设计、新调度与情绪节奏 |
+| [short-drama-assets](short-drama-assets/SKILL.md) | 最小主体资产、参考用途与实际采用图 |
+| [short-drama-image-prompts](short-drama-image-prompts/SKILL.md) | 人物/造型、场景、关键道具与按需控制图片 |
+| [short-drama-storyboard](short-drama-storyboard/SKILL.md) | 期待与注意路径、镜头调度、表演与声画关系 |
 | [short-drama-video-prompts](short-drama-video-prompts/SKILL.md) | 目标模型提示词、动态过程与镜头交接 |
 | [short-drama-produce](short-drama-produce/SKILL.md) | 生产准备、执行、结果收集与版本登记 |
 | [short-drama-edit](short-drama-edit/SKILL.md) | OpenFilm 初剪、精剪、字幕、声音与交付 |
-| [short-drama-review](short-drama-review/SKILL.md) | 按实际证据审查故事、画面、连续性与成片 |
+| [short-drama-review](short-drama-review/SKILL.md) | 分镜后导演体验审读与实际作品质量复核 |
 
 ## 🔬 有实测，也把实测边界说清楚
 

@@ -86,10 +86,10 @@ def inspect(episode, root=None):
         next_skill = "short-drama-write"
     elif needs_design:
         next_skill = "short-drama-design"
-    elif not images and not text_only:
-        next_skill = "short-drama-assets"
     elif not shots:
         next_skill = "short-drama-storyboard"
+    elif not images and not text_only:
+        next_skill = "short-drama-assets"
     else:
         next_skill = "short-drama-video-prompts"
     return {"episode": str(ep), "projectRoot": str(root), "missing": missing,

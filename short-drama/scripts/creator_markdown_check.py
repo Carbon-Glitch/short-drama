@@ -1347,9 +1347,7 @@ def _check_continuity_locks(
                     errors.append(f"{lock_id}: 连续性锁指向不存在的镜头: {shot_id}")
                     continue
                 keyframe = _copyable_prompt(shots[shot_id], heading=r"冻结关键帧提示词")
-                if keyframe is None:
-                    errors.append(f"{lock_id}: {shot_id} 缺少可读的冻结关键帧提示词")
-                elif not _carries_surface(keyframe, surface):
+                if keyframe is not None and not _carries_surface(keyframe, surface):
                     errors.append(f"{lock_id}: {shot_id} 冻结关键帧提示词缺少锁面")
             motion = motion_by_shot.get(shot_id)
             if motion is None:
@@ -1774,11 +1772,6 @@ def validate_documents(
             motion_by_shot[shot_id] = (motion_id, body, copyable_prompt)
         if motion_id.removeprefix("MOTION-") != shot_id.removeprefix("SHOT-"):
             errors.append(f"{motion_id}: ID 必须与分镜 {shot_id} 一一对应")
-        if copyable_prompt is None:
-            errors.append(
-                f"{motion_id}: 缺少唯一且非空的可复制提示词"
-                + _copyable_prompt_cause(body)
-            )
 
     if has_storyboard and has_video and set(motion_by_shot) != set(shots):
         errors.append("分镜.md/视频提示词.md: SHOT 与 MOTION 未一一对应")
@@ -1909,18 +1902,22 @@ def validate_documents(
             )
         if basis.parsed:
             in_frame[shot_id] = basis.declared
-        # The keyframe is the only place the frame's contents exist as text, so a
-        # shot without one would make the coverage check below vacuous.
+        # Subject-reference storyboards keep their visible facts in the normal
+        # shot fields. A precision keyframe, when present, is checked separately.
         keyframe = _copyable_prompt(shot_body, heading=r"冻结关键帧提示词")
-        if keyframe is None:
-            errors.append(
-                f"{shot_id}: 缺少唯一且非空的冻结关键帧提示词"
-                + _copyable_prompt_cause(shot_body, heading=r"冻结关键帧提示词")
-            )
-        elif basis.parsed:
-            _check_named_coverage(
-                keyframe, shot_id, "冻结关键帧提示词", basis, visual_entries, errors
-            )
+        if basis.parsed:
+            if keyframe is not None:
+                _check_named_coverage(
+                    keyframe, shot_id, "冻结关键帧提示词", basis, visual_entries, errors
+                )
+            else:
+                visible_text = "\n".join(
+                    fields.get(name, "")
+                    for name in ("景别/机位", "运镜", "起点", "唯一动作", "终点")
+                )
+                _check_named_coverage(
+                    visible_text, shot_id, "镜头画面说明", basis, visual_entries, errors
+                )
         # The closing keyframe is optional — many shots end where they began —
         # but a heading that is present and malformed is a defect, not a shot
         # that quietly has no closing frame.
@@ -2001,6 +1998,35 @@ def validate_documents(
         spoken_sources=spoken_sources if quote_sources_complete else None,
         errors=errors,
     )
+
+    group_prompt_by_shot: dict[str, str] = {}
+    for members, group_prompt in group_members.values():
+        if group_prompt is not None:
+            for shot_id in members:
+                group_prompt_by_shot[shot_id] = group_prompt
+    for shot_id, (motion_id, body, copyable_prompt) in motion_by_shot.items():
+        if copyable_prompt is not None:
+            continue
+        group_prompt = group_prompt_by_shot.get(shot_id)
+        if group_prompt is None:
+            errors.append(
+                f"{motion_id}: 缺少唯一且非空的可复制提示词；"
+                "逐镜提交时在 MOTION 写正文，多镜提交时由所属 GROUP 承担"
+                + _copyable_prompt_cause(body)
+            )
+            continue
+        fields = _fields(body, owner=motion_id, errors=[])
+        governing_input = _plain(fields.get("输入参考图", ""))
+        anchor = _plain(fields.get("静态视觉锚点", ""))
+        if (
+            _is_explicit_text_to_video(governing_input)
+            and anchor
+            and anchor != "无"
+            and anchor not in group_prompt
+        ):
+            errors.append(
+                f"{motion_id}: 所属 GROUP 可复制提示词没有包含本镜静态视觉锚点"
+            )
 
     _check_language_designators(
         project_root, entries=visual_entries, errors=errors

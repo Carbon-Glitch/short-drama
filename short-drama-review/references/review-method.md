@@ -12,7 +12,7 @@
 - `REV-01` — Start from the audience experience and use the relevant integrity checks alongside the creative review.
 - `REV-02` — Every finding names a bounded target, evidence, impact, required outcome, owner and severity.
 - `REV-03` — A semantic-invention finding pairs the authoritative fact with the conflicting downstream fact.
-- `REV-04` — Use in-task self-review by default; identify it honestly. Arrange separate independent review when the user requests it.
+- `REV-04` — 局部修改使用制作内自检并如实标明；整集跨阶段交付采用未参与创作的独立首看与连续性复核，作者自检不冒充首次观众。
 - `REV-05` — Diagnose repeated/generic mechanisms at exact locations rather than applying an “AI-ish” label.
 - `REV-06` — Alternative preferences remain notes unless the current choice violates an accepted constraint.
 - `REV-07` — An end-to-end task authorizes responsible creative decisions; distinguish actual user choices from the Agent's design choices.
@@ -66,8 +66,9 @@ It does not copy upstream snapshots, invent record IDs or create another version
 
 ## Cross-layer synthesis
 
-Trace important moves end to end: story fact, asset decision, shot boundary, keyframe, motion and next-shot state.
-Resolve upstream meaning first; do not polish prompt wording when the shot or asset binding is wrong.
+Trace important moves end to end: story fact, design priority, subject assets, image prompt and actual REF, shot boundary, optional keyframe, motion and next-shot state. For each important design, identify its concrete image/shot carrier and the details added downstream; distinguish intentional crop allocation, dependence on a planned reference, state-projection errors and true omissions. Check that every generated image has a real generation consumer; representative and per-cut frames are evaluated when their control route is chosen.
+
+Resolve upstream meaning first; do not polish prompt wording when the shot or asset binding is wrong. Judge actual images for design fidelity and aesthetic strength, and dynamic footage for readable action, focus, lighting, reflection and material change.
 
 ## Revision and re-review
 

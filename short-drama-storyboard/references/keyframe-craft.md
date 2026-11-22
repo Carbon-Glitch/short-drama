@@ -23,24 +23,30 @@ accepted shot. A keyframe is not a compressed video prompt.
 
 ## Ordered recipe
 
-1. **Purpose:** what the audience must notice now.
-2. **Focal subject:** exact asset and variant IDs.
-3. **Frame:** shot size, angle, lens intent, aspect-aware composition.
-4. **Geography:** Location/View, fixed anchors, foreground/background zones.
-5. **Boundary projection:** exact start position, body facing, pose, gaze, hands,
+1. **Purpose:** name the design, action or reaction the audience must notice now.
+2. **Focal subject:** bind exact assets and variants, then carry the visible identity,
+   current Look, geography and prop details needed in this crop. Shoes belong to a
+   full-body view; earrings, lip color and makeup belong to a readable close view.
+3. **Frame:** choose camera distance, angle, perspective, subject share and
+   aspect-aware composition; say where the important detail sits and how large it reads.
+4. **Geography:** Location/View, fixed anchors, foreground/background zones and
+   the designed environment details visible through this framing.
+5. **Focus and depth:** choose the focal plane, depth of field and what each layer
+   must still communicate. If a background action matters, give it a readable
+   focal treatment or move it into another shot.
+6. **Boundary projection:** exact start position, body facing, pose, gaze, hands,
    held props. Give body facing for every person — it fixes which screen side they
    hold and which side the next reverse cuts from; `gaze` does not cover it. Add
    head facing only when it differs from body facing.
-6. **Performance instant:** one visible expression/tension state, not an arc.
+7. **Performance instant:** one visible expression/tension state, not an arc.
    Pick a channel the current shot size can actually read — gaze, breath, body
-   set, object handling, or a held decision. A wide shot cannot carry an eyelid;
-   a close-up cannot carry a full-body retreat. Naming only the emotion ("愤怒")
-   leaves the translation to a downstream stage, and the keyframe is the first
-   frame — a mistranslation there is wrong from frame one.
-7. **Light and atmosphere:** inherit accepted direction/time/weather; add only
-   frame-relevant detail.
-8. **Text policy:** readable/symbolic/blank/postproduction for visible surfaces.
-9. **Exclusions:** contradictions or drift likely for this frame.
+   set, object handling, or a held decision.
+8. **State-projected light and surface:** inherit the physical sources and Look,
+   then describe this instant's door/opening, position and occlusion. Write how
+   light, shadows, highlights and reflections fall on the actual clothes, skin,
+   prop and set, and how steam/rain becomes visible.
+9. **Text policy:** readable/symbolic/blank/postproduction for visible surfaces.
+10. **Exclusions:** only the contradictions or drift likely for this frame.
 
 Identity and boundary facts remain source references. The keyframe owns focal,
 composition, camera/lens, frame-only staging, and exclusions.
@@ -90,18 +96,13 @@ instead of inventing a hidden candidate state.
 
 ## 尾帧：什么时候可以有，以及它换来什么代价（`SHT-17`）
 
-默认每镜一张首帧，冻结「起点」。交付工作流需要首尾帧时，再补一张投影
-「终点」的尾帧；两帧之间的运动仍按分镜边界和运动提示词实现。
+需要精确开场或逐切控制时才制作首帧，冻结「起点」。交付工作流确实需要首尾帧时，再补一张投影「终点」的尾帧；普通主体参考多镜不增加这些图片。
 
 **`structural_invariant`**：《分镜.md》的首帧与收尾关键帧分别指向同一镜头已接受的起点与终点。
-**尾帧是「终点」的投影，
-不是新的终点事实**——它与首帧对「起点」的关系完全一样：可以决定这一帧怎么构图、
-用什么景别镜头、光怎么落，不能决定人在哪、手里有什么、看着谁。尾帧与镜头终点不一致时，
-错的是尾帧。
+**尾帧是「终点」的投影，不是新的终点事实**——它与首帧对「起点」的关系完全一样：可以决定这一帧怎么构图、
+用什么景别镜头、光怎么落，不能决定人在哪、手里有什么、看着谁。尾帧与镜头终点不一致时，错的是尾帧。
 
-每镜的关键帧数量**不是固定的**。默认一张首帧；只有当交付工作流真的要消费尾帧时才加一张，
-不为凑齐而画。补尾帧不改变 `SHT-10`：首帧仍然只能写 start 事实，尾帧只能写 end 事实，
-两张各自守自己的边界，不互相借用。
+首帧与尾帧都只写各自边界的真实事实，不互相借用。
 
 **代价要说清楚：交出一对首尾帧，等于把两帧之间的运动交给了执行端插值**。 而运动路径本来
 是运动规格拥有的东西。所以选了首尾帧接续的镜头，其运动规格不是"照旧再写一遍"，而是被
@@ -148,12 +149,18 @@ A single held pose may imply tension, but it must not require several moments.
 
 ## Prompt economy
 
-Do not restate full character or location 设定集s. Bind accepted variants and
-repeat only facts the frame needs to prevent ambiguity: distinguishing anchor,
-current Look, crucial spatial anchor, held prop, light direction, text state.
+Bind accepted variants and actual REFs, then write every design fact this crop
+needs: distinguishing anchors, current Look details, visible set dressing,
+crucial spatial anchors, held props, state-projected light, material response,
+focus and text state. A full-body frame carries the selected shoes and silhouette;
+a close-up carries readable earrings, makeup and lip color. Details outside the
+crop belong to their assigned IMG/SHOT rather than being forced into this one.
 
-Generic “cinematic, 8K, masterpiece” language cannot replace subject identity,
-geography, composition, or continuity.
+Do not compress a chosen asset into a character or location name, and do not
+repeat the whole design bible indiscriminately. Each important design should
+have a concrete carrier across the complete image/shot set. Generic “cinematic,
+8K, masterpiece” language cannot replace identity, geography, composition,
+material behavior, or continuity.
 
 ## Failure examples
 

@@ -37,6 +37,15 @@ Fresh-machine installation, broad cross-genre generated-video quality and audien
 - All 12 added staging events reached OpenFilm handoff. Rhythm and exit-state notes were retained; design edits invalidated the earlier handoff.
 - Scene/asset section isolation, repeated staging fields and multi-scene order were checked. The 17 existing core self-tests passed.
 - Optional Hypit writer context checks used the paired local installation: design-role messages received the design guides; H3-role messages received the selected scene design without repeating recent-work research. This separate Hypit writer change is not bundled here.
-- Rich audiovisual design and longer-clip preferences are creative defaults. Their effect on generated-video quality or audience retention has not been established by these structural checks.
+- At this snapshot, rich audiovisual design and longer-clip preferences were creative defaults. Their effect on generated-video quality or audience retention was not established by these structural checks; the 2026-11-22 revision below replaces the richness default with content- and audience-specific choices.
 
 本次发布包含技能、资料与执行脚本，未包含私人制作工程、视频、凭据或运行时状态。近期作品搜索集中到设计阶段；其他阶段按问题查影视工业方法。
+
+## Experience and director review / 体验与导演审读 — 2026-11-22
+
+- All 12 skill directories in the release copy passed skill validation. The six skills with numbered Python self-tests passed 44 cases in total; the short-drama-edit self-test suite also passed.
+- A synthetic breakfast-shop scene passed the complete five-document validator using the release-copy script. It uses four subject references and one 16-second multi-shot prompt, with no per-shot keyframes and no generated media.
+- The text test checked early expectation, two visible payoffs, attention handoff, prop counts, hand/prop continuity, focus and sound. It does not establish generated-image quality, audience preference or retention.
+- README and README.en now describe the current order: experience design → text storyboard → director-experience review → minimal subject assets → video prompts. No new creative document or review artifact was added.
+
+本轮还复核了设计路由与版本用例、五文档传递用例和视频单正文回归；未向图片或视频服务提交任务，也未上传短测项目、本机路径、缓存或凭据。

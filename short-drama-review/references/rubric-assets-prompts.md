@@ -84,23 +84,23 @@ note (`AST-15`).
 
 ## Prompt recipe review
 
-All prompt types need purpose, exact binding, identifying facts, current variant,
-composition, background, lighting, text policy, constraints, and exclusions. Then
-apply type-specific criteria:
+Review design fidelity and concrete imaging alongside identity and reuse:
 
-- Does each media reference declare one purpose, the facts it may copy,
-  the facts it must not import, and a pixel/text admission decision?
-- If a reference is composition-, scale-, or effect-only, did the prompt avoid
-  borrowing its identity, wardrobe, content, text, count, or story state?
+- Trace each important design to the final prompt, an actual REF, or another named IMG/SHOT. Distinguish an out-of-frame detail from an unassigned omission; PLAN alone is not pixel evidence.
+- Check camera distance/perspective, subject share, foreground/middle/background, focal plane and depth of field where they affect the image's purpose.
+- Read how light acts on named surfaces: direction, softness, fill, shadow density, black level, highlight, skin and separation. The shared Look must be projected through the current open/closed, position and occlusion state.
+- Compare materials through roughness, reflection, transmission, fibres, wear, air, contact shadow and scale rather than a shared “tactile” phrase.
+- For scene-moment frames, judge the whole visual relationship at its strongest designed moment. For key-state details, judge the exact current state. Production start frames still project the shot start.
+- Each media reference declares its purpose, control range and observation state; local edits preserve the adopted image's identity, geometry and visual strengths.
 
-- **Character sheet:** one identity and coherent Look; useful reference views;
-  neutral enough background/light to recognize anchors; no story action chain.
-- **Location plate:** navigable geography, orientation, fixed anchors, material,
-  palette, light direction, atmosphere; normally empty of cast.
-- **Prop plate:** scale cue, shape, materials, wear, function/moving parts, current
-  state, viewing angle, isolation, text policy.
-- **Edit delta:** exact target and region, changes, preserve set, expected
-  continuity impact; no unrelated regeneration.
+Apply type-specific criteria:
+
+- **Character sheet:** one identity and coherent Look; full visible styling, useful views and material separation.
+- **Location plate:** navigable geography, fixed anchors, layered set dressing, material, palette, light and atmosphere.
+- **Prop plate:** scale cue, shape, material behavior, wear, function/moving parts and current state.
+- **Scene moment:** a complete, striking composition that proves character, styling, space, light and behavior together.
+- **Key-state detail:** the decisive small structure/state is readable at the chosen scale and focus.
+- **Edit delta:** exact target and region, changes, preserve set and continuity impact.
 
 ## Prompt quality failures
 
@@ -117,5 +117,4 @@ apply type-specific criteria:
 - private URL, source ID, provider task field, or operator complaint leaks in.
 - “use the whole reference” does not say what may or may not be copied.
 
-Prompt prose elegance is secondary to recognition, reuse, continuity, and clear
-control of the current operation.
+Prompt prose must serve the chosen design, recognition, reuse, continuity and clear control of the current operation. Rich imaging detail is valuable when it makes the intended beauty, material, space and state visible; repetition and generic adjectives are not substitutes.
