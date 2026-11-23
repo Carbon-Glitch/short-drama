@@ -1,3 +1,11 @@
+---
+provider: seedance
+api_scope: video-generation
+official_checked_at: unknown
+metadata_reviewed_at: 2026-11-22
+profile_status: configurable
+---
+
 # Seedance adapter
 
 Adapter command:

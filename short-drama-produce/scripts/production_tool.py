@@ -124,7 +124,7 @@ CREATOR_SOURCE_NAMES = {
 # copyable body.
 CREATOR_SOURCE_ENTRIES = {
     "图片提示词.md": ("IMG-", r"可复制(?:通用)?提示词", "参考"),
-    "视频提示词.md": ("MOTION-", r"可复制(?:通用)?提示词", "输入参考图"),
+    "视频提示词.md": (("MOTION-", "GROUP-"), r"可复制(?:通用)?提示词", "输入参考图"),
     "分镜.md": ("SHOT-", r"冻结关键帧提示词", "输入参考图"),
 }
 
@@ -954,6 +954,29 @@ def _markdown_audio_bindings(section: str) -> list[dict[str, Any]]:
     return bindings
 
 
+def _check_group_duration(document, section, requested):
+    from decimal import Decimal
+
+    def seconds(body):
+        values = _field_values(body, "时长")
+        match = re.fullmatch(r"(\d+(?:\.\d+)?)\s*(?:s|秒)?", values[0].strip()) if len(values) == 1 else None
+        if not match or Decimal(match[1]) <= 0:
+            raise ValueError("GROUP and each member need a positive duration")
+        return Decimal(match[1])
+
+    listed = _field_values(section, "成员")
+    members = [m.strip() for m in re.split(r"[、,，]", listed[0])] if len(listed) == 1 else []
+    if not members or len(set(members)) != len(members) or not all(
+        re.fullmatch(r"MOTION-[A-Z0-9-]+", m) for m in members
+    ):
+        raise ValueError("invalid GROUP members")
+    total = seconds(section)
+    if sum(seconds(_markdown_section(document, m)) for m in members) != total:
+        raise ValueError("GROUP duration differs from its member sum")
+    if type(requested) not in (int, float) or total != Decimal(str(requested)):
+        raise ValueError("job duration must match the selected GROUP duration")
+
+
 def _verify_markdown_source(
     root: Path,
     *,
@@ -961,12 +984,15 @@ def _verify_markdown_source(
     source_entry: str,
     prompt: str,
     bindings: list[dict[str, Any]],
+    duration=None,
 ) -> None:
     source_path = _project_file(root, source)
     if source_path.suffix.casefold() != ".md":
         raise ValueError("source_entry requires a Markdown source")
     document = source_path.read_text(encoding="utf-8")
     section = _markdown_section(document, source_entry)
+    if source_entry.startswith("GROUP-"):
+        _check_group_duration(document, section, duration)
     _, heading, field_name = CREATOR_SOURCE_ENTRIES[source_path.name]
     if _copyable_prompt(section, heading) != prompt.strip():
         raise ValueError("job prompt does not match the selected source entry")
@@ -1085,6 +1111,7 @@ def _normalize_job(root: Path, raw: object) -> dict[str, Any]:
             source_entry=source_entry,
             prompt=prompt,
             bindings=reference_bindings,
+            duration=raw["parameters"].get("duration") if isinstance(raw.get("parameters"), Mapping) else None,
         )
     outputs = [
         _relative_path(path, output=True)
@@ -1190,8 +1217,10 @@ def _validate_stored_job(
         or source is None
     ):
         raise ValueError("stored job source entry is invalid")
-    expected_entry_prefix = {"image": "IMG-", "video": "MOTION-"}.get(
-        str(modality)
+    expected_entry_prefix = (
+        CREATOR_SOURCE_ENTRIES[PurePosixPath(source).name][0]
+        if source and CREATOR_SOURCE_NAMES.get(PurePosixPath(source).name) == modality
+        else None
     )
     if source_entry is not None and (
         expected_entry_prefix is None

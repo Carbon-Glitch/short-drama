@@ -31,6 +31,13 @@
 未复制其固定样本量、三方向/三版本配额、默认整套调研、独立节拍表或第二份主剧本；来源skill本体保留原样，
 short-drama引用为自包含的方法转译，不依赖另一skill的安装或执行。
 
+2026-11-23 通读用户提供的 `老唐电影级分镜skill-s10至臻版_v3` 主 skill、21 份参考、回归夹具与预览脚本，
+选择性吸收同源审阅视图、章节级加载、长对白改例、反打光照推导、画外承受、非人表达通道、整组段界和版本对照。
+新增[完整声画调度预览](../../short-drama-storyboard/references/storyboard-preview.md)与[Skill 版本对照评估](skill-evaluation.md)，
+其余增量原位进入分镜和接镜资料；未采用强制确认、固定话术、规则编号导航、镜头/时长/景别配额或统一表演与亮度公式。
+本机已验证真实 CLI、离线自检和链接；外部回归夹具未被当作媒体效果证据，本套件也未执行本轮媒体生产。
+原始 skill 保持原样，short-drama 不依赖其安装或执行。其许可证未随包声明；本次只转译机制并重写表达与工具，未复制其模板和代码。
+
 | 方法来源 | 按需技巧卡 | 吸收边界 |
 |---|---|---|
 | Judith Weston《Directing Actors》；Michael Rabiger《Directing: Film Techniques and Aesthetics》；《Actions: The Actors’ Thesaurus》 | [表演导演](../../short-drama-video-prompts/references/performance-direction.md) | 行动动词、现场目标、听者、adjustment；沿用人物内核，主动发展具体行为与可读细节 |

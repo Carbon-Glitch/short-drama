@@ -5,15 +5,15 @@
 - [Boundary and instant tests](#boundary-and-instant-tests)
 - [Purpose](#purpose)
 - [Ordered recipe](#ordered-recipe)
-- [尾帧：什么时候可以有，以及它换来什么代价](#尾帧什么时候可以有以及它换来什么代价sht-17)
+- [尾帧：什么时候可以有，以及它换来什么代价](#尾帧什么时候可以有以及它换来什么代价)
 - [Start-only drafting discipline](#start-only-drafting-discipline)
 - [Static test](#static-test)
 
 ## Boundary and instant tests
 
-- `SHT-05` — Project exactly one accepted shot boundary and bind the exact
+- Project exactly one accepted shot boundary and bind the exact
   Character/Look, Location/View, and Prop/State variants visible there.
-- `SHT-06` — Describe one freezeable instant. Ordered action, expression arcs,
+- Describe one freezeable instant. Ordered action, expression arcs,
   camera movement, and transforming weather belong to motion, not the keyframe.
 
 ## Purpose
@@ -94,7 +94,7 @@ is legible in this composition; it may not replace the exact wording or policy
 with an untraceable prose instruction. If the policy is still undecided, say so
 instead of inventing a hidden candidate state.
 
-## 尾帧：什么时候可以有，以及它换来什么代价（`SHT-17`）
+## 尾帧：什么时候可以有，以及它换来什么代价
 
 需要精确开场或逐切控制时才制作首帧，冻结「起点」。交付工作流确实需要首尾帧时，再补一张投影「终点」的尾帧；普通主体参考多镜不增加这些图片。
 
@@ -117,7 +117,7 @@ instead of inventing a hidden candidate state.
 
 ## Start-only drafting discipline
 
-**`SHT-10 · reviewed_invariant`**: rendered keyframe prose may contain only facts
+**`reviewed_invariant`**: rendered keyframe prose may contain only facts
 from the boundary that frame declares. 首帧写进任何由运动或终点首次产生的事实是漂移；
 尾帧写进在它之前就已经消耗掉的事实同样是漂移。两帧各守各的边界，不互相借用。
 

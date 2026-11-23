@@ -37,6 +37,4 @@
 | SCR-21 | craft_default | The writer reads back its own dialogue draft and cuts every line that carries neither action nor conflict; every line kept converts to an action or expression an actor can play. Creator-supplied text is not trimmed under this rule. |
 | SCR-22 | craft_default | The episode's first beat stands alone as a hook, since it is what the viewer sees in the opening frame: a visible conflict, an anomalous image, an open question, or the last beat of a peak. A still image qualifies when it raises the question by itself; information that works only after reading on-screen text, knowing who someone is, or hearing the next line is not staged alone as the first beat. |
 
-规则分级由高到低：`structural_invariant`（可机械证明的结构缺陷，可阻断）、
-`reviewed_invariant`（需证据判断）、`craft_default`（常用做法，可覆盖）、
-`taste_option`（创作者选择，不作缺陷）。创作者已接受的事实优先于本表。
+规则分级与冲突优先级见[契约与所有权](../../short-drama/references/contract-and-ownership.md#规则分级)。创作者已接受的事实优先于本表。

@@ -1,3 +1,11 @@
+---
+provider: gpt-image-2
+api_scope: image-generation
+official_checked_at: unknown
+metadata_reviewed_at: 2026-11-22
+profile_status: configurable
+---
+
 # GPT Image 2 adapter
 
 Adapter command:

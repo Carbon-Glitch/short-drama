@@ -6,26 +6,16 @@ license: MIT
 
 # 主体资产与按需控制图片
 
-## 创作目标与默认阅读
+## 目标与输入
 
-先把画面设计得漂亮、独特、有想象力，再以角色行为、表演和剪辑兑现故事。先读[共同创作方式](../short-drama/references/viewer-first.md)和[影视工业核心](../short-drama/references/film-craft-core.md)，以及本阶段核心知识：
-
-- [通用设计与成像配方](references/common-recipe.md)
-- [美术组织](../short-drama/references/visual-structure-and-art-direction.md)
-- [角色与造型图](references/character-and-look.md)
-- [场景母版](references/location-plate.md)
-- [按需代表图](references/lookdev-frame.md)
-- [成像风格与感官质感](../short-drama/references/image-look-and-finishing.md)
-
-手艺资料：[按问题查影视工业知识](../short-drama/references/craft-knowledge.md)。同轮已读未变的内容复用，方法缺口再定向联网。
-
-把设计变成可供全能参考复用的人物、造型、场景与关键道具图片。统一写入 `剧集/<EP>/图片提示词.md`；实际出图接已授权生产路线。
+把设计转成可复用的人物、造型、场景与关键道具图片，写入 `剧集/<EP>/图片提示词.md`；实际出图接已授权生产路线。
+先读[共同创作方式](../short-drama/references/viewer-first.md)、[通用设计与成像配方](references/common-recipe.md)和[角色与造型图](references/character-and-look.md)；按问题查[影视工业知识](../short-drama/references/craft-knowledge.md)。
 
 ## 工作流
 
 1. 读取视觉设定、文本分镜和资产安排，先完成本次生成需要的最小主体资产包。
 2. 按用途选择必要角度、造型和状态，写清身份、地理、形制及本图需要呈现的材质、光色和空间关系。中性技术板与场景图按各自用途展开。
-3. 从注意力中心落实机位距离、透视、主体占比、前中后景、焦面、光源方向与软硬、黑位、高光、材质反射/透光、空气、接触阴影和尺度，避免把设计缩成主体名词或通用质量句。
+3. 把摄影机放到一个具体位置：谁占前景，视线越过什么，清晰处落在哪里？让光写出材料的差别：同一盏灯在镍圈上拉出窄亮边，在湿棉袖口只留下深色压痕。按本图选用透视、景深、光质、黑位、高光、透光、空气、接触阴影与尺度，把可见结果写进正文。
 4. 每个 IMG 在现有用途/复用说明中写明**进入哪次生成、控制什么**。代表图、关键状态细节图和逐切关键帧只在新方向比较或实际失控需要时添加。
 5. 图像返回后比较美感、身份、设计、材质、空间和状态，登记采用 REF 并刷新分镜绑定。优先用主体资产＋文本分镜试生成视频，再依据真实问题定向修图或补图。
 

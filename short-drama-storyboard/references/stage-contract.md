@@ -5,6 +5,8 @@
 
 覆盖比较、场次视觉计划和调度推演都留在上下文；只有最终镜头与关键决定进入 `分镜.md`。来源使用
 场景 ID。已存在的图片提示词条目可用 `IMG-...` 可见标题引用；它不是已生成图片的证明，也不是分镜的前置门禁。没有条目时直接引用《视觉设定.md》，不建立 coverage、shots、keyframes、audition 或接受记录。
+可选审阅预览由当前分镜同源生成，使用 `分镜号｜时间｜镜长｜完整声画调度`，完整保留制作与观看所需的声画事实；
+它不是独立权威、额外审批或第六份创作文档，修订仍只回 `分镜.md`。
 
 ## 本阶段规则
 
@@ -55,6 +57,4 @@
 | CON-06 | structural_invariant | A continuity change names every existing downstream document it affects; future work is described, not pre-created. |
 | CON-07 | structural_invariant | A continuity lock declared in `视觉设定.md` fixes one verbatim surface plus its shot and image scope; every in-scope motion prompt and named image prompt carries it unchanged, and a keyframe carries it when that optional frame is used. |
 
-规则分级由高到低：`structural_invariant`（结构缺陷，阻断）、
-`reviewed_invariant`（需证据判断）、`craft_default`（常用做法，可覆盖）、
-`taste_option`（创作者选择，不作缺陷）。创作者已接受的事实优先于本表。
+规则分级与冲突优先级见[契约与所有权](../../short-drama/references/contract-and-ownership.md#规则分级)。创作者已接受的事实优先于本表。

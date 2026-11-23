@@ -351,6 +351,9 @@ def parse_storyboard(text: str) -> dict[str, Any]:
             "end": fields.get("终点", ""),
             "sound": fields.get("声音", ""),
             "screenText": fields.get("画面文字", ""),
+            "editIntent": fields.get("剪辑意图", ""),
+            "productionRole": fields.get("制作分工", ""),
+            "join": fields.get("接镜", ""),
             "imgs": [
                 {"id": ident, "name": name, "ctl": control}
                 for ident, name, control in check.IMG_RE.findall(fields.get("图片提示词项", ""))

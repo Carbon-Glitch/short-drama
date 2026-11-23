@@ -1,3 +1,11 @@
+---
+provider: minimax-music
+api_scope: music-generation
+official_checked_at: unknown
+metadata_reviewed_at: 2026-11-22
+profile_status: configurable
+---
+
 # MiniMax Music adapter
 
 Adapter command:

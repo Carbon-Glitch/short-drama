@@ -29,9 +29,7 @@
 | EDT-19 | craft_default | A dialogue cut enters about 0.25 s before the line's speech onset and leaves about 0.4 s after the line ends, and lasts at least about 1.2 s. Locate these from the sounds that belong to the scripted line, so noise never stretches the cut. |
 | EDT-20 | craft_default | Compare like surfaces within each scene. New OpenFilm projects store actual clip/look decisions; legacy automatic shot matching is not assumed to run in this backend. |
 
-规则分级由高到低：`structural_invariant`（结构缺陷，阻断）、
-`reviewed_invariant`（需证据判断）、`craft_default`（常用做法，可覆盖）、
-`taste_option`（创作者选择，不作缺陷）。创作者已接受的事实优先于本表。
+规则分级与冲突优先级见[契约与所有权](../../short-drama/references/contract-and-ownership.md#规则分级)。创作者已接受的事实优先于本表。
 
 ## 与上游阶段的分工
 

@@ -54,6 +54,7 @@ SUBTITLE_FONT = "Noto Sans CJK SC"
 REMOTION_SOURCE = Path(__file__).resolve().parent.parent / "assets" / "remotion"
 REMOTION_SOURCE_FILES = (
     "package.json",
+    "package-lock.json",
     "tsconfig.json",
     "remotion.config.ts",
     "src/index.ts",

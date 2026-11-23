@@ -6,21 +6,10 @@ license: MIT
 
 # 短剧开发
 
-## 创作目标与默认阅读
+## 目标与输入
 
-先把画面设计得漂亮、独特、有想象力，再以角色行为、表演和剪辑兑现故事。先读[共同创作方式](../short-drama/references/viewer-first.md)和[影视工业核心](../short-drama/references/film-craft-core.md)，以及本阶段核心知识：
-
-- [故事与人物引擎](references/story-craft.md)
-- [导演阐述](references/director-brief-craft.md)
-- [预期、揭示与兑现](references/reveal-reversal-payoff.md)
-
-- [成像风格与感官质感](../short-drama/references/image-look-and-finishing.md)
-
-手艺资料：[按问题查影视工业知识](../short-drama/references/craft-knowledge.md)。先用本地资料，遇到方法或接口缺口再定向联网。
-
-本阶段核心资料按当前任务读取；同轮已读未变的内容复用，接口与故障资料用到再查。
-
-把创作者的意图变成能持续制造**选择、代价与状态变化**的故事系统，保留创作者对题材、结局和尺度的选择。流行套路只能作为候选方法。
+抓住值得拍成一集的矛盾：谁最想得到什么，他每次用什么办法，为什么偏偏把事情弄得更难？沿创作者定下的题材、结局与尺度，把这个矛盾发展到足以支撑本次篇幅。
+先读[共同创作方式](../short-drama/references/viewer-first.md)、[影视工业核心](../short-drama/references/film-craft-core.md)与[故事与人物引擎](references/story-craft.md)；按问题查[影视工业知识](../short-drama/references/craft-knowledge.md)。
 
 ## Quick Start
 
@@ -155,7 +144,7 @@ python3 {技能目录}/scripts/episode_intake.py index <多集整稿> --out <epi
 - `项目开发/episode-intake-index.json`（多集整稿接入时；可重建的机械索引，不是创作事实）
 - `项目开发/episode-map.jsonl`
 
-它不写场景动作与台词，不拆资产，不写图片/视频提示词，不生成媒体，也不签发终审结论。剧本语义由 `$short-drama-write` 接管。
+选定方向后，把人物的选择、代价和这一集要兑现的事交给 `$short-drama-write` 写成戏。
 
 ## 细分知识索引
 

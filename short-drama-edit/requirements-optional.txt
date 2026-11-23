@@ -1,0 +1,3 @@
+# Optional local ASR. The base short-drama tools use the Python standard library.
+# Verified in the current development environment on 2026-11-22.
+faster-whisper==1.2.1

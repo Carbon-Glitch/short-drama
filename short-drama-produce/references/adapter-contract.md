@@ -40,7 +40,7 @@ video and tail-frame inputs; do not omit the source selector to bypass this boun
 - `source`: optional current project text/spec that owns the prompt.
 - `source_entry`: for a creator-first job, the exact uppercase H2 ID inside a
   canonical `剧集|episodes/<EP>/` creator document, matched to that document:
-  `图片提示词.md` takes `IMG-*` (image), `视频提示词.md` takes `MOTION-*` (video). A `GROUP-*` multi-shot
+  `图片提示词.md` takes `IMG-*` (image), `视频提示词.md` takes `MOTION-*` or `GROUP-*` (video). A `GROUP-*` multi-shot
   delivery body is accepted only when the configured execution path explicitly supports grouped submission and the
   group has its own complete input bindings;
   and `分镜.md` takes `SHOT-*` (image, whose prompt is the shot's

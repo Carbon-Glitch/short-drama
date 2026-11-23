@@ -6,19 +6,10 @@ license: MIT
 
 # 确认后生产
 
-## 创作目标与默认阅读
+## 目标与输入
 
-先把画面设计得漂亮、独特、有想象力，再以角色行为、表演和剪辑兑现故事。先读[共同创作方式](../short-drama/references/viewer-first.md)和[影视工业核心](../short-drama/references/film-craft-core.md)，以及本阶段核心知识：
-
-- [按需代表图](../short-drama-image-prompts/references/lookdev-frame.md)
-- [生成观察与修订](references/generation-test-matrix.md)
-- [实际素材质量](../short-drama-review/references/production-quality-gates.md)
-- [成像风格与感官质感](../short-drama/references/image-look-and-finishing.md)
-- [按模型排生成段与接镜](../short-drama/references/model-aware-coverage-and-joins.md)
-
-手艺资料：[按问题查影视工业知识](../short-drama/references/craft-knowledge.md)，同轮已读未变的内容复用。
-
-把当前文档与真实参考送入项目既有生产路线，观察结果是否兑现美术、表演与视听设计，再交给后期。写作和判断由当前 Agent 完成，沿用项目已选 H3/imagegen 等工具。
+带着本场最想看到的一拍去看回片：动作发生时，观众看得清吗？修手位以后，那点迟疑还在吗？用当前文档与真实参考沿既有路线生产，选出能剪出这场戏的素材。
+先读[共同创作方式](../short-drama/references/viewer-first.md)、[生成观察与修订](references/generation-test-matrix.md)和[实际素材质量](../short-drama-review/references/production-quality-gates.md)；按问题查[影视工业知识](../short-drama/references/craft-knowledge.md)。
 
 ## 生产流程
 
@@ -35,7 +26,7 @@ license: MIT
 |---|---|
 | 人物、造型、场景、道具及按需代表图 | `图片提示词.md` 的 `IMG-*` 可复制正文 |
 | 需要精确控制的某镜首帧/尾帧 | `分镜.md` 中对应 `SHOT-*` 的关键帧正文 |
-| 视频 | `视频提示词.md` 的 `MOTION-*` 正文与所选真实参考 |
+| 视频 | `视频提示词.md` 的实际提交条目（逐镜 MOTION / 多镜 GROUP）正文与该条目声明的真实参考 |
 | 配音 | 剧本原句、角色音色和表演要求；按既有接口字段传递 |
 | 音乐 | 已定音乐意图与曲段职责，后期落实真实时长和落点 |
 
@@ -56,4 +47,4 @@ python scripts/production_tool.py audit <project>
 
 ## 完成
 
-实际素材已落盘并可追溯，本轮设计重点已观察，采用版本与需定向修订处清楚。技术完成、图像观察、动态观察和声音判断分别说明；完整任务接续后期。
+实际素材已落盘并可追溯，本轮设计重点已观察，采用版本与需定向修订处清楚。交给剪辑时说明哪段能用、该从哪一拍取、还缺哪一个反应。文件已生成、画面已看过、声音已听过，分别按真实进度说。

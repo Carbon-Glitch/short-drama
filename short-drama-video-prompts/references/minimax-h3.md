@@ -1,3 +1,10 @@
+---
+target_video_model: minimax-h3
+api_scope: video-generation
+official_checked_at: 2026-09-07
+metadata_reviewed_at: 2026-11-22
+---
+
 # MiniMax H3 提示词方言
 
 只在目标档案明确写 `target_video_model: minimax-h3` 时使用。推荐档案：
@@ -31,7 +38,8 @@ non_diegetic_music: ...
 
 - `integrated_multimodal_description` 按 `[Shot 1]`、`[Shot 2]` 写画面、动作、说话人、逐字对白和同步声音；
   单镜也保留 `[Shot 1]`。第一镜不加切镜时间戳，后续切镜用 `[Shot 2] At 00:03.500, ...`，时间递增且落在本次生成时长内。
-  小样本观察到切点接近要求，但仍有偏差；交付要求精确时应检查实际切点并在剪辑中调整。
+  切点接近要求仍可能有偏差；交付要求精确时检查实际切点并在剪辑中调整，观察见
+  [OBS-H3-OTHER](model-observations.md#obs-h3-other)。
 - `overall_soundscape` 汇总环境声、物理音效和非语言人声，不重复对白；对白事件留在上面的主时间线。
   无非画内配乐时写 `non_diegetic_music: N/A`，不要留空让模型补乐——这一条有实测支撑，见
   [无对白镜](#无对白镜)。
@@ -356,8 +364,8 @@ full-reference：
 
 **`craft_default`**：按 [对白预算](performance-action-timing.md#对白预算) 先核对完整发声需要多久，
 再给主时间线安排开口、停顿与落点。分镜镜长够长但开口太晚，一样会赶词。
-H3 中文小样本可参考约 4.1 个可发声字/秒；用实际可发声区间估算，生成后核对台词完整性。
-样本出现过赶词与静默截断，不能据此确定通用截断阈值。
+文本预算只作初始参考，实际可发声区间与生成后逐字核对优先；小样本语速和截断见
+[OBS-H3-SPEECH-RATE](model-observations.md#obs-h3-speech-rate)，不形成通用阈值。
 口语语言、声线与语速描述放在 `<d>` 外；`<d>` 内只放语言标签和逐字台词，不放秒数或表演指令。
 稳定说话人用 `(S1)`、`(S2)`；full-reference 中说话人物同时写 `<Subject N> (Sx)`。
 
@@ -379,10 +387,8 @@ H3 官方接口未提供独立 `speech_rate` 参数，也没有公布「中文�
 `The messenger does not speak; his lips remain completely closed.`——与官方画外音写法
 `while his lips remain completely closed` 是同一句式。
 
-一镜实测（远处小孩喊一句，近处骑手不说话，骑手在台词期间仍正对镜头）：现行写法 3 次中 2 次口型落在骑手、
-小孩闭嘴；加上述两条后 3 次全部落在小孩。19 条样本的发声基频都在儿童区间——模型没有选错声音，
-只是把口型放到画面里最显眼的正脸上。骑手已出画或背对时，两种写法 12 次全部正确。所以分镜能安排时，
-先让不说话的人出画或背身；不能时才靠这两条兜底，生成后仍核对口型落在谁脸上。
+分镜能安排时，可先减少台词期间竞争正脸；不能时再补说话人与不说话者边界，生成后仍核对口型归属。
+原观察见[OBS-H3-LIP-SYNC](model-observations.md#obs-h3-lip-sync)，不把样本当成功概率。
 
 ### 有配音或参考音频时
 

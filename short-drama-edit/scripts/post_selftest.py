@@ -78,5 +78,12 @@ class PostRuntimeTests(unittest.TestCase):
             with self.assertRaises(ValueError):cache.run('invalid',['tool',str(output)],[source],invalid)
             self.assertEqual(len(calls),1)
 
+    def test_optional_dependencies_are_declared(self):
+        root=Path(__file__).resolve().parents[1]
+        requirements=(root/'requirements-optional.txt').read_text(encoding='utf-8')
+        self.assertIn('faster-whisper==1.2.1',requirements)
+        self.assertTrue((root/'assets/remotion/package-lock.json').is_file())
+        self.assertTrue((root/'references/runtime-dependencies.md').is_file())
+
 
 if __name__=='__main__':unittest.main()

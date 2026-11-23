@@ -69,15 +69,26 @@ def inspect(episode, root=None):
     required = ("来源", "时长", "起点", "唯一动作", "终点")
     shots = bool(heads) and all(all(re.search(r"^[-*]\s*" + field + r"[：:]\s*\S", body, re.M)
                                               for field in required) for body in shot_bodies)
-    # Explicit adopted asset declarations, otherwise the storyboard's real image bindings.
     asset_fields = re.findall(r"^[-*]\s*资产图[：:]\s*(.+)$", visual, re.M)
-    fields = asset_fields or re.findall(r"^[-*]\s*输入参考图[：:]\s*(.+)$", storyboard, re.M)
+    fields = list(asset_fields)
+    missing_shots = []
+    text_choices = []
+    for head, body in zip(heads, shot_bodies):
+        refs = re.findall(r"^[-*]\s*输入参考图[：:]\s*(.+)$", body, re.M)
+        fields.extend(refs)
+        value = refs[0].strip() if len(refs) == 1 else ""
+        exempt = value.rstrip("。") == "无（创作者已明确选择文生视频）"
+        text_choices.append(exempt)
+        required_paths = REF.findall(value)
+        if not exempt and (not required_paths or any(x in value for x in ("待补", "待生成", "PLAN-"))
+                           or any(not image_file(root / f.strip()) for f in required_paths)):
+            missing_shots.append(head.group().split()[-1])
     paths = sorted({name.strip() for field in fields for name in REF.findall(field)})
     unresolved = [name for name in paths if not image_file(root / name)]
-    pending = any("待补" in field or "待生成" in field or "PLAN-" in field for field in fields)
-    images = bool(paths) and not unresolved and not pending
-    text_only = bool(fields) and not asset_fields and all("创作者已明确选择文生视频" in s for s in fields)
-    missing = (["分镜"] if not shots else []) + (["实际资产图"] if not images else [])
+    pending = any(any(x in field for x in ("待补", "待生成", "PLAN-")) for field in fields)
+    images = bool(paths) and not unresolved and not pending and not missing_shots
+    text_only = bool(text_choices) and all(text_choices)
+    missing = (["分镜"] if not shots else []) + (["实际资产图"] if not images and not text_only else [])
     stale = bool(receipt) and not current
     scenes = set(SCENE.findall(screenplay))
     designed = set(DESIGN.findall(creative))
@@ -94,7 +105,7 @@ def inspect(episode, root=None):
         next_skill = "short-drama-video-prompts"
     return {"episode": str(ep), "projectRoot": str(root), "missing": missing,
             "storyboard_present": shots, "asset_images_present": images,
-            "asset_paths": paths, "missing_asset_paths": unresolved,
+            "asset_paths": paths, "missing_asset_paths": unresolved, "missing_asset_shots": missing_shots,
             "assets_intentionally_unused": text_only,
             "design_current": current, "design_stale": stale, "needs_design": needs_design,
             "missing_scene_designs": sorted(scenes - designed),
