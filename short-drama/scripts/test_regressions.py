@@ -100,7 +100,7 @@ class CreativeDirectionTests(unittest.TestCase):
         edit = (self.skills / "short-drama-edit/SKILL.md").read_text(encoding="utf-8")
         self.assertIn("不自动取中间方案", design)
         self.assertIn("选中机制、观看收益", design)
-        self.assertIn("观看机制不同的方案", storyboard)
+        self.assertIn("本场选定的动作、对白、声音和揭示，落到相应 SHOT", storyboard)
         self.assertIn("主动选择能放大体验的表达", storyboard)
         self.assertIn("references/editing-decision-library.md", edit)
         self.assertIn("不把平均切镜", edit)

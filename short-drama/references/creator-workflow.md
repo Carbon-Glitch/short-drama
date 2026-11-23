@@ -19,7 +19,7 @@
 |---|---|---|
 | 故事、原句与场次 | short-drama-write | 剧集/<EP>/剧本.md |
 | 观众体验、视觉主张、人物场景、新调度与信息密度 | short-drama-design | 剧集/<EP>/视觉设定.md |
-| 期待与注意路径、镜头覆盖、文本画面、clip分组与按需关键帧 | short-drama-storyboard | 剧集/<EP>/分镜.md |
+| 揭示时机、注意交接与镜头覆盖、文本画面、clip分组与按需关键帧 | short-drama-storyboard | 剧集/<EP>/分镜.md |
 | 最小主体资产、参考安排与采用图 | short-drama-assets | 视觉设定末尾「资产实现」 |
 | 主体资产与按需控制图片的生成表达 | short-drama-image-prompts | 剧集/<EP>/图片提示词.md |
 | 目标模型执行提示词 | short-drama-video-prompts | 剧集/<EP>/视频提示词.md |
