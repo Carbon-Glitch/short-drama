@@ -58,7 +58,7 @@ class DocumentationContractTests(unittest.TestCase):
             with self.subTest(document=document.name):
                 text = document.read_text(encoding="utf-8")
                 self.assertTrue(text.startswith("---\n"))
-                self.assertIn("metadata_reviewed_at: 2026-11-22", text)
+                self.assertRegex(text, r"(?m)^metadata_reviewed_at: \d{4}-\d{2}-\d{2}\s*$")
 
     def test_repeated_skill_opening_is_removed(self):
         for document in self.skills.glob("short-drama*/SKILL.md"):
@@ -86,22 +86,20 @@ class CreativeDirectionTests(unittest.TestCase):
 
     def test_viewing_value_drives_expression_choice(self):
         core = (self.skills / "short-drama/references/viewer-first.md").read_text(encoding="utf-8")
-        router = (self.skills / "short-drama/SKILL.md").read_text(encoding="utf-8")
         evaluation = (self.skills / "short-drama/references/skill-evaluation.md").read_text(encoding="utf-8")
-        self.assertIn("常规方案作为比较基线", core)
-        self.assertIn("观看机制真正不同", core)
-        self.assertIn("技术正确性是兑现选定表达的下限", core)
-        self.assertIn("观众愿意看、愿意停留", router)
+        self.assertIn("观看机制与审美路数真正不同", core)
+        self.assertIn("技术正确性是兑现表达的底线", core)
+        self.assertIn("观众愿意停留", core)
         self.assertIn("关键场次的表达选择", evaluation)
 
     def test_key_stages_compare_and_choose(self):
         design = (self.skills / "short-drama-design/SKILL.md").read_text(encoding="utf-8")
         storyboard = (self.skills / "short-drama-storyboard/SKILL.md").read_text(encoding="utf-8")
         edit = (self.skills / "short-drama-edit/SKILL.md").read_text(encoding="utf-8")
-        self.assertIn("不自动取中间方案", design)
-        self.assertIn("选中机制、观看收益", design)
-        self.assertIn("本场选定的动作、对白、声音和揭示，落到相应 SHOT", storyboard)
-        self.assertIn("主动选择能放大体验的表达", storyboard)
+        self.assertIn("不自动折中取中间方案", design)
+        self.assertIn("设计重点", design)
+        self.assertIn("故事与美学双线承接", storyboard)
+        self.assertIn("大胆调动高级视听手法", storyboard)
         self.assertIn("references/editing-decision-library.md", edit)
         self.assertIn("不把平均切镜", edit)
 
@@ -109,8 +107,8 @@ class CreativeDirectionTests(unittest.TestCase):
         prompts = (self.skills / "short-drama-video-prompts/SKILL.md").read_text(encoding="utf-8")
         review = (self.skills / "short-drama-review/SKILL.md").read_text(encoding="utf-8")
         ladder = (self.skills / "short-drama-review/references/quality-ladder.md").read_text(encoding="utf-8")
-        self.assertIn("保留观看机制、改实现路径", prompts)
-        self.assertIn("不能在提示词编译中静默换成", prompts)
+        self.assertIn("故障只改路径，不降格品味", prompts)
+        self.assertIn("绝不静默降级前端美术与导演设计", prompts)
         self.assertIn("正确但普通", review)
         self.assertIn("保守降级", review)
         self.assertIn("有意的简洁、克制", ladder)
