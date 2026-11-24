@@ -20,6 +20,7 @@ export default class ShortDrama extends HTMLElement {
   }
   draw(state){
     this.box.replaceChildren(this.element('h3','短剧创作台'));
+    const desk=this.element('a','打开导演台 · 按阶段看产物');desk.href='/api/plugins/short-drama/projects/'+encodeURIComponent(this.projectId)+'/desk';desk.target='_blank';desk.rel='noopener';desk.style.color='inherit';this.box.append(desk);
     const summary=this.element('p',`${state.duration.toFixed(2)} 秒 · ${state.clips.length} 个轨道项 · 同一份 film.html`);this.box.append(summary);
     for(const doc of state.documents){
       const details=this.element('details');details.style.marginBottom='10px';details.append(this.element('summary',doc.name));

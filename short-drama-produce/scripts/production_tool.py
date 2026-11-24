@@ -1761,6 +1761,15 @@ def run_job(root: Path, *, job_id: str, adapter_config: Path) -> dict[str, Any]:
             if _active_run(root, job_id) is not None:
                 raise RuntimeError("this job is already running")
             job = _read_job(root, job_id)
+            # Director holds are local decisions, independent of provider confirmation.
+            director = Path(__file__).resolve().parents[2] / "short-drama/scripts"
+            if (director / "director_desk.py").is_file():
+                sys.path.insert(0, str(director))
+                try:
+                    from director_desk import gate_job
+                    gate_job(root, job)
+                finally:
+                    sys.path.remove(str(director))
             command, timeout, roles = _load_adapter(adapter_config, str(job["adapter"]), root)
             _require_adapter_roles(job, roles)
             try:

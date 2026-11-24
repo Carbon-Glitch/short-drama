@@ -29,7 +29,7 @@ def bootstrap():
     changed = []
     envelope=HERE.parents[1]/'hypit/scripts/music_envelope.py'
     if not envelope.is_file():envelope=HERE/'openfilm/music_envelope.py'
-    for source in [*(HERE.parent / 'assets/openfilm-plugin').iterdir(), HERE / 'openfilm/core.mjs', HERE / 'openfilm/audio.mjs', HERE / 'openfilm/handoff.mjs', HERE / 'openfilm/duck_plan.py', envelope]:
+    for source in [*(HERE.parents[1]/"short-drama/scripts"/n for n in ("director_desk.py","creator_views.py","creator_markdown_check.py")), *(HERE.parent / 'assets/openfilm-plugin').iterdir(), HERE / 'openfilm/core.mjs', HERE / 'openfilm/audio.mjs', HERE / 'openfilm/handoff.mjs', HERE / 'openfilm/duck_plan.py', envelope]:
         if source.is_file():
             dest = target / source.name
             if not dest.exists() or dest.read_bytes() != source.read_bytes():
@@ -38,7 +38,7 @@ def bootstrap():
     data = json.loads(prefs.read_text(encoding='utf-8')) if prefs.exists() else {'language':'zh-CN'}
     data.setdefault('plugins', {})['short-drama'] = True
     prefs.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding='utf-8')
-    build=hashlib.sha256(b''.join((target/name).read_bytes() for name in ('server.mjs','core.mjs','audio.mjs','handoff.mjs','duck_plan.py','music_envelope.py'))).hexdigest()
+    build=hashlib.sha256(b''.join((target/name).read_bytes() for name in ('server.mjs','desk.mjs','desk-live.mjs','core.mjs','audio.mjs','handoff.mjs','duck_plan.py','music_envelope.py'))).hexdigest()
     loaded_path=home/'state/short-drama-loaded.json';run_path=home/'state/run.json'
     loaded=json.loads(loaded_path.read_text(encoding='utf-8')) if loaded_path.exists() else {}
     running=json.loads(run_path.read_text(encoding='utf-8')) if run_path.exists() else {}
@@ -59,7 +59,7 @@ def run(command, root, *, payload=None, out=None, preview=False):
     for line in reversed(lines):
         if line.startswith('SHORT_DRAMA_RESULT='):
             value=json.loads(line.split('=',1)[1])
-            if deployment['restartStudioIfRunning']:
+            if deployment['restartStudioIfRunning'] and command != 'desk':
                 value['runtimeRestartRequired']=True
                 value['runtimeMessage']='保存当前编辑并重启专用 Studio，使界面与 CLI 使用同一版后端'
             return value
@@ -68,7 +68,7 @@ def run(command, root, *, payload=None, out=None, preview=False):
 def main():
     if hasattr(sys.stdout, 'reconfigure'): sys.stdout.reconfigure(encoding='utf-8')
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('command', choices=['setup','init','state','check','sync','patch','import-asset','replace-source','handoff','bind-handoff','open','render','verify','seams'])
+    p.add_argument('command', choices=['setup','desk','init','state','check','sync','patch','import-asset','replace-source','handoff','bind-handoff','open','render','verify','seams'])
     p.add_argument('root', nargs='?', default='.')
     p.add_argument('--input'); p.add_argument('--out'); p.add_argument('--preview', action='store_true')
     a = p.parse_args()

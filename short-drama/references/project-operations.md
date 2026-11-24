@@ -20,16 +20,11 @@ python3 {技能目录}/scripts/project_tool.py init ./my-drama --title "示例�
 
 ## 创作台与旧 Dashboard
 
-新项目默认打开 OpenFilm 短剧创作台；多集时传 `--episode EP001` 选本次处理的集。已有 film.html 的集也可直接用剪辑技能的 `edit_tool.py open`。原文档台以 `--legacy` 显式打开，生产仍走现有 helper。
+新项目沿同一入口打开 OpenFilm 导演台。传项目根目录，按集切换；只有剧本或外部素材也能监测，不会因浏览创建剪辑稿。已有剪辑工程可从导演台进入原生时间线。用法、阶段暂停和跨 Agent 回执见[导演台](director-desk.md)。
 
-```bash
-python3 {技能目录}/scripts/dashboard_server.py --workspace <workspace> --port 0 --detach --open
-python3 {技能目录}/scripts/dashboard_server.py --workspace <workspace> --status
-python3 {技能目录}/scripts/dashboard_server.py --workspace <workspace> --stop
-```
+    python scripts/dashboard_server.py --workspace <本机项目根> --open
 
-Dashboard 展示剧本、视觉设定、分镜、提示词、成片和审查；它只读取文档中的真实绑定，不按文件名猜图片，
-不负责工作流编排和媒体生产。没有绑定就显示空位。
+省略 --open 时登记后台监测。旧文档台仍可传 --legacy；--status 和 --stop 用于旧文档台进程，不关闭共享的 OpenFilm Studio。
 
 ## 导出与交付
 

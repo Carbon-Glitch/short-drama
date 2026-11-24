@@ -2,11 +2,12 @@ import {watch,existsSync,readFileSync,writeFileSync} from 'node:fs';
 import {readFile} from 'node:fs/promises';
 import {join,dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {routes as deskRoutes} from './desk.mjs';
 import * as sd from './core.mjs';
 
 export default studio=>{
   const base=dirname(fileURLToPath(import.meta.url));
-  const build=sd.hash(Buffer.concat(['server.mjs','core.mjs','audio.mjs','handoff.mjs','duck_plan.py','music_envelope.py'].map(name=>readFileSync(join(base,name)))));
+  const build=sd.hash(Buffer.concat(['server.mjs','desk.mjs','desk-live.mjs','core.mjs','audio.mjs','handoff.mjs','duck_plan.py','music_envelope.py'].map(name=>readFileSync(join(base,name)))));
   writeFileSync(join(sd.runtimeHome(),'state/short-drama-loaded.json'),JSON.stringify({pid:process.pid,build}));
   const watchers=new Map();
   function follow(root){
@@ -32,6 +33,7 @@ export default studio=>{
   }
   async function rootOf(id){const value=await studio.project(id);follow(value.path);return value.path;}
   return {
+    ...deskRoutes(studio),
     'GET /projects/:project/state':async({params})=>sd.state(await rootOf(params.project)),
     'POST /projects/:project/sync':async({params})=>sd.reconcile(await rootOf(params.project)),
     'POST /projects/:project/edit':async({params,req})=>{const body=await studio.readJson(req);return sd.patch(await rootOf(params.project),body.ops,{rev:body.rev,actor:'person'});},

@@ -45,12 +45,17 @@ license: MIT
 五份创作文档记录剧本、视觉与提示词；新项目的后期主稿是 OpenFilm 的 `film.html` 与引用文件，剪辑单自动生成。打开创作台使用同一 Studio 的前期面板、素材与时间线；原 Dashboard 仅为未迁移项目保留。
 修改故事、镜头职责或上游时长声明时，回到负责该内容的文档。
 
+## 导演台实时监测
+
+在本机新开或接续自动制作时，先用 `python scripts/dashboard_server.py --workspace <项目根>` 登记监测；加 `--open` 给导演打开同一座台。任何 Agent 的落盘产物均可监测。进入阶段、采纳关键调整或等待返修时，用 `python scripts/director_signal.py <集目录> --actor <实际执行者> --stage <阶段> --change 开始|调整|完成|等待|返修 --message "本次决定" [--artifact 本集相对路径]` 留一条简短回执。不同设备共享或同步同一项目目录（含 .short-drama/progress）即可接续；云端无本机工具时按[导演台](references/director-desk.md)写同格式回执。
+
 ## 制作入口检查
 
 在本技能目录运行：
 
     python ../short-drama-design/scripts/design_tool.py inspect <集目录> --project-root <项目根>
 
+导演台的「到此等我」与返修意见跟随本集。进入下一创作阶段前，运行 `python scripts/director_desk.py gate <集目录> <集号> <阶段>`（开发／剧本／Design／分镜／资产／投产／回片／剪辑／交付）；返回 waiting 时保留产物，待导演放行后接续。用 `director_desk.py state <集目录>` 读取当前版本意见与已选参考再返修。实际生产沿 production_tool 提交。
 按 next_skill 接续；needs_design 为真时先做设计。设计完成记录当前来源版本后，同一缺口不会反复触发设计。剧本、创意设定或制作方向变化时更新设计；资产实现区的图像登记独立接续。只有图片提示词或挂图计划时，实际图像仍视为缺失。
 
 ## 执行请求

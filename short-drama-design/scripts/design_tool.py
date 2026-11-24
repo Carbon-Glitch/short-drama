@@ -103,7 +103,16 @@ def inspect(episode, root=None):
         next_skill = "short-drama-assets"
     else:
         next_skill = "short-drama-video-prompts"
-    return {"episode": str(ep), "projectRoot": str(root), "missing": missing,
+    waiting=None
+    if (ep/'.short-drama/director.sqlite').exists():
+        tools_dir=Path(__file__).resolve().parents[2]/'short-drama/scripts'
+        sys.path.insert(0,str(tools_dir))
+        try:
+            from director_desk import blocked
+            waiting=blocked(ep,{'short-drama-write':'剧本','short-drama-design':'Design','short-drama-storyboard':'分镜','short-drama-assets':'资产','short-drama-video-prompts':'投产'}[next_skill])
+        finally:sys.path.remove(str(tools_dir))
+    if waiting:next_skill='wait-for-director'
+    return {"director_waiting":waiting,"episode": str(ep), "projectRoot": str(root), "missing": missing,
             "storyboard_present": shots, "asset_images_present": images,
             "asset_paths": paths, "missing_asset_paths": unresolved, "missing_asset_shots": missing_shots,
             "assets_intentionally_unused": text_only,
@@ -115,6 +124,8 @@ def inspect(episode, root=None):
 
 def complete(episode, root=None):
     result = inspect(episode, root)
+    if result.get("director_waiting") and result["director_waiting"] in ("开发","剧本"):
+        raise ValueError("导演台等待确认："+result["director_waiting"])
     if result["next_skill"] == "short-drama-write":
         raise ValueError("先准备含真实场次的剧本。")
     if result["missing_scene_designs"] or result["unknown_scene_designs"]:
