@@ -9,9 +9,10 @@ export default class ShortDrama extends HTMLElement {
     this.box=document.createElement('div');this.box.style.cssText='height:100%;overflow:auto;padding:14px;background:var(--bg,#171b23);color:var(--fg,#eee);font:13px system-ui;box-sizing:border-box';
     this.blockHost.replaceChildren(this.box);
     this.stopEvents=this.api.events(this.projectId,()=>this.refresh());
+    this.backLink=document.createElement('a');this.backLink.textContent='← 返回导演台';this.backLink.href='/api/plugins/short-drama/projects/'+encodeURIComponent(this.projectId)+'/desk';this.backLink.style.cssText='position:fixed;right:24px;bottom:24px;z-index:90;padding:10px 18px;background:#eee9df;color:#222;border:1px solid #81786b;border-radius:6px;font:14px system-ui;text-decoration:none;box-shadow:0 3px 18px #0005';document.body.append(this.backLink);
     this.refresh();
   }
-  disconnectedCallback(){queueMicrotask(()=>{if(this.isConnected)return;this.active=false;this.stopBlock?.();this.stopEvents?.();this.box?.remove();});}
+  disconnectedCallback(){queueMicrotask(()=>{if(this.isConnected)return;this.active=false;this.stopBlock?.();this.stopEvents?.();this.box?.remove();this.backLink?.remove();});}
   element(tag,text){const el=document.createElement(tag);if(text!==undefined)el.textContent=text;return el;}
   async refresh(){
     if(this.dirty)return;

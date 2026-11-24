@@ -7,7 +7,7 @@ import * as sd from './core.mjs';
 
 export default studio=>{
   const base=dirname(fileURLToPath(import.meta.url));
-  const build=sd.hash(Buffer.concat(['server.mjs','desk.mjs','desk-live.mjs','core.mjs','audio.mjs','handoff.mjs','duck_plan.py','music_envelope.py'].map(name=>readFileSync(join(base,name)))));
+  const build=sd.hash(Buffer.concat(['server.mjs','desk.mjs','desk-live.mjs','desk-launch.mjs','core.mjs','audio.mjs','handoff.mjs','duck_plan.py','music_envelope.py'].map(name=>readFileSync(join(base,name)))));
   writeFileSync(join(sd.runtimeHome(),'state/short-drama-loaded.json'),JSON.stringify({pid:process.pid,build}));
   const watchers=new Map();
   function follow(root){

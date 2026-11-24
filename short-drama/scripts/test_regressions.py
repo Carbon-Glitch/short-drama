@@ -87,19 +87,20 @@ class CreativeDirectionTests(unittest.TestCase):
     def test_viewing_value_drives_expression_choice(self):
         core = (self.skills / "short-drama/references/viewer-first.md").read_text(encoding="utf-8")
         evaluation = (self.skills / "short-drama/references/skill-evaluation.md").read_text(encoding="utf-8")
-        self.assertIn("观看机制与审美路数真正不同", core)
-        self.assertIn("技术正确性是兑现表达的底线", core)
-        self.assertIn("观众愿意停留", core)
+        self.assertIn("体验先行", core)
+        self.assertIn("上游逼野，下游保真", core)
+        self.assertIn("单源真相", core)
+        self.assertIn("实片裁决", core)
         self.assertIn("关键场次的表达选择", evaluation)
 
     def test_key_stages_compare_and_choose(self):
         design = (self.skills / "short-drama-design/SKILL.md").read_text(encoding="utf-8")
         storyboard = (self.skills / "short-drama-storyboard/SKILL.md").read_text(encoding="utf-8")
         edit = (self.skills / "short-drama-edit/SKILL.md").read_text(encoding="utf-8")
-        self.assertIn("不自动折中取中间方案", design)
-        self.assertIn("设计重点", design)
-        self.assertIn("故事与美学双线承接", storyboard)
-        self.assertIn("大胆调动高级视听手法", storyboard)
+        self.assertIn("最终决断与主动牺牲", design)
+        self.assertIn("硬物理规格", design)
+        self.assertIn("原样继承《视觉设定.md》的锋芒与牺牲", storyboard)
+        self.assertIn("台词与画面分离", storyboard)
         self.assertIn("references/editing-decision-library.md", edit)
         self.assertIn("不把平均切镜", edit)
 
@@ -107,8 +108,9 @@ class CreativeDirectionTests(unittest.TestCase):
         prompts = (self.skills / "short-drama-video-prompts/SKILL.md").read_text(encoding="utf-8")
         review = (self.skills / "short-drama-review/SKILL.md").read_text(encoding="utf-8")
         ladder = (self.skills / "short-drama-review/references/quality-ladder.md").read_text(encoding="utf-8")
-        self.assertIn("故障只改路径，不降格品味", prompts)
-        self.assertIn("绝不静默降级前端美术与导演设计", prompts)
+        self.assertIn("两步工作流：先做导演，再做编译器", prompts)
+        self.assertIn("阶段 A · 导演直写", prompts)
+        self.assertIn("阶段 B · 工程合规编译", prompts)
         self.assertIn("正确但普通", review)
         self.assertIn("保守降级", review)
         self.assertIn("有意的简洁、克制", ladder)
@@ -203,7 +205,7 @@ class StoryboardPreviewTests(unittest.TestCase):
         self.assertIn("完整声画调度", document)
         self.assertIn("不是第六份创作文档", document)
         self.assertIn("工具直接投影现有 SHOT 字段", document)
-        self.assertIn("不强制经过预览或确认", skill)
+        self.assertIn("连续制作不强制停靠预览", skill)
 
 
 if __name__ == "__main__":

@@ -38,7 +38,7 @@ def bootstrap():
     data = json.loads(prefs.read_text(encoding='utf-8')) if prefs.exists() else {'language':'zh-CN'}
     data.setdefault('plugins', {})['short-drama'] = True
     prefs.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding='utf-8')
-    build=hashlib.sha256(b''.join((target/name).read_bytes() for name in ('server.mjs','desk.mjs','desk-live.mjs','core.mjs','audio.mjs','handoff.mjs','duck_plan.py','music_envelope.py'))).hexdigest()
+    build=hashlib.sha256(b''.join((target/name).read_bytes() for name in ('server.mjs','desk.mjs','desk-live.mjs','desk-launch.mjs','core.mjs','audio.mjs','handoff.mjs','duck_plan.py','music_envelope.py'))).hexdigest()
     loaded_path=home/'state/short-drama-loaded.json';run_path=home/'state/run.json'
     loaded=json.loads(loaded_path.read_text(encoding='utf-8')) if loaded_path.exists() else {}
     running=json.loads(run_path.read_text(encoding='utf-8')) if run_path.exists() else {}

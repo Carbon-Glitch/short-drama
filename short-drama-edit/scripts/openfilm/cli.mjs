@@ -18,7 +18,7 @@ try{
     const client=await sd.native('studio/client.mjs');let run=await client.ensureStudio();const path='/api/plugins/short-drama/projects/'+id+'/desk';
     const headers={'x-studio-key':run.key};
     const probe=await fetch(run.origin+path,{headers});await probe.arrayBuffer();
-    const names=['server.mjs','desk.mjs','desk-live.mjs','core.mjs','audio.mjs','handoff.mjs','duck_plan.py','music_envelope.py'];
+    const names=['server.mjs','desk.mjs','desk-live.mjs','desk-launch.mjs','core.mjs','audio.mjs','handoff.mjs','duck_plan.py','music_envelope.py'];
     const dir=join(sd.packageHome(),'plugins/short-drama');const expected=sd.hash(Buffer.concat(await Promise.all(names.map(n=>readFile(join(dir,n))))));
     const loaded=await sd.readJson(join(sd.runtimeHome(),'state/short-drama-loaded.json'),{});
     if(probe.status===404||loaded.build!==expected){run=await client.ensureStudio(undefined,{fresh:true});const verify=await fetch(run.origin+path,{headers:{'x-studio-key':run.key}});if(!verify.ok)throw Error('Studio 正在运行旧插件；结束导出后再打开导演台');}

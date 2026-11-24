@@ -4,7 +4,7 @@ import {existsSync,createReadStream} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {spawn} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
-import {register} from './desk-launch.mjs';
+import {register,discover} from './desk-launch.mjs';
 import {observer} from './desk-live.mjs';
 import * as sd from './core.mjs';
 const base=dirname(fileURLToPath(import.meta.url)),reg=()=>join(sd.runtimeHome(),'state','director-projects');
@@ -28,9 +28,10 @@ export function routes(studio){
  }
  const prefix='/projects/:project/desk';
  return {
- ['GET '+prefix+'/projects']:async()=>{const ids=(await readdir(reg()).catch(()=>[])).filter(n=>/^desk-[a-f0-9]{24}\.json$/.test(n));const list=[];for(const n of ids){const v=await sd.readJson(join(reg(),n));if(existsSync(v.root))list.push({id:n.slice(0,-5),name:basename(v.root),path:v.root})}return list},
+ ['GET '+prefix+'/projects']:async()=>{await discover(sd);const ids=(await readdir(reg()).catch(()=>[])).filter(n=>/^desk-[a-f0-9]{24}\.json$/.test(n));const list=[];for(const n of ids){const v=await sd.readJson(join(reg(),n));if(existsSync(v.root))list.push({id:n.slice(0,-5),name:basename(v.root),path:v.root})}return list},
  ['POST '+prefix+'/register']:async ctx=>{const b=await studio.readJson(ctx.req);if(typeof b.path!=='string'||!isAbsolute(b.path))throw Error('请输入本机项目的完整目录');const path=await realpath(b.path);if(dirname(path)===path)throw Error('请选择项目目录而非整个磁盘');const id=await register(path,sd);await observer(path);return {id}},
  ['GET '+prefix+'/overview']:async()=>{const result=[];for(const n of (await readdir(reg()).catch(()=>[])).filter(x=>/^desk-[a-f0-9]{24}\.json$/.test(x))){const v=await sd.readJson(join(reg(),n));if(!existsSync(v.root))continue;const o=await observer(v.root);result.push({id:n.slice(0,-5),name:basename(v.root),path:v.root,latest:o.recent().events.at(-1)||null})}return result},
+ ['POST '+prefix+'/scan']:async ctx=>{const b=await studio.readJson(ctx.req);await discover(sd,b.path);return {ok:true}},
  ['GET '+prefix+'/history']:async ctx=>(await observer((await project(ctx)).root)).recent(Number(ctx.url.searchParams.get('since')||0)),
  ['GET '+prefix+'/events']:async ctx=>(await observer((await project(ctx)).root)).stream(ctx.req,ctx.res,Number(ctx.req.headers['last-event-id']||ctx.url.searchParams.get('since')||0)),
  ['POST '+prefix+'/progress']:async ctx=>{const v=await studio.readJson(ctx.req);if(!String(v.message||'').trim())throw Error('进展内容为空');return (await observer((await project(ctx)).root)).report(v)},
@@ -44,6 +45,7 @@ export function routes(studio){
   const receipt=await sd.readJson(join(folder,'.short-drama/render-result.json'));const changed=[];
   for(const [name,expected] of Object.entries(receipt.inputs?.files||{})){try{if(await checkHash(await child(pr,resolve(folder,name)))!==expected)changed.push(name)}catch{changed.push(name)}}
   return {ok:changed.length===0,reason:changed.length?'导出后来源发生变化：'+changed.join('、'):''}},
+ ['GET '+prefix+'/editor']:async ctx=>{const {folder,d}=await load(ctx);if(!d.hasFilm)throw Error('此集还没有剪辑工程');const projects=await sd.native('studio/server/projects.mjs');const p=await projects.openProject(folder,{create:false});const back='/api/plugins/short-drama/projects/'+encodeURIComponent(ctx.params.project)+'/desk?episode='+encodeURIComponent(d.episode)+'&stage='+encodeURIComponent('剪辑');ctx.res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Referrer-Policy':'no-referrer','Cache-Control':'no-store'});ctx.res.end('<!doctype html><html lang="zh"><meta charset="utf-8"><title>剪辑台 · 短剧导演台</title><style>body{margin:0;background:#1d1e1c;color:#eee;font:14px system-ui}header{height:46px;display:flex;align-items:center;gap:24px;padding:0 20px;border-bottom:1px solid #444}a{color:#eee9df;text-decoration:none;padding:7px 12px;border:1px solid #666;border-radius:4px}iframe{border:0;width:100%;height:calc(100dvh - 47px)}</style><header><a href="'+back+'">← 返回导演台</a><span>OpenFilm · 当前集剪辑工程</span></header><iframe title="OpenFilm 剪辑台" allow="fullscreen" src="/projects/'+encodeURIComponent(p.id)+'"></iframe></html>')},
  ['POST '+prefix+'/timeline']:async ctx=>{const {folder,d}=await load(ctx);if(!d.hasFilm)throw Error('此集还没有剪辑工程');const projects=await sd.native('studio/server/projects.mjs');const p=await projects.openProject(folder,{create:false});return {id:p.id}},
  ['POST '+prefix+'/replace']:async ctx=>{const {d,files,folder,pr}=await load(ctx),b=await studio.readJson(ctx.req),a=d.media.find(x=>x.id===b.media&&x.kind==='video');if(!a||!d.hasFilm||!b.src)throw Error('请选择真实源片和剪辑项');return sd.replaceSource(folder,{clip:b.clip,file:await child(pr,files.get(a.id)),expectedSrc:b.src})},
  ['GET '+prefix+'/file/:id']:async ctx=>{const {req,res,params,url}=ctx,k=params.project+':'+(url.searchParams.get('episode')||'');let m=map.get(k);if(!m?.files.has(params.id))m=await load(ctx);if(!m.files.has(params.id))throw new studio.HttpError(404,'媒体版本不存在');
