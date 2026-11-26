@@ -1,5 +1,7 @@
 # 分轨剪辑、预览与执行计划
 
+仅用于尚未迁移的旧Markdown工程。新项目用[OpenFilm](openfilm-workflow.md)。
+
 需要原声跨切点、独立配乐包络、画面转场或连续预览时，在剧集的 `后期配置.json` 中写 `"execution":"layered"`。入口仍是 `edit_tool.py`，内部复用已安装 hypit 的本地 FFmpeg 执行器；不进入其写作或生产流程。
 
 《剪辑单.md》仍是唯一剪辑决定来源。工具生成 `制作成果/成片/.execution/` 下的计划与编译时间轴；改剪时改 Markdown，生成文件随时可重建。

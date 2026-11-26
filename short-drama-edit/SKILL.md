@@ -9,7 +9,7 @@ license: MIT
 ## 目标与输入
 
 先看素材里谁先变了。台词还没说完，听者的笑已经收住，这一刀就可能属于听者；两人在同一画面里更有劲，就让镜头继续。开篇第一刀敢于砍掉多余起势、从最抓人的动作或声画瞬态切入，按实际表演和呼吸节奏选剪点。
-先读[共同创作方式](../short-drama/references/viewer-first.md)、[前期情绪到实际剪法](references/editorial-intent.md)、[精剪手艺](references/finishing-craft.md)与[声音与音乐叙事](references/sound-narrative-and-music.md)；按问题查[影视工业知识](../short-drama/references/craft-knowledge.md)。
+读当前工程与[剪辑意图](references/editorial-intent.md)；精修查[精剪手艺](references/finishing-craft.md)，声音任务查[声音与音乐](references/sound-narrative-and-music.md)。
 
 ## 一份后期主稿
 

@@ -3,11 +3,19 @@
 本文件只负责 **owner、规则分级与跨阶段交接**，不是默认创作阅读入口；具体手艺另查 `craft-knowledge.md`，两处不同时加载。
 各技能的预检、所有权边界、形态输入与完整规则表见其 `references/stage-contract.md`；具体加载哪份资料由该技能决定。
 
-## 目录
+## 规则归属
 
-- [主题权威路由](#主题权威路由)
-- [规则分级](#规则分级)
-- [冲突优先级](#冲突优先级)
+| 规则 | 完整定义位置 |
+|---|---|
+| 段长/分组/接镜与项目选择 | [分组策略](model-aware-coverage-and-joins.md) + short-drama.json |
+| 创作目标/概念发明/策略菜单 | [设计](../../short-drama-design/SKILL.md)与[场面体验](../../short-drama-design/references/scene-design.md) |
+| 镜头语法与控制路线 | [分镜](../../short-drama-storyboard/SKILL.md) |
+| 资产成像与屏幕图形/文字边界 | [通用配方](../../short-drama-image-prompts/references/common-recipe.md) |
+| 提示词通用流程 | [视频提示词](../../short-drama-video-prompts/SKILL.md) |
+| 模型语法与接口 | [2.5方言](../../short-drama-video-prompts/references/seedance-2.5.md)、[2.5写作建议](../../short-drama-video-prompts/references/execution-model-25.md)、[H3方言](../../short-drama-video-prompts/references/minimax-h3.md) |
+| 改进与回写权限 | [共同底线](viewer-first.md)，总控只路由 |
+
+引用格式与ID见[五文档契约](creator-documents.md)。
 
 ## 主题权威路由
 
@@ -15,7 +23,7 @@
 
 | 主题 | 负责技能 | 何时读取 | 协作与交接 |
 |---|---|---|---|
-| 影视工业整体决策与精品闭环 | `$short-drama` + 当前阶段 owner | 进入任一阶段默认先读 `film-craft-core.md`，再按阶段读取对应 craft card | 不把核心卡片变成固定镜数、色卡、声轨或提示词配方 |
+| 影视工业整体决策与精品闭环 | `$short-drama` + 当前阶段 owner | 默认遵循共同创作底线；遇到具体工艺问题再读 `film-craft-core.md` 或对应 craft card | 不把核心卡片变成固定镜数、色卡、声轨或提示词配方 |
 | 长篇原著切片与逐章功能提取 | `$short-drama-novel-analyze` | 导入小说、连载或多集散稿，需要可追溯的分析层 | 不写改编契约与分集地图，不建资产 |
 | 抽样快评一本书值不值得拆 | `$short-drama-novel-analyze` | 全量拆解前先按抽样判断改编密度与风险 | 结论限于抽样范围，不产候选集条目 |
 | 改编价值与分集候选 | `$short-drama-novel-analyze` | 判断哪些单元在屏幕上成立、按戏剧结果切候选集 | 候选不是决定；集数由创作者与 develop 定 |

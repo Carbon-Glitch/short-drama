@@ -1,90 +1,33 @@
-# Evidence-Based Review Method
+# 审查方法
 
 ## Rule classification
 
-- `structural_invariant`: objectively checkable integrity; validators may block it.
-- `reviewed_invariant`: semantic integrity that needs cited evidence.
-- `craft_default`: a recommended method that may change for a stated reason.
-- `taste_option`: a chosen style is not itself a defect; weak realization of the agreed visual goal is still a valid creative finding.
+规则分级见[契约与所有权](../../short-drama/references/contract-and-ownership.md#规则分级)。结构错误可由工具验证；审美与叙事问题需指出实际观看损失。
 
 ## Governing know-how
 
-- `REV-01` — Start from the audience experience and use the relevant integrity checks alongside the creative review.
-- `REV-02` — Every finding names a bounded target, evidence, impact, required outcome, owner and severity.
-- `REV-03` — A semantic-invention finding pairs the authoritative fact with the conflicting downstream fact.
-- `REV-04` — 局部修改使用制作内自检并如实标明；整集跨阶段交付采用未参与创作的独立首看与连续性复核，作者自检不冒充首次观众。
-- `REV-05` — Diagnose repeated/generic mechanisms at exact locations rather than applying an “AI-ish” label.
-- `REV-06` — Alternative preferences remain notes unless the current choice violates an accepted constraint.
-- `REV-07` — An end-to-end task authorizes responsible creative decisions; distinguish actual user choices from the Agent's design choices.
+先看作品，再查来源。保留最强的表达，优先修不想继续看、看不懂、感受不到或明显出戏的地方。个人偏好的替代方案作为建议，不冒充缺陷。
 
 ## Review scope
 
-Start from the current creator-visible files and the constraints the creator has explicitly chosen. Use a focused in-task review, identifying what was actually read, seen or heard. Preserve the user's requested scope.
-
-If a target changes during review, reread that target before recording the verdict. Do not recursively invalidate
-unrelated findings.
+只读当前任务相关版本；文件变化后重读受影响部分。首看不预读导演意图，具体方法见[首次观看](fresh-viewer-review.md)。没有看见或听见的内容不作实测结论。
 
 ## Creative outcomes and mechanical support
 
-Mechanical examples:
-
-- missing or duplicate Markdown IDs, broken links or unresolved references;
-- unknown asset variants or contradictory camera flags;
-- explicit segments not matching their declared duration;
-- readable text conflicting with the accepted text policy;
-- a stage document silently taking over facts owned by another document;
-- delivery containing private or unapproved material.
-
-Semantic examples:
-
-- the promised striking visual design has collapsed into generic assets, with the missing shape/material/spatial choices identified;
-- a key design or reaction exists somewhere in the footage but is unreadable at its intended payoff;
-
-- downstream action changes story meaning;
-- a conflict scene has no opposition or turn, or another kind of scene lacks a necessary state change;
-- a keyframe implies several moments;
-- action load crowds out performance;
-- escalation repeats the same mechanism;
-- a prompt preserves the wrong identity.
+ID、引用与容量交检查器。实际画面核对设计与身份，动态素材核对表演、焦点、受光、动作和声音。漂亮但没兑现职责、字段齐全但反应不可读，都需要具体修订。
 
 ## Finding anatomy
 
-A useful finding contains:
-
-1. stable diagnostic/rule ID when one exists;
-2. project-relative file plus heading ID, line number or shot when useful;
-3. bounded quotation or conflicting facts;
-4. audience, continuity or production impact;
-5. required outcome and the facts that must stay unchanged, leaving replacement prose to the owner;
-6. owner, severity and open/closed status.
-
-“The dialogue is weak” is invalid. A finding should identify the exact exchange, say what fails to change, and tell
-the write owner what outcome must be restored.
-
-The review Markdown cites the current file name, heading ID, line number or a necessary short quotation directly.
-It does not copy upstream snapshots, invent record IDs or create another version of the source material.
+每个问题写位置、证据、观众影响、负责阶段和明确改法。声称上下游矛盾时同时引用两端。合并同一根因，避免重复开问题；报告长度随问题数量，不凑表格。
 
 ## Cross-layer synthesis
 
-Trace important moves end to end: story fact, design priority, subject assets, image prompt and actual REF, shot boundary, optional keyframe, motion and next-shot state. For each important design, identify its concrete image/shot carrier and the details added downstream; distinguish intentional crop allocation, dependence on a planned reference, state-projection errors and true omissions. Check that every generated image has a real generation consumer; representative and per-cut frames are evaluated when their control route is chosen.
-
-Resolve upstream meaning first; do not polish prompt wording when the shot or asset binding is wrong. Judge actual images for design fidelity and aesthetic strength, and dynamic footage for readable action, focus, lighting, reflection and material change.
+沿故事事实→设计重点→资产/参考→镜头→生成→剪辑追踪缺失发生在哪一层。先修源头，不用提示词润色掩盖错绑素材。画外裁切、有意省略和真正遗漏分开判断。
 
 ## Revision and re-review
 
-Group duplicate findings and route them to the owning skill. A revision request states the target outcome, preserve
-set and review scope to rerun.
-
-`REV-14`: a revision request names the smallest change at a cited location and the facts to preserve. Local
-findings do not authorize a whole-episode rewrite. When the review compares a revision with the version before
-it, any strong hook, payoff line, or comic beat that polishing removed is listed under `## 被删的强钩子` with its prior
-location and a short quote, so the owner can decide whether to restore it.
-
-On a later explicit re-review request, read the current version, confirm the required outcome, check the preserve
-set and close or retain each affected finding. Prefer another uninvolved reviewer when available; otherwise disclose self-review.
+局部问题只改相关范围，保住已成立的钩子、表演和笑点。若修订删掉了强项，指出原位置与丢失作用；复核改动及相邻承接，不重新扩成全项目审查。
 
 ## Anti-template review
 
-Do not use a banned-word list. Look for repeated mechanisms, interchangeable character voices, abstract intensity
-without playable behavior, generic quality adjectives burying identity, automatic reaction close-ups and decorative
-camera movement. Cite location and impact while preserving deliberate genre rhythm.
+查重复机制、可互换的人物声音、同义强调和无效摄影；给出具体位置与损失。定向修法见[去模板感](anti-template-repair.md)。

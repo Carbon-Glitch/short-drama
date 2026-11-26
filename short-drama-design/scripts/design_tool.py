@@ -92,7 +92,7 @@ def inspect(episode, root=None):
     stale = bool(receipt) and not current
     scenes = set(SCENE.findall(screenplay))
     designed = set(DESIGN.findall(creative))
-    needs_design = bool(scenes) and (bool(missing) or stale) and not current
+    needs_design = bool(scenes) and (not creative or bool(scenes - designed) or stale)
     if not scenes:
         next_skill = "short-drama-write"
     elif needs_design:

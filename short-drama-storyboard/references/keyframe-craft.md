@@ -1,14 +1,5 @@
 # Frozen Keyframe Craft
 
-## 目录
-
-- [Boundary and instant tests](#boundary-and-instant-tests)
-- [Purpose](#purpose)
-- [Ordered recipe](#ordered-recipe)
-- [尾帧：什么时候可以有，以及它换来什么代价](#尾帧什么时候可以有以及它换来什么代价)
-- [Start-only drafting discipline](#start-only-drafting-discipline)
-- [Static test](#static-test)
-
 ## Boundary and instant tests
 
 - Project exactly one accepted shot boundary and bind the exact
@@ -98,7 +89,7 @@ instead of inventing a hidden candidate state.
 
 需要精确开场或逐切控制时才制作首帧，冻结「起点」。交付工作流确实需要首尾帧时，再补一张投影「终点」的尾帧；普通主体参考多镜不增加这些图片。
 
-**`structural_invariant`**：《分镜.md》的首帧与收尾关键帧分别指向同一镜头已接受的起点与终点。
+《分镜.md》的首帧与收尾关键帧分别指向同一镜头已接受的起点与终点。
 **尾帧是「终点」的投影，不是新的终点事实**——它与首帧对「起点」的关系完全一样：可以决定这一帧怎么构图、
 用什么景别镜头、光怎么落，不能决定人在哪、手里有什么、看着谁。尾帧与镜头终点不一致时，错的是尾帧。
 
@@ -117,7 +108,7 @@ instead of inventing a hidden candidate state.
 
 ## Start-only drafting discipline
 
-**`reviewed_invariant`**: rendered keyframe prose may contain only facts
+rendered keyframe prose may contain only facts
 from the boundary that frame declares. 首帧写进任何由运动或终点首次产生的事实是漂移；
 尾帧写进在它之前就已经消耗掉的事实同样是漂移。两帧各守各的边界，不互相借用。
 

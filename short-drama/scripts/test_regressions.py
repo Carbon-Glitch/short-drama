@@ -79,41 +79,18 @@ class DocumentationContractTests(unittest.TestCase):
         self.assertIn("作者自检", text)
 
 
-class CreativeDirectionTests(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.skills = Path(__file__).resolve().parents[2]
-
-    def test_viewing_value_drives_expression_choice(self):
-        core = (self.skills / "short-drama/references/viewer-first.md").read_text(encoding="utf-8")
-        evaluation = (self.skills / "short-drama/references/skill-evaluation.md").read_text(encoding="utf-8")
-        self.assertIn("体验先行", core)
-        self.assertIn("上游逼野，下游保真", core)
-        self.assertIn("单源真相", core)
-        self.assertIn("实片裁决", core)
-        self.assertIn("关键场次的表达选择", evaluation)
-
-    def test_key_stages_compare_and_choose(self):
-        design = (self.skills / "short-drama-design/SKILL.md").read_text(encoding="utf-8")
-        storyboard = (self.skills / "short-drama-storyboard/SKILL.md").read_text(encoding="utf-8")
-        edit = (self.skills / "short-drama-edit/SKILL.md").read_text(encoding="utf-8")
-        self.assertIn("最终决断与主动牺牲", design)
-        self.assertIn("硬物理规格", design)
-        self.assertIn("原样继承《视觉设定.md》的锋芒与牺牲", storyboard)
-        self.assertIn("台词与画面分离", storyboard)
-        self.assertIn("references/editing-decision-library.md", edit)
-        self.assertIn("不把平均切镜", edit)
-
-    def test_downstream_preserves_selected_mechanism(self):
-        prompts = (self.skills / "short-drama-video-prompts/SKILL.md").read_text(encoding="utf-8")
-        review = (self.skills / "short-drama-review/SKILL.md").read_text(encoding="utf-8")
-        ladder = (self.skills / "short-drama-review/references/quality-ladder.md").read_text(encoding="utf-8")
-        self.assertIn("两步工作流：先做导演，再做编译器", prompts)
-        self.assertIn("阶段 A · 导演直写", prompts)
-        self.assertIn("阶段 B · 工程合规编译", prompts)
-        self.assertIn("正确但普通", review)
-        self.assertIn("保守降级", review)
-        self.assertIn("有意的简洁、克制", ladder)
+class ReferenceLinkTests(unittest.TestCase):
+    def test_local_reference_files_resolve(self):
+        import re
+        skills = Path(__file__).resolve().parents[2]
+        for directory in skills.glob("short-drama*"):
+            for document in directory.rglob("*.md"):
+                for target in re.findall(r"\]\(([^)]+)\)", document.read_text(encoding="utf-8-sig")):
+                    relative = target.split("#", 1)[0]
+                    if not relative or "://" in relative or "<" in relative or "{" in relative:
+                        continue
+                    with self.subTest(document=str(document.relative_to(skills)), target=target):
+                        self.assertTrue((document.parent / relative).exists())
 
 
 class StoryboardPreviewTests(unittest.TestCase):

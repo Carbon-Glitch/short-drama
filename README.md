@@ -10,6 +10,16 @@
 
 *内置 imagegen 生成的概念封面，展示创作方向；非 H3 成片截图。*
 
+## 本地导演台协作（可选）
+
+本仓库以 **12 个 Skill** 为主，也提供 `director-desk/` 源码，供你与 Agent 在浏览器里编辑剧本、视觉设定、分镜、参考素材与视频提示词，并进入 OpenFilm 剪辑。
+
+已安装 Python 3.11+、Node.js 22.12+ 和 npm 的 Windows 用户，克隆或下载完整仓库后，双击 `director-desk/Start-Director-Desk.cmd`。首次启动会安装前端依赖并构建界面，需要联网；以后直接打开。导演台默认使用仓库内的 Skill，无需先复制到个人技能目录。
+
+纯 Skill 使用按下方快速开始安装。导演台中自动改稿另需已登录的 Codex CLI；剪辑需 FFmpeg/ffprobe 与 OpenFilm；生成服务使用你自己的账号与配置。当前提供源码，不发布安装包。
+
+[导演台使用说明](director-desk/README.md) · [已验证范围](director-desk/VALIDATION.md)
+
 ## 🔥 剧本写了“买个馒头”，镜头可以拍出整个早晨
 
 你给一句：**“男主逛早市，买了个馒头。”**
@@ -59,7 +69,7 @@
 
 ### 06 / Agent 做判断，helper 干执行
 
-创作与分析使用当前 Agent 的模型；沿用项目已配置的 imagegen、MiniMax H3 / RunningHub 等生产路线。入口仍是 `$short-drama`，按任务路由到阶段技能。无需再搭一套独立 WebUI，也不要求额外订阅一个写作或听审模型。
+创作与分析使用当前 Agent 的模型；沿用项目已配置的 imagegen、MiniMax H3 / RunningHub 等生产路线。入口仍是 `$short-drama`，按任务路由到阶段技能。可直接使用 Skill，也可用仓库自带导演台协作；不要求额外订阅一个写作或听审模型。
 
 生产有任务记录，可继续查询与收集结果；无法直接听审时，波形等数据辅助判断，并明确声音验收尚未完成。
 

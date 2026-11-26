@@ -37,3 +37,5 @@ Agent 在已有授权与成本范围内比较并选择，不把每个参考/候�
 ## 方法来源与刷新入口
 
 [BUCK 案例](https://buck.co/work)可发现角色、广告、图形与声音表达；[Design Museum / LAIKA](https://designmuseum.org/exhibitions/laika-presents-wildwood-the-exhibition)展示视觉研究到服装、木偶、布景的制作链。这些是入口和方法例子，不是固定推荐榜；每个项目仍按当日日期找适合的新作。
+
+离线时用时代错位、材料尺度反差或正经外壳与荒诞内核发展原创；不虚构近期原作与观众证据。

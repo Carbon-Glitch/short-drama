@@ -81,7 +81,7 @@
 ## 交给后期的证据
 
 让剪辑者能从本镜现有字段找到：观众应何时确认什么、必须看/听到的事件、相邻镜要保持的状态和允许的替代剪法。
-后期把真实采用源窗与取舍写回《剪辑单.md》，按[分镜落实与精剪](../../short-drama-edit/references/editorial-conform.md)
+后期把真实采用源窗与取舍写入当前工程，新项目由film.html生成剪辑单，按[分镜落实与精剪](../../short-drama-edit/references/editorial-conform.md)
 检查。只有ID齐全、台词齐全或镜头数相同，都不足以证明这段体验完整。
 
 ## 方法来源

@@ -10,6 +10,16 @@ An **Agent Skills workflow for AI short dramas, animated shorts and vertical vid
 
 *Concept artwork generated with built-in imagegen. This is a creative direction illustration, not a frame from an H3-generated film.*
 
+## Optional local Director Desk
+
+This repository primarily ships 12 Agent Skills. The `director-desk/` source adds browser editing, reference management, video selection and OpenFilm editing.
+
+On Windows with Python 3.11+, Node.js 22.12+ and npm installed, clone/download the complete repository and double-click `director-desk/Start-Director-Desk.cmd`. The first launch installs frontend dependencies and builds the interface; network access is required. It uses the Skills beside it in this repository by default.
+
+Automatic Agent editing requires a signed-in Codex CLI. Video editing requires FFmpeg/ffprobe and OpenFilm; generation requires your own provider configuration. This is a source release, not an installer.
+
+[Director Desk guide](director-desk/README.md) · [Validation and limitations](director-desk/VALIDATION.md)
+
 ## 🔥 Your script says “buy a bun.” The shot can capture a whole morning.
 
 A vendor lifts a bamboo lid. Steam catches the dawn light. Fabric awnings soften the street. Someone brushes past. A bag rustles. Your character accepts breakfast—and their expression earns a moment on screen.

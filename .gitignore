@@ -1,2 +1,11 @@
 __pycache__/
 *.py[cod]
+director-desk/web/node_modules/
+director-desk/web/dist/
+director-desk/.local/
+
+# Machine-local projects, runtime binaries, and internal work logs
+director-desk/runtime/
+director-desk/PROGRESS.md
+director-desk/design/workspace-before-v2.jsx.txt
+director-desk/design/interaction-acceptance.md

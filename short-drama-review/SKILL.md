@@ -10,7 +10,7 @@ license: MIT
 
 第一遍以完全陌生的观众视角连着看：开场前 3 秒什么画面或声音把你钉住了？从哪一拍开始迫切想知道下一步？哪一拍让你改了判断、会心一笑、屏息或被击中？看完后脑海里真正留下印记的画面和细节是什么？第二遍把最该保住的核心亮色和最拉垮/最平庸的地方精准指给作者：分镜指到 SHOT，资产指到 IMG/REF，成片指到时间码和那里的具体画面或声音。制作内直接返修，单独审查交判断与建议。
 
-先读[共同创作方式](../short-drama/references/viewer-first.md)、[作品质量证据](references/quality-ladder.md)、[审查方法](references/review-method.md)与[首次观看与反馈判断](references/fresh-viewer-review.md)；按问题查[影视工业知识](../short-drama/references/craft-knowledge.md)。
+读[审查方法](references/review-method.md)；首看任务加读[首看反馈](references/fresh-viewer-review.md)，完成范围按[质量证据](references/quality-ladder.md)判断。
 
 ## 检查顺序（先审吸引力与格调，再查技术）
 

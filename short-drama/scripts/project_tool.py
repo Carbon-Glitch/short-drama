@@ -477,6 +477,15 @@ def initialize_project(
     }
     atomic_json(root / STATE_FILE, state)
     atomic_json(project_path, project)
+    # Discovery failure must not undo a successfully created project.
+    try:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("short_drama_project_registry", Path(__file__).with_name("project_registry.py"))
+        registry = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(registry)
+        registry.register_project(root, project["title"])
+    except OSError:
+        pass
     return {"project_root": str(root), "project": project, "state": state}
 
 

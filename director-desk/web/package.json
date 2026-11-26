@@ -1,0 +1,25 @@
+{
+  "name": "director-desk",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
+    "@xyflow/react": "^13.0.3",
+    "artplayer": "5.4.0",
+    "elkjs": "0.12.2",
+    "react": "^19.3.1",
+    "react-diff-viewer-continued": "4.4.0",
+    "react-dom": "^19.3.1",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.3.0",
+    "vite": "^8.3.8"
+  }
+}

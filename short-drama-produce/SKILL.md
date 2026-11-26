@@ -9,7 +9,7 @@ license: MIT
 ## 目标与输入
 
 带着本场最想看到的一拍和本集建立的视觉气场去看回片：动作发生时，观众看得清吗？修手位以后，那点迟疑还在吗？画面本身脱不脱离“廉价 AI 感”、有没有让人停下来的质感？用当前文档与真实参考沿既有路线生产，选出能剪出这场戏的高水准素材。
-先读[共同创作方式](../short-drama/references/viewer-first.md)、[生成观察与修订](references/generation-test-matrix.md)和[实际素材质量](../short-drama-review/references/production-quality-gates.md)；按问题查[影视工业知识](../short-drama/references/craft-knowledge.md)。
+试拍或返修查[生成观察](references/generation-test-matrix.md)；回片时按对象查[素材质量](../short-drama-review/references/production-quality-gates.md)。
 
 ## 生产流程
 

@@ -1,120 +1,37 @@
-# Assets And Asset-Image Prompt Rubric
+# 资产与图片提示词审读
 
 ## Occurrence and decision
 
-- Does each designed item identify its scene and its basis: established story fact or the current art-design choice in `视觉设定.md`?
-- Does the design create character, believable space, sensory detail, visual interest or performance opportunities?
-- Is the decision explicit: reuse, new identity, new variant, or unresolved?
-- Were pronouns, aliases, groups, memories, portraits, and screen content handled
-  without guessing?
+设计是否有辨识度并服务本场体验？资产安排是否覆盖实际可见需求？区分复用、新身份、状态变体与未决，代词、照片、倒影和屏内人物不能靠猜绑定。
 
 ## Identity versus variant
 
 ### Character / Look
 
-Identity: stable face/body/hair anchors, distinguishing marks, and any explicitly
-recorded persistent voice identity. Look: wardrobe, makeup, hair arrangement, injury, dirt/wetness, disguise,
-age/weathering state, validity range.
-
-Fail when a costume change creates a new person or incompatible Looks mix in one
-prompt without story reason.
-
-Relationship labels may guide current blocking, gaze, and social presentation,
-but they do not prove beauty, ugliness, body type, skin tone, or facial morality.
-Judge the chosen casting and visual traits against the actual character and story. Idealization, restraint, exaggeration and counter-casting are available design choices.
+脸、体态等身份锚点与服装、妆发、湿污、伤势和伪装状态分开。同一板不能混入互斥Look，换装不能换人。造型可以理想化、夸张或反差选角；关系与道德标签不自动决定外貌。
 
 ### Voice direction (optional, `AST-07`–`AST-12`)
 
-Only reviewed when `视觉设定.md` records a voice direction. Timbre is carried by a
-named reference recording, not by prose: identity is the reference plus the
-creator's current pronunciation choices, and the text alongside it exists to
-select or judge a voice, never to stand in for one.
-
-Fail when:
-
-- a project has no reference and a paragraph of adjectives is standing in for
-  identity — the voice section must say `待选型` instead;
-- a binding omits what it controls and what it must not, or lets the take's
-  emotion, the recording space (reverb, mic distance) or background noise into
-  identity (`AST-08`);
-- a claim about what is audible in a reference has no creator description and no
-  authorized listening observation, yet is written as established fact (`AST-09`);
-- one proper noun appears with two accepted spellings anywhere in `视觉设定.md`
-  (`AST-10`) — this one is structural and blocks;
-- two characters designed together are bound to confusable references and no
-  distinguishing trait names the nearest neighbour (`AST-11`);
-- reference audio bytes, a provider parameter, a model name, a task field or a
-  URL appear in `视觉设定.md` or the delivery package.
-
-Selection criteria should be audible, bounded by counter-examples, and limited to what helps choose or judge a
-reference (`AST-12`, `craft_default`). Report a weak criterion as a craft note; list length alone is not a failure.
+有声音要求才检查。文字可描述目标音色，但不能冒充已选参考；绑定录音要分清音色、情绪、录制空间和背景声。检查实际听感、角色区分及专名发音，未听到的不作结论。绑定与选型见[声音方向](../../short-drama-assets/references/voice-direction.md)。
 
 ### Location / View
 
-Identity: architecture, layout, entrances, zones, anchors, materials, navigation.
-View: camera-facing orientation/zone, time/weather/light state, visible anchors.
-
-Fail when each camera angle becomes a new unrelated location or geography changes
-silently between scene and plate.
-
-Views of one Location sharing a time/weather state must also share key-light source,
-warm/cool priority, contrast direction, and practical on/off state (`IMG-10`). Compare
-the group side by side—each plate reading well alone is not evidence. Fail when an
-unrecorded difference would read as two times or two rooms once the plates are
-intercut; orientation-driven back/front lighting and occlusion shadows are expected
-and need only a stated source.
+同一地点的不同机位保持地理、固定锚点及当前光态；反打可改变受光投影，不应无因换房间或换时间。并排比较后再判断，不以单张好看代替跨图一致。
 
 ### Prop / State
 
-Identity: scale, shape, material, function, moving parts, marks, text policy.
-State: owner/hand/location, open/closed, clean/damaged/wet/bloodied, contents,
-validity.
-
-Fail when a prop teleports, changes scale/material, or readable evidence is erased.
+尺度、形制、材质、功能与当前开合、持有、损坏、内容物分开。检查交互所需细节是否可辨，精确文字或图形表演是否被误删。
 
 ## Era
 
-The era comes from source facts: devices, platforms, slang, stated years. Fail
-when the era shown in `视觉设定.md`, `图片提示词.md` or `视频提示词.md` contradicts
-them. Newness, age, repair and wear may be deliberately developed by production design within that world (`AST-14`).
-This is the visual layer of the source-fidelity check (`STY-07`): cite the source
-fact and the conflicting line. A visual direction with
-no era anchors, or entries that leave the era-specific form unstated, is a craft
-note (`AST-15`).
+设备、造型和陈设与已定世界一致；复古混搭可以成立，但应是作品选择。用原始事实定位冲突，不因磨损、新旧或风格化本身判错。
 
 ## Prompt recipe review
 
-Review design fidelity and concrete imaging alongside identity and reuse:
+成像、材质与文字边界沿[通用配方](../../short-drama-image-prompts/references/common-recipe.md)。本轮只检查图种承担的职责：人物图识别与造型，地点图空间与光态，道具图尺度与状态，代表帧整体关系，关键细节图决定性结构，局部编辑的改变与保留。
 
-- Trace each important design to the final prompt, an actual REF, or another named IMG/SHOT. Distinguish an out-of-frame detail from an unassigned omission; PLAN alone is not pixel evidence.
-- Check camera distance/perspective, subject share, foreground/middle/background, focal plane and depth of field where they affect the image's purpose.
-- Read how light acts on named surfaces: direction, softness, fill, shadow density, black level, highlight, skin and separation. The shared Look must be projected through the current open/closed, position and occlusion state.
-- Compare materials through roughness, reflection, transmission, fibres, wear, air, contact shadow and scale rather than a shared “tactile” phrase.
-- For scene-moment frames, judge the whole visual relationship at its strongest designed moment. For key-state details, judge the exact current state. Production start frames still project the shot start.
-- Each media reference declares its purpose, control range and observation state; local edits preserve the adopted image's identity, geometry and visual strengths.
-
-Apply type-specific criteria:
-
-- **Character sheet:** one identity and coherent Look; full visible styling, useful views and material separation.
-- **Location plate:** navigable geography, fixed anchors, layered set dressing, material, palette, light and atmosphere.
-- **Prop plate:** scale cue, shape, material behavior, wear, function/moving parts and current state.
-- **Scene moment:** a complete, striking composition that proves character, styling, space, light and behavior together.
-- **Key-state detail:** the decisive small structure/state is readable at the chosen scale and focus.
-- **Edit delta:** exact target and region, changes, preserve set and continuity impact.
+设计重点应落入实际图或生成正文。PLAN不是图像证据；REF应存在且用途明确。重要细节不入画与设计被遗漏是两回事。局部改图后比较身份、几何和原有强项。
 
 ## Prompt quality failures
 
-- quality/style boilerplate appears before or instead of identity/geography/scale;
-- prompt copies the whole visual specification instead of the needed identity and current variant;
-- character description mixes immutable anchors with accidental pose;
-- location prose is rich but cannot orient entrances/zones;
-- one character or prop is assigned to mutually exclusive positions, hands, or
-  relationship lines in the same frozen instant;
-- prop has no scale or text state;
-- negative constraints contradict the required visible fact;
-- edit request says “make better” without target/change/preserve;
-- `图片提示词.md` contradicts the current identity, state or text policy in `视觉设定.md`;
-- private URL, source ID, provider task field, or operator complaint leaks in.
-- “use the whole reference” does not say what may or may not be copied.
-
-Prompt prose must serve the chosen design, recognition, reuse, continuity and clear control of the current operation. Rich imaging detail is valuable when it makes the intended beauty, material, space and state visible; repetition and generic adjectives are not substitutes.
+指出具体失败：只有美词没有设计、错误Look或视角、无尺度参照、同一瞬间状态冲突、光态不连续、文字政策相反、修改目标不明、参考职责越权。实际图可看时以图判断；正文合规不代替图像通过。
