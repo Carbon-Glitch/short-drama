@@ -1,8 +1,10 @@
+from document_contract import SHOT_DEPENDENCIES
 """Structured creative sections; Markdown remains a projection of stable entities."""
 import re
 from uuid import uuid5, NAMESPACE_URL
 
 from store import Conflict
+from document_contract import check_headings
 from reference_media import render_paths
 
 TYPES={'人物':'character','造型':'look','地点':'location','道具':'prop'}
@@ -34,6 +36,7 @@ def parts(text):
 
 
 def section_specs(filename,text):
+    check_headings(filename,text)
     prefix,sections=parts(text)
     if not sections and prefix:sections=[('内容',prefix)];prefix=''
     result=[]
@@ -41,6 +44,9 @@ def section_specs(filename,text):
         kind='design';name=heading;code=None
         match=re.match(r'^(人物|造型|地点|道具)\s*·\s*(.+)$',heading)
         if filename=='视觉设定.md' and match:kind=TYPES[match[1]];name=match[2]
+        elif filename=='视觉设定.md':
+            decision=re.match(r'^(DESIGN-[A-Za-z0-9-]+)(?:\s*·\s*)?(.*)$',heading)
+            if decision:code=decision[1];name=decision[2] or code
         elif filename=='图片提示词.md':
             match=re.match(r'^(IMG-[A-Za-z0-9-]+)(?:\s*·\s*)?(.*)$',heading)
             if match:kind='image_prompt';code=match[1];name=match[2] or code
@@ -92,7 +98,7 @@ def materialize(store):
         entry['data']['unresolved_shot_codes']=unresolved
         for identity in links:
             operations.append({'type':'bind','source':identity,'target':entry['id'],
-                'fields':['action','duration','camera','movement','join','source_excerpt','visual_basis','sound','start','end','purpose','references','design_refs']})
+                'fields':SHOT_DEPENDENCIES})
     try:return store.apply(state['project']['revision'],operations,actor='project-import')
     except Conflict:return store.state()
 

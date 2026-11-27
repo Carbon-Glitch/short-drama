@@ -3,7 +3,7 @@ import re
 from store import Conflict
 from documents import declared_shots,link_shots
 
-SHOT_DEPENDENCIES=['action','duration','camera','movement','join','source_excerpt','visual_basis','sound','start','end','purpose','references','design_refs']
+from document_contract import SHOT_DEPENDENCIES
 
 class VideoCoverage:
  def __init__(self,library):self.library=library

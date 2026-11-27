@@ -9,6 +9,8 @@ import sqlite3
 import time
 from uuid import uuid4
 from dialogue import sync_dialogue
+from document_contract import validate_data
+from design_dependencies import connect_designs, sync_design_names
 
 
 KINDS = frozenset({"project_settings", "episode", "scene", "character", "look", "location", "prop",
@@ -94,6 +96,7 @@ class ProjectStore:
         for entity in entities.values():
             if entity["kind"] not in KINDS or not isinstance(entity["data"], dict):
                 raise ValueError("未知对象类型或无效内容")
+            validate_data(entity["kind"],entity["data"])
             encoded(entity["data"])
             document=entity['data'].get('document_id')
             if document and (document not in entities or entities[document]['kind']!='document' or
@@ -180,7 +183,7 @@ class ProjectStore:
                     if entity['kind']=='document' and entity['data'].get('structured') and 'original' in patch:
                         raise ValueError('请编辑具体条目，文档由条目自动生成')
                     if entity["kind"] == "media" and any(k in patch and patch[k] != entity["data"].get(k)
-                            for k in ("path", "sha256", "type")):
+                            for k in ("path", "sha256", "type", "production")):
                         raise ValueError("素材版本不能覆盖，请导入新版本")
                     fields = {k for k, v in patch.items() if entity["data"].get(k) != v}
                     entity["data"].update(deepcopy(patch))
@@ -221,6 +224,8 @@ class ProjectStore:
             state["entities"] = list(entities.values())
             state["project"]["revision"] = revision
             sync_dialogue(before,state,revision,changes)
+            sync_design_names(before,state,revision)
+            connect_designs(state)
             self._validate(state)
             self._invalidate(state, changes)
             self._write(db, state)

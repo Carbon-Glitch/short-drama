@@ -12,12 +12,18 @@ license: MIT
 
 分镜或实际资产图缺失时先按[设计阶段](../short-drama-design/SKILL.md)检查；当前设计完成后先形成文本分镜，再按各镜可见需求安排资产。
 
+## 备图边界
+
+默认按可复用主体备图，不按镜头数配图：角色/造型、场景空景、必要道具跨镜共用，站位图按场次安排。换景别、换说话人、普通表情或屏幕动画变化，不自动新建图片。图形表演先写进视频过程，不逐拍烘焙成状态图。
+
+用户明确要求精确首尾、关键形态难以靠现有图说明，或试片暴露具体失控时才补专用图；在现有用途说明中点明缺口和消费镜头，能共用就共用，不展开「全部机位 × 全部状态」。已有过重计划先按当前路线缩减待生成项，保留已有文件与采用历史。分镜卡片有无预览图不决定是否生产。
+
 ## 做法
 
 1. **筛选必画资产与关键状态**：从设计重点和各镜画面挑两类参考：跨镜要认得出的主体，以及一旦画错、这场戏就失去意味的关键状态。后者即使只出现一次，也值得先画；日常普通物件随人物或场景入图。
 2. **按实际消费需求拆资产**：人物身份、一次Look、场景空间与道具状态分清；角色肖像、全身、空景视角、细节或定调代表图按真实缺口制作，不机械配套。路线沿[分镜分流](../short-drama-storyboard/SKILL.md#生成路线分流)，质感与屏幕图形处理只按[通用成像配方](../short-drama-image-prompts/references/common-recipe.md)。
-3. **写清复用与控制契约**：在「## 资产实现」简记 IMG 项、对应设计、用途、状态和复用范围。为每张图点名用处与不控制项：哪一镜靠它认人，哪一镜靠它锁空间，哪处变化值得另做一个状态。
-4. **返图检查与采用**：生产返回后按设计重点与[通用成像配方](../short-drama-image-prompts/references/common-recipe.md#8-完成与真实图像检查)检查；记录实际采用版本，再绑定REF。PLAN仍只是挂图计划。
+3. **写清复用与控制契约**：在「## 资产实现」简记 IMG 项、对应设计、用途、状态和复用范围。为每张图点名用处，确有冲突才写排除项。场景空景与多人俯拍站位图按[地点与视角](references/location-and-view.md#场景图与俯拍站位图)安排。
+4. **返图检查与采用**：分别判断资产是否可复用、是否适合当前镜头；入镜适配与派生追溯沿[资产实现检查](references/asset-review-checklist.md)。生产返回后按设计重点与[通用成像配方](../short-drama-image-prompts/references/common-recipe.md#8-完成与真实图像检查)检查；记录实际采用版本，再绑定REF。PLAN仍只是挂图计划。
 
 5. **主动用好定调代表图与按需控制图**：
    - **风格/构图代表图（影调母版）**：强风格作品、高反差美学或仅凭中性角色/场景板难以让视频模型稳住高级影调时，主动安排 1～2 张代表图锁死全片色彩与光影气场，也用于新方向比较；
@@ -31,3 +37,5 @@ license: MIT
 格式见[五份文档](../short-drama/references/creator-documents.md)、[参考角色](../short-drama/references/reference-roles.md)，完成判断见[资产检查](references/asset-review-checklist.md)。
 
 按问题查[地点与视角](references/location-and-view.md)、[道具与状态](references/prop-and-state.md)、[连续性变化](references/continuity-delta.md)、[时代特征](references/era-anchors.md)；从长剧本找复用对象时查[出场提取](references/occurrence-extraction.md)。
+
+资产计划保留关键设计来源，图片条目的设计承接与参考职责沿[五份文档](../short-drama/references/creator-documents.md#分镜多维字段与设计关联)。

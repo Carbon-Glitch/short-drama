@@ -9,6 +9,7 @@ import tempfile
 from uuid import uuid4
 
 from store import ProjectStore
+from document_contract import split_fields, check_headings, SHOT_FIELDS
 from filesystem import io_path
 from project_settings import from_config
 
@@ -37,7 +38,7 @@ def parse_script(text,code):
 
 
 def fields(text):
-    return {m[1].strip(): m[2].strip() for m in re.finditer(r"^[-*]\s*([^：:\n]+)[：:]\s*(.+)$", text, re.M)}
+    return split_fields(text)[0]
 
 
 class Library:
@@ -117,6 +118,9 @@ class Library:
         source = Path(source).expanduser().resolve(strict=True)
         if not source.is_dir():
             raise ValueError("请选择项目文件夹")
+        for doc in source.rglob('*.md'):
+            if doc.name in DOCS and '制作成果' not in doc.parts and '.short-drama' not in doc.parts:
+                check_headings(doc.name,doc.read_text(encoding='utf-8-sig'))
         if source == self.projects or self.projects in source.parents:
             raise ValueError("此项目已经在资料库中")
         config = source/"short-drama.json"
@@ -208,11 +212,7 @@ class Library:
                             if media_id:
                                 refs.append(media_id)
                         shot_id = add("shot", {"name": match[2] or match[1], "code": match[1], "parent_id": parent,
-                            "order": order, "action": f.get("唯一动作", ""), "purpose": f.get("目的", ""),
-                            "duration": f.get("时长", ""), "start": f.get("起点", ""), "end": f.get("终点", ""),
-                            "camera": f.get("景别/机位", ""), "sound": f.get("声音", ""),
-                            "movement":f.get("运镜",""),"join":f.get("接镜",""),"source_excerpt":f.get("来源",""),
-                            "visual_basis":f.get("视觉依据",""),"image_plan":f.get("图片提示词项",""),"production_split":f.get("制作分工",""),
+                            "order": order, **{key:f.get(label, "") for key,label in SHOT_FIELDS.items()},
                             "references": refs, "source_text": body, "fields": f}, match[1])
                         ops.append({"type": "bind", "source": parent, "target": shot_id, "fields": ["text"]})
                         for ref_id in refs:
@@ -265,7 +265,7 @@ class Library:
             raise ValueError("素材文件发生变化，请作为新版本导入")
         return io_path(path)
 
-    def add_media(self, project_id, paths, expected_revision, shot_id=None):
+    def add_media(self, project_id, paths, expected_revision, shot_id=None, *, production=None):
         store = self.project(project_id)
         state = store.state()
         if expected_revision != state["project"]["revision"]:
@@ -288,7 +288,7 @@ class Library:
             media_type = "image" if target.suffix in {".png", ".jpg", ".jpeg", ".webp"} else "video" if target.suffix in {".mp4", ".mov", ".webm"} else "audio"
             operations.append({"type": "create", "id": identity, "kind": "media", "data": {
                 "name": source.stem, "path": target.relative_to(store.root).as_posix(),
-                "type": media_type, "sha256": digest, "origin": "import", "shot_id": shot_id}})
+                "type": media_type, "sha256": digest, "origin": "generation" if production else "import", "shot_id": shot_id, **({"production":production} if production else {})}})
             added.append(identity)
         if not operations:
             return state

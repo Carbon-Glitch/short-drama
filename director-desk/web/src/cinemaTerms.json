@@ -1,0 +1,705 @@
+{
+  "version": 1,
+  "sources": [
+    "https://www.studiobinder.com/blog/shot-lists-complete-customization-intuitive-interface/",
+    "https://www.hollywoodcamerawork.com/shot-designer-videos.html",
+    "https://www.arri.com/en/software/previs-software/look-builder",
+    "https://www.kodak.com/en/motion/products/camera-films/?product-family=vision3"
+  ],
+  "categories": [
+    {
+      "id": "size",
+      "label": "景别",
+      "field": "camera",
+      "advanced": false,
+      "items": [
+        {
+          "id": "size-1",
+          "label": "大特写",
+          "description": "只看眼睛、指尖等局部"
+        },
+        {
+          "id": "size-2",
+          "label": "特写",
+          "description": "突出面部或关键物件"
+        },
+        {
+          "id": "size-3",
+          "label": "近景",
+          "description": "胸部以上，读取表情"
+        },
+        {
+          "id": "size-4",
+          "label": "中近景",
+          "description": "腰胸之间以上，兼顾手势"
+        },
+        {
+          "id": "size-5",
+          "label": "中景",
+          "description": "腰部以上，兼顾动作与关系"
+        },
+        {
+          "id": "size-6",
+          "label": "中全景",
+          "description": "膝部以上，展示身体姿态"
+        },
+        {
+          "id": "size-7",
+          "label": "全景",
+          "description": "完整主体及周围环境"
+        },
+        {
+          "id": "size-8",
+          "label": "远景",
+          "description": "环境为主，人物较小"
+        },
+        {
+          "id": "size-9",
+          "label": "大远景",
+          "description": "强调规模与人物渺小"
+        }
+      ]
+    },
+    {
+      "id": "angle",
+      "label": "机位",
+      "field": "camera",
+      "advanced": false,
+      "items": [
+        {
+          "id": "angle-1",
+          "label": "平视",
+          "description": "与主体眼睛或主要部位等高",
+          "prompt_en": "Eye-level camera."
+        },
+        {
+          "id": "angle-2",
+          "label": "低机位仰拍",
+          "description": "从低处向上看主体",
+          "prompt_en": "Low-angle view looking up at the subject."
+        },
+        {
+          "id": "angle-3",
+          "label": "高机位俯拍",
+          "description": "从高处向下看主体",
+          "prompt_en": "High-angle view looking down at the subject."
+        },
+        {
+          "id": "angle-4",
+          "label": "顶视",
+          "description": "从主体正上方向下看",
+          "prompt_en": "Direct overhead view."
+        },
+        {
+          "id": "angle-5",
+          "label": "荷兰角",
+          "description": "倾斜地平线制造不稳感",
+          "prompt_en": "A tilted horizon creates a Dutch angle."
+        },
+        {
+          "id": "angle-6",
+          "label": "贴地机位",
+          "description": "贴近地面观察移动与尺度",
+          "prompt_en": "A ground-level camera observes contact and scale."
+        }
+      ]
+    },
+    {
+      "id": "composition",
+      "label": "构图",
+      "field": "camera",
+      "advanced": false,
+      "items": [
+        {
+          "id": "composition-1",
+          "label": "越肩构图",
+          "description": "借前景肩部建立对话关系",
+          "prompt_en": "Over-the-shoulder framing establishes the relationship."
+        },
+        {
+          "id": "composition-2",
+          "label": "主观视角",
+          "description": "从角色眼睛的位置观看",
+          "prompt_en": "The camera takes the character's point of view."
+        },
+        {
+          "id": "composition-3",
+          "label": "对称构图",
+          "description": "让轴线与左右形状呼应",
+          "prompt_en": "Symmetrical framing organizes the subjects around a central axis."
+        },
+        {
+          "id": "composition-4",
+          "label": "框中框",
+          "description": "借门窗框住主体",
+          "prompt_en": "A doorway or window frames the subject."
+        },
+        {
+          "id": "composition-5",
+          "label": "前景遮挡",
+          "description": "让前景部分阻挡主体",
+          "prompt_en": "Foreground elements partially obscure the subject."
+        },
+        {
+          "id": "composition-6",
+          "label": "负空间",
+          "description": "用空白区域强调孤独或等待",
+          "prompt_en": "Negative space emphasizes the subject's isolation."
+        },
+        {
+          "id": "composition-7",
+          "label": "纵深构图",
+          "description": "前中后景共同组织关系",
+          "prompt_en": "Foreground, middle ground and background carry the spatial relationship."
+        },
+        {
+          "id": "composition-8",
+          "label": "偏置构图",
+          "description": "主体偏向画面一侧",
+          "prompt_en": "The subject is placed off-center."
+        },
+        {
+          "id": "composition-planimetric",
+          "label": "平面化构图",
+          "description": "人物和背景元素平行于画框而非纵深排列，形成图案式空间。"
+        },
+        {
+          "id": "composition-window",
+          "label": "窗框分割",
+          "description": "用窗框把人物分在不同区域，表现隔绝或相互观察。"
+        },
+        {
+          "id": "composition-peering",
+          "label": "窥视构图",
+          "description": "从门缝、柱后或人群间观察；先选实际遮挡物和可见区域。"
+        },
+        {
+          "id": "composition-one-point",
+          "label": "单点透视",
+          "description": "同向平行线汇向一个灭点，建立纵深与秩序。"
+        }
+      ]
+    },
+    {
+      "id": "motion",
+      "label": "运镜",
+      "field": "movement",
+      "advanced": false,
+      "items": [
+        {
+          "id": "motion-1",
+          "label": "固定",
+          "description": "机位保持不动，依靠画内表演"
+        },
+        {
+          "id": "motion-2",
+          "label": "缓推",
+          "description": "摄影机缓慢靠近主体"
+        },
+        {
+          "id": "motion-3",
+          "label": "拉远",
+          "description": "摄影机远离主体，逐步揭开环境"
+        },
+        {
+          "id": "motion-4",
+          "label": "横移",
+          "description": "摄影机横向移动，产生前后景视差"
+        },
+        {
+          "id": "motion-5",
+          "label": "跟随",
+          "description": "随主体移动并保持观看关系"
+        },
+        {
+          "id": "motion-6",
+          "label": "水平摇镜",
+          "description": "机位位置不变，左右转动朝向"
+        },
+        {
+          "id": "motion-7",
+          "label": "俯仰摇镜",
+          "description": "机位位置不变，上下转动朝向"
+        },
+        {
+          "id": "motion-8",
+          "label": "环绕",
+          "description": "沿主体周围弧线移动"
+        },
+        {
+          "id": "motion-9",
+          "label": "升降",
+          "description": "摄影机向上或向下移动"
+        },
+        {
+          "id": "motion-10",
+          "label": "甩镜",
+          "description": "快速转动朝向，以模糊连接注意"
+        },
+        {
+          "id": "motion-11",
+          "label": "手持",
+          "description": "保留有动机的身体感晃动"
+        },
+        {
+          "id": "motion-12",
+          "label": "变焦推近",
+          "description": "改变焦距收窄视野，机位不前移"
+        },
+        {
+          "id": "motion-13",
+          "label": "滑动变焦",
+          "description": "Dolly Zoom / Zolly / Contra-zoom：机身移动与变焦配合，主体大小近似不变，背景透视变化。"
+        }
+      ]
+    },
+    {
+      "id": "focus",
+      "label": "焦点与景深",
+      "field": "camera",
+      "advanced": false,
+      "items": [
+        {
+          "id": "focus-1",
+          "label": "浅景深",
+          "description": "明确主体，其他距离逐渐虚化"
+        },
+        {
+          "id": "focus-2",
+          "label": "深景深",
+          "description": "让前后空间同时清晰可读"
+        },
+        {
+          "id": "focus-3",
+          "label": "焦点交接",
+          "description": "Rack Focus / Focus Pull：清晰对象从A交给B；写明起点、触发与落点。"
+        },
+        {
+          "id": "focus-4",
+          "label": "分屈光镜效果",
+          "description": "让近远两处同时清晰并保留特殊分界"
+        }
+      ]
+    },
+    {
+      "id": "lens",
+      "label": "镜头与透视",
+      "field": "camera",
+      "advanced": false,
+      "items": [
+        {
+          "id": "lens-1",
+          "label": "广角透视",
+          "description": "贴近主体时夸大近远大小差异"
+        },
+        {
+          "id": "lens-2",
+          "label": "标准透视",
+          "description": "以自然距离组织空间"
+        },
+        {
+          "id": "lens-3",
+          "label": "长焦压缩",
+          "description": "从较远机位取景，压缩前后主体的视觉距离"
+        },
+        {
+          "id": "lens-4",
+          "label": "微距",
+          "description": "放大微小物件的纹理与接触"
+        },
+        {
+          "id": "lens-5",
+          "label": "鱼眼",
+          "description": "强烈弯曲边缘并扩大视野"
+        },
+        {
+          "id": "lens-6",
+          "label": "变形宽银幕观感",
+          "description": "横向眩光与椭圆焦外等风格线索"
+        },
+        {
+          "id": "lens-7",
+          "label": "24mm广角",
+          "description": "焦距意图，实际视野取决于画幅"
+        },
+        {
+          "id": "lens-8",
+          "label": "50mm标准镜头",
+          "description": "焦距意图，按传感器画幅理解视野"
+        },
+        {
+          "id": "lens-9",
+          "label": "85mm人像镜头",
+          "description": "中长焦取景意图，兼顾人物与背景分离"
+        }
+      ]
+    },
+    {
+      "id": "light",
+      "label": "光线",
+      "field": "camera",
+      "advanced": false,
+      "items": [
+        {
+          "id": "light-1",
+          "label": "柔光",
+          "description": "光影边缘柔和"
+        },
+        {
+          "id": "light-2",
+          "label": "硬光",
+          "description": "阴影边界清晰"
+        },
+        {
+          "id": "light-3",
+          "label": "侧光",
+          "description": "从侧面塑造体积"
+        },
+        {
+          "id": "light-4",
+          "label": "逆光",
+          "description": "从主体后方形成边缘或透光"
+        },
+        {
+          "id": "light-5",
+          "label": "顶光",
+          "description": "从上方压出局部阴影"
+        },
+        {
+          "id": "light-6",
+          "label": "动机光",
+          "description": "让窗、灯或屏幕成为可信光源"
+        },
+        {
+          "id": "light-7",
+          "label": "冷暖分离",
+          "description": "用不同色温区分主体与空间"
+        },
+        {
+          "id": "light-8",
+          "label": "低调影像",
+          "description": "以暗部为主，保留关键亮部"
+        },
+        {
+          "id": "light-9",
+          "label": "高调影像",
+          "description": "以明亮影调为主，保留层次"
+        },
+        {
+          "id": "light-under",
+          "label": "底光",
+          "description": "光从下方照向主体，鼻与眉骨阴影向上。"
+        },
+        {
+          "id": "light-volumetric",
+          "label": "体积光",
+          "description": "光穿过烟雾或微尘形成可见光束。"
+        },
+        {
+          "id": "light-dappled",
+          "label": "斑驳光",
+          "description": "光穿过树叶、窗格等遮挡，在表面形成疏密变化的光斑。"
+        }
+      ]
+    },
+    {
+      "id": "look",
+      "label": "成像质感",
+      "field": "camera",
+      "advanced": false,
+      "items": [
+        {
+          "id": "look-1",
+          "label": "细腻胶片颗粒",
+          "description": "细小有机颗粒，保留主体细节"
+        },
+        {
+          "id": "look-2",
+          "label": "高光柔晕",
+          "description": "亮部边缘轻微扩散"
+        },
+        {
+          "id": "look-3",
+          "label": "柔和高光过渡",
+          "description": "亮部渐变自然，不过早截断"
+        },
+        {
+          "id": "look-4",
+          "label": "黑白影调",
+          "description": "用亮度与纹理组织画面"
+        },
+        {
+          "id": "look-5",
+          "label": "低饱和色彩",
+          "description": "收敛色彩纯度"
+        },
+        {
+          "id": "look-6",
+          "label": "浓烈撞色",
+          "description": "用有秩序的高饱和对比"
+        },
+        {
+          "id": "look-7",
+          "label": "漂白旁路观感",
+          "description": "偏低饱和、高反差的审美方向"
+        },
+        {
+          "id": "look-8",
+          "label": "复古CRT",
+          "description": "扫描线、荧光与模拟信号质感"
+        }
+      ]
+    },
+    {
+      "id": "camera",
+      "label": "摄影机风格",
+      "field": "camera",
+      "advanced": true,
+      "items": [
+        {
+          "id": "camera-1",
+          "label": "ARRI ALEXA风格意图",
+          "description": "以自然肤色与柔和高光描述目标，不等于真实机型模拟"
+        },
+        {
+          "id": "camera-2",
+          "label": "RED数字电影风格意图",
+          "description": "进一步写清所需锐度、色彩和高光，品牌不代表固定Look"
+        },
+        {
+          "id": "camera-3",
+          "label": "手持手机影像",
+          "description": "贴近日常随手记录的视角与运动"
+        },
+        {
+          "id": "camera-4",
+          "label": "16mm摄影观感",
+          "description": "较明显颗粒与轻巧纪录感的风格意图"
+        },
+        {
+          "id": "camera-5",
+          "label": "35mm电影摄影观感",
+          "description": "细腻颗粒、光学与影调的综合意图"
+        }
+      ]
+    },
+    {
+      "id": "film",
+      "label": "胶片片种",
+      "field": "camera",
+      "advanced": true,
+      "items": [
+        {
+          "id": "film-1",
+          "label": "KODAK VISION3 500T 5219",
+          "description": "钨丝灯平衡彩色负片，ISO 500；可作为低照度胶片风格参考"
+        },
+        {
+          "id": "film-2",
+          "label": "KODAK VISION3 250D 5207",
+          "description": "日光平衡彩色负片，ISO 250；以实际目标光色描述补充"
+        },
+        {
+          "id": "film-3",
+          "label": "KODAK VISION3 50D 5203",
+          "description": "日光平衡彩色负片，ISO 50；细颗粒风格参考"
+        },
+        {
+          "id": "film-4",
+          "label": "KODAK VISION3 200T 5213",
+          "description": "钨丝灯平衡彩色负片，ISO 200；不自动指定场景色温"
+        }
+      ]
+    },
+    {
+      "id": "color",
+      "label": "色彩秩序",
+      "field": "text",
+      "items": [
+        {
+          "id": "color-0",
+          "label": "有限色盘",
+          "description": "选择少量主辅色，并写清各自落在哪些物件上"
+        },
+        {
+          "id": "color-1",
+          "label": "冷暖分区",
+          "description": "以光源或空间区域建立冷暖关系"
+        },
+        {
+          "id": "color-2",
+          "label": "单色点睛",
+          "description": "降低其他区域纯度，以一个物件引导注意"
+        }
+      ]
+    },
+    {
+      "id": "pose",
+      "label": "姿态与重心",
+      "field": "text",
+      "items": [
+        {
+          "id": "pose-0",
+          "label": "重心前倾",
+          "description": "躯干略向前，重量压向前脚；交代手和视线",
+          "prompt_en": "The body leans forward with weight on the front foot; specify hands and gaze."
+        },
+        {
+          "id": "pose-1",
+          "label": "侧身回望",
+          "description": "身体保持原方向，头与视线转向后方",
+          "prompt_en": "The body maintains its direction as the head and gaze turn back."
+        },
+        {
+          "id": "pose-2",
+          "label": "接触受力",
+          "description": "接触处承重，手指、织物与阴影对应压力",
+          "prompt_en": "The point of contact bears weight; fingers, fabric and contact shadows respond to pressure."
+        }
+      ]
+    },
+    {
+      "id": "surface",
+      "label": "局部材质",
+      "field": "text",
+      "items": [
+        {
+          "id": "surface-0",
+          "label": "哑光织物",
+          "description": "表面吸光，保留经纬和折痕",
+          "prompt_en": "Matte fabric absorbs light, retaining visible weave and folds."
+        },
+        {
+          "id": "surface-1",
+          "label": "玻璃反射",
+          "description": "保留玻璃透视、环境反射与局部指纹",
+          "prompt_en": "Glass preserves perspective, environmental reflections and subtle fingerprints."
+        },
+        {
+          "id": "surface-2",
+          "label": "金属磨损",
+          "description": "边角露出磨痕，反光随曲面变化",
+          "prompt_en": "Worn metal edges catch highlights that follow the surface curvature."
+        }
+      ]
+    },
+    {
+      "id": "action_speed",
+      "label": "动作节奏",
+      "field": "text",
+      "items": [
+        {
+          "id": "action_speed-0",
+          "label": "停顿后动作",
+          "description": "先留反应停顿，再完成明确动作，不压缩对白",
+          "prompt_en": "Hold a reaction beat before the action; preserve the full spoken line."
+        },
+        {
+          "id": "action_speed-1",
+          "label": "突然加速",
+          "description": "从迟疑转为果断，明确加速触发与落点",
+          "prompt_en": "The movement shifts from hesitation to a sudden acceleration, with a clear trigger and stopping point."
+        },
+        {
+          "id": "action_speed-2",
+          "label": "缓慢收束",
+          "description": "动作逐渐减速，在指定姿态结束",
+          "prompt_en": "The action gradually slows into the intended final pose."
+        },
+        {
+          "id": "action_speed-3",
+          "label": "并行动作",
+          "description": "主动作与次要反应同时发生，注意中心明确",
+          "prompt_en": "The main action and a secondary reaction overlap while the attention remains clearly directed."
+        }
+      ]
+    },
+    {
+      "id": "camera_timing",
+      "label": "摄影执行",
+      "field": "text",
+      "items": [
+        {
+          "id": "camera_timing-0",
+          "label": "触发后缓推",
+          "description": "保持既定机位，指定动作发生后缓推至既定景别",
+          "prompt_en": "Hold the established camera position, then begin a slow push on the specified action, ending at the planned framing."
+        },
+        {
+          "id": "camera_timing-1",
+          "label": "跟随并停稳",
+          "description": "沿分镜路径跟随，主体停下后摄影机减速落幅",
+          "prompt_en": "Follow the planned path, slowing to a settled frame after the subject stops."
+        },
+        {
+          "id": "camera_timing-2",
+          "label": "焦点交接时机",
+          "description": "先合焦前景，指定字音或动作触发焦点转向后景",
+          "prompt_en": "Focus begins on the foreground; the specified word or action triggers a clean rack to the background."
+        },
+        {
+          "id": "camera_timing-3",
+          "label": "运动中揭示",
+          "description": "沿既定方向移动，让前景遮挡逐渐移开",
+          "prompt_en": "Move in the established direction so the foreground obstruction gradually reveals the subject."
+        }
+      ]
+    },
+    {
+      "id": "light_change",
+      "label": "光线变化",
+      "field": "text",
+      "items": [
+        {
+          "id": "light_change-0",
+          "label": "进入光区",
+          "description": "主体移入既定光区，亮部沿表面连续移动",
+          "prompt_en": "As the subject enters the established light, highlights travel continuously across its surface."
+        },
+        {
+          "id": "light_change-1",
+          "label": "光源被遮挡",
+          "description": "遮挡发生后局部光照收束，其他光源维持",
+          "prompt_en": "When the light source is occluded, its local illumination narrows while other sources remain unchanged."
+        },
+        {
+          "id": "light_change-2",
+          "label": "屏幕光响应",
+          "description": "屏幕亮度变化同步照亮邻近材质，反射随距离变化",
+          "prompt_en": "Changes in screen brightness illuminate nearby materials, with reflections responding to distance."
+        }
+      ]
+    },
+    {
+      "id": "audio",
+      "label": "声音同步",
+      "field": "text",
+      "items": [
+        {
+          "id": "audio-0",
+          "label": "接触同步",
+          "description": "物件实际接触的瞬间发声，声源方向与距离一致",
+          "prompt_en": "The sound begins on actual contact, with direction and distance matching the visible source."
+        },
+        {
+          "id": "audio-1",
+          "label": "声音提前进入",
+          "description": "J-cut：下一镜的声音先于它的画面进入。",
+          "prompt_en": "The next scene's sound begins before the picture cuts to its source."
+        },
+        {
+          "id": "audio-2",
+          "label": "尾声延续",
+          "description": "L-cut：上一镜的声音延续到下一镜画面。",
+          "prompt_en": "The previous shot's sound continues over the next image, retaining the listener's reaction."
+        },
+        {
+          "id": "audio-3",
+          "label": "声场骤静",
+          "description": "触发点撤去背景声，保留指定呼吸或近处细响",
+          "prompt_en": "At the chosen trigger, the ambience drops away, leaving the specified breath or nearby sound."
+        }
+      ]
+    }
+  ]
+}

@@ -22,6 +22,7 @@ export function routes(studio){
  async function load(ctx){
    const {root,ep}=await project(ctx),d=await py('state',root,ep);const pr=['剧集','episodes'].includes(basename(dirname(root)))?dirname(dirname(root)):root;
    const folder=await child(pr,[join(pr,'剧集',d.episode),join(pr,'episodes',d.episode),root].find(p=>existsSync(p)&&basename(p)===d.episode)||root);
+   d.managed=existsSync(join(folder,'.short-drama/managed-source.json'));
    const files=new Map(d.media.map(m=>[m.id,resolve(pr,m.path)]));
    for(const v of Object.values(d.decisions))if(v?.asset){const a=v.asset,arch=join(folder,'.short-drama/director-media',a.id+extname(a.path).toLowerCase());if(/^[a-f0-9]{32}$/.test(a.id)&&existsSync(arch))files.set(a.id,arch);}
    const k=ctx.params.project+':'+ep;map.set(k,{pr,folder,files});return {d,pr,folder,files};

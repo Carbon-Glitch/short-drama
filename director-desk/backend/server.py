@@ -191,6 +191,9 @@ class Handler(BaseHTTPRequestHandler):
                 download=self.server.downloads.get(path.rsplit('/',1)[-1])
                 if not download:raise ValueError('下载已过期，请重新导出')
                 return self.stream(download,attachment=True)
+            if path == '/api/document-contract' and not writing:
+                from document_contract import CONTRACT
+                return self.respond(200,CONTRACT)
             if path == '/api/model-presets' and not writing:
                 return self.respond(200,model_presets())
             if path == '/api/editing-runtime':
@@ -257,6 +260,8 @@ class Handler(BaseHTTPRequestHandler):
                     return self.respond(200,result)
                 if action=='generation-jobs' and not writing:
                     return self.respond(200,self.server.production.list(identity))
+                if action=='generation-context' and writing:
+                    return self.respond(200,self.server.production.context(identity,body['id']))
                 if action=='generation-prepare' and writing:
                     return self.respond(200,self.server.production.prepare(identity,body['source_id'],body['adapter'],body.get('parameters',{})))
                 if action=='generation-submit' and writing:
@@ -306,11 +311,14 @@ class Handler(BaseHTTPRequestHandler):
                     film = (store.root/episode["data"]["film_path"]).resolve(strict=True)
                     if not film.is_relative_to(store.root):
                         raise ValueError("剪辑工程不在项目中")
+                    self.server.editing.sync_documents(identity,episode['id'],film.parent)
+                    deployment=self.server.editing_runtime.deploy_plugin()
                     result = subprocess.run(["node", str(Path(__file__).with_name("openfilm.mjs")), str(film.parent)],
-                                            env=self.server.editing_runtime.environment(),
+                                            env={**self.server.editing_runtime.environment(),'SHORT_DRAMA_PLUGIN_BUILD':deployment['pluginBuild']},
                                             capture_output=True, text=True, encoding="utf8", timeout=60,
                                             creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
                     if result.returncode:
+                        if "剪辑服务仍是旧版" in result.stderr:raise ValueError("剪辑服务仍是旧版，请先保存现有剪辑并重启 OpenFilm，再重新进入。")
                         raise ValueError("剪辑台未能打开，请检查本机 OpenFilm 运行时")
                     return self.respond(200, json.loads(result.stdout.strip().splitlines()[-1]))
                 if writing and action in {"undo", "redo"}:

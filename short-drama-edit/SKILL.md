@@ -9,7 +9,7 @@ license: MIT
 ## 目标与输入
 
 先看素材里谁先变了。台词还没说完，听者的笑已经收住，这一刀就可能属于听者；两人在同一画面里更有劲，就让镜头继续。开篇第一刀敢于砍掉多余起势、从最抓人的动作或声画瞬态切入，按实际表演和呼吸节奏选剪点。
-读当前工程与[剪辑意图](references/editorial-intent.md)；精修查[精剪手艺](references/finishing-craft.md)，声音任务查[声音与音乐](references/sound-narrative-and-music.md)。
+试剪和返修时按[导演自查](../short-drama-review/references/director-self-check.md)核对实际声画与采用窗口。读当前工程与[剪辑意图](references/editorial-intent.md)；精修查[精剪手艺](references/finishing-craft.md)，声音任务查[声音与音乐](references/sound-narrative-and-music.md)。
 
 ## 一份后期主稿
 
@@ -44,3 +44,5 @@ python scripts/edit_tool.py verify <剧集目录>
 素材生产仍由 $short-drama-produce 和项目已配置的 Seedance 2.5 / MiniMax H3 / imagegen 等路线负责。当前 Agent 做写作、分析与审美判断；素材测量、节拍、波形与音频处理复用本地 helper。OpenFilm 独占新工程的预览和最终混音/渲染。
 
 旧项目没有 film.html 时保持原执行路线。用户选择迁移后，导入独立副本；旧格式按需读[旧工程工作流](references/legacy-edit-workflow.md)。复杂图形转成可编辑镜头页，特殊效果注明实际保留范围。
+
+带 DESIGN 编号的关键决定进入前期交接，映射到实际 clip/cue；镜头与设计关系从分镜继承。检查对应源窗是否真的呈现预期的触发、揭示和反应，关系已绑定与效果已观察分别记录。

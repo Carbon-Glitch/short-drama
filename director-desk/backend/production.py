@@ -1,3 +1,4 @@
+from creative_context import context_ids, project_context
 """Bridge structured generation entries to the existing production_tool protocol."""
 import importlib.util
 import hashlib
@@ -114,49 +115,20 @@ class Production:
         if not re.fullmatch(r'EP\d+',code):raise ValueError('剧集编号无效')
         document=render_document(state,doc)
         section=self.tool._markdown_section(document,source['data']['code'])
-        prompt=self.tool._copyable_prompt(section)
-        field='参考' if source['kind']=='image_prompt' else '输入参考图'
-        bindings=self.tool._markdown_reference_bindings(section,field_name=field)
-        audio=self.tool._markdown_audio_bindings(section) if source['kind']=='submission' else []
-        bindings+= [{**b,'order':len(bindings)+b['order'],'role':'reference_audio'} for b in audio]
-        purposes={}
-        for binding in bindings:
-            if binding.get('role')=='reference_audio':continue
-            match=re.search(re.escape(binding['slot_id'])+r'（顺序：.*?用途：([^；）]+)',section,re.S)
-            purposes[binding['slot_id']]=match[1].strip() if match else '身份'
-        full_reference=bool(audio) or any(p not in ('起始帧','结束帧') for p in purposes.values())
-        frame_purposes=[p for p in purposes.values() if p in ('起始帧','结束帧')]
-        declared=source['data'].get('generation_mode','')
-        if not declared:
-            mode_line=re.search(r'^- 生成方式：([^\n]+)',section,re.M)
-            declared=mode_line[1].strip() if mode_line else ''
-        if declared in ('reference','全能参考','多图参考') and bindings:full_reference=True
-        if source['kind']=='submission' and not bindings and declared not in ('文生视频','纯文本','text','text_to_video'):
-            raise ValueError('请先选择全能参考所需素材；只有明确选择纯文本生成时才可不传参考')
-        dedicated=declared in ('纯首帧','首帧','first_frame','纯首尾帧','首尾帧','first_last_frame')
-        if source['kind']=='submission' and dedicated and full_reference:
-            raise ValueError('首尾帧专用条件不能与音色或多图参考同时提交；请先选择控制路线并更新提示词')
-        if source['kind']=='submission' and not full_reference:
-            if frame_purposes.count('起始帧')>1 or frame_purposes.count('结束帧')>1:
-                raise ValueError('首帧与尾帧各只能选择一张图片')
-            if '结束帧' in frame_purposes and '起始帧' not in frame_purposes:
-                raise ValueError('使用尾帧前，请先选择起始帧')
-        mode='reference' if full_reference else 'first_last_frame' if '结束帧' in frame_purposes else 'first_frame' if frame_purposes else 'text'
-        is_h3=profile.get('provider')=='minimax-h3' or adapter=='director-minimax-h3'
-        if source['kind']=='submission' and is_h3:
-            if audio and not purposes:raise ValueError('H3音色参考需要至少一张画面参考')
-            base=bool(re.search(r'^\s*integrated_multimodal_description:',prompt,re.M))
-            full=bool(re.search(r'^\s*(?:subject_definitions|retention_analysis):',prompt,re.M))
-            if (mode=='reference' and base) or (mode!='reference' and full):
-                raise ValueError('H3提示词结构与参考模式不一致，请按当前参考重新编译提示词')
-        for binding in bindings:
-            if 'role' not in binding:
-                binding['role']='reference_image' if full_reference else {'起始帧':'first_frame','结束帧':'last_frame'}[purposes[binding['slot_id']]]
+        inputs=self.tool.entry_inputs(section, field='参考' if source['kind']=='image_prompt' else '输入参考图',
+            is_video=source['kind']=='submission', declared=source['data'].get('generation_mode',''),
+            provider=profile.get('provider',''), adapter=adapter)
+        prompt=inputs['prompt'];bindings=inputs['bindings'];mode=inputs['mode']
+        input_scope=context_ids(state,{source_id},'video-prompts' if source['kind']=='submission' else 'production')
+        missing=sorted({code for i in input_scope for code in entities[i]['data'].get('unresolved_design_codes',[])})
+        if missing:raise ValueError('设计承接未找到：'+', '.join(missing))
         identity=uuid4().hex;workspace_relative='.short-drama/state/production/'+identity
         workspace=filesystem_path(store.root/workspace_relative);workspace.mkdir(parents=True)
         (workspace/'short-drama.json').write_text(encoded(to_config(state)),encoding='utf8')
+        from transfer import project_markdown, subset
+        project_markdown(workspace,subset(state,ep['id']))
         relative=f'剧集/{code}/{doc["data"]["name"]}'
-        target=inside(workspace,relative);target.parent.mkdir(parents=True);target.write_text(document,encoding='utf8')
+        target=inside(workspace,relative);target.parent.mkdir(parents=True,exist_ok=True);target.write_text(document,encoding='utf8')
         for binding in bindings:
             live=inside(store.root,binding['path'])
             if not live.is_file():live=inside(store.root,'source/'+binding['path'])
@@ -180,24 +152,32 @@ class Production:
         job={'schema_version':'1.0','job_id':identity,'modality':modality,'adapter':adapter,'prompt':prompt,
              'source':relative,'source_entry':source['data']['code'],'reference_bindings':bindings,
              'references':[b['path'] for b in bindings],'outputs':[output],'parameters':parameters,'overwrite':False}
-        jobfile=workspace/'job.json';jobfile.write_text(encoded(job),encoding='utf8')
-        preview=self.tool.prepare_job(workspace,jobfile)
+        preview=self.tool.prepare_payload(workspace,job)
         if self.service_revision(self.service_details(adapter))!=service_revision:raise ValueError('服务配置在准备期间发生变化，请重新预览')
         preview['service_revision']=service_revision
         preview['service_model']=(service.get('settings') or {}).get('model','')
         preview['reference_mode']=mode
         preview['ratio_from_first_frame']=bool(seedance and mode in ('first_frame','first_last_frame'))
-        preview['frame_images_as_references']=bool(frame_purposes and full_reference)
-        related={source_id}|{e['id'] for e in state['entities'] if e['kind']=='project_settings'}
-        while True:
-            inputs={d['source'] for d in state['dependencies'] if d['target'] in related}
-            if inputs<=related:break
-            related.update(inputs)
+        preview['frame_images_as_references']=inputs['frame_images_as_references']
+        related=context_ids(state,{source_id},'video-prompts' if modality=='video' else 'production')
         basis={i:entities[i]['revision'] for i in related}
+        context={'schema':1,'source_id':source_id,'source_shot_ids':list(source['data'].get('shot_ids',[])),
+                 'basis':basis,'project':project_context(state,related)}
+        (workspace/'creative-context.json').write_text(encoded(context),encoding='utf8')
+        preview['creative_context']={'path':workspace_relative+'/creative-context.json',
+            'shot_ids':context['source_shot_ids'],
+            'design_codes':[entities[i]['data']['code'] for i in sorted(related) if entities[i]['kind']=='design' and entities[i]['data'].get('code')]}
         with store.connection() as db:
             db.execute('INSERT INTO generation_job VALUES(?,?,?,?,?,?,?,?,?)',
                 (identity,source_id,encoded(basis),workspace_relative,encoded(preview),'prepared',None,None,time.time()))
         return self.list(project)[0]
+
+    def context(self,project,identity):
+        job=next((j for j in self.list(project) if j['id']==identity),None)
+        if not job:raise ValueError('生成记录不存在')
+        path=filesystem_path(self.store(project).root/job['workspace']/'creative-context.json')
+        return {'created':job['created'],'status':job['status'],
+                'context':json.loads(path.read_text(encoding='utf8')) if path.is_file() else None}
 
     def submit(self,project,identity,asynchronous=True):
         store=self.store(project)
@@ -228,12 +208,16 @@ class Production:
             result=(self.tool.collect_job if collect else self.tool.run_job)(workspace,job_id=identity,adapter_config=adapter_config)
             status=self.tool.job_status(workspace,job_id=identity)
             outputs=status.get('latest_run',{}).get('outputs',[])
-            state=store.state();source=next((e for e in state['entities'] if e['id']==job['source_id']),None)
-            shot_ids=source['data'].get('shot_ids',[]) if source else []
-            shot_ids=[i for i in shot_ids if any(e['id']==i for e in state['entities'])]
+            state=store.state()
+            context_path=workspace/'creative-context.json'
+            context=json.loads(context_path.read_text(encoding='utf8')) if context_path.is_file() else {}
+            # Legacy jobs have no frozen coverage; do not invent it from a changed live unit.
+            original_shots=context.get('source_shot_ids',[])
+            shot_ids=[i for i in original_shots if any(e['id']==i for e in state['entities'])]
             paths=[workspace/o['path'] for o in outputs]
-            # New files remain candidates. Neither a successful adapter nor a filename adopts them.
-            updated=self.library.add_media(project,paths,state['project']['revision'],shot_ids[0] if len(shot_ids)==1 else None)
+            provenance={'job_id':identity,'source_id':job['source_id'],'shot_ids':original_shots,
+                'basis':job['basis'],'creative_context':job['preview'].get('creative_context')}
+            updated=self.library.add_media(project,paths,state['project']['revision'],shot_ids[0] if len(shot_ids)==1 else None,production=provenance)
             media=[e['id'] for e in updated['entities'] if e['kind']=='media' and e['revision']==updated['project']['revision']]
             result={'media':media,'provider':status.get('latest_run',{}).get('provider_job_id'),'source_id':job['source_id']}
             with store.connection() as db:db.execute("UPDATE generation_job SET status='succeeded',result=?,error=NULL WHERE id=?",(encoded(result),identity))

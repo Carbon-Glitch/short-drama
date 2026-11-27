@@ -6,16 +6,15 @@ from library import sections,fields
 from documents import LABELS
 from reference_media import paths,resolve
 
-SHOT_FIELDS={'action':'唯一动作','duration':'时长','camera':'景别/机位','sound':'声音','start':'起点','end':'终点',
-             'purpose':'目的','movement':'运镜','join':'接镜','source_excerpt':'来源','visual_basis':'视觉依据',
-             'image_plan':'图片提示词项','production_split':'制作分工','input_reference_text':'输入参考图'}
+from document_contract import SHOT_FIELDS, split_fields, check_headings, canonical_fields
 PLAN_FIELDS=('blocking','generation_plan','director_review')
 
-def prose(body):return '\n'.join(line for line in body.splitlines() if not re.match(r'^[-*]\s*[^：:\n]+[：:]',line)).strip()
+def prose(body):return split_fields(body)[1]
 
 class StoryboardSync(DocumentSync):
  supported={'分镜.md'}
  def specs(self,filename,text):
+  check_headings(filename,text)
   records=[];plans={}
   for order,(heading,body) in enumerate(sections(text)):
    if heading.startswith(('场景站位','生成安排')):
@@ -48,7 +47,7 @@ class StoryboardSync(DocumentSync):
    item['data'].update({key:scene['data'].get(key,'') for key in PLAN_FIELDS});result.append(item)
   for shot in state['entities']:
    if shot['kind']!='shot' or shot['data'].get('parent_id') not in scene_ids:continue
-   item=deepcopy(shot);data=item['data'];raw=data.get('fields',{})
+   item=deepcopy(shot);data=item['data'];raw=canonical_fields(data.get('fields',{}))
    for key,label in SHOT_FIELDS.items():data[key]=data.get(key,raw.get(label,''))
    data['extra_fields']={key:value for key,value in raw.items() if key not in SHOT_FIELDS.values()}
    data['source_text']=prose(data.get('source_text',''));result.append(item)
@@ -67,7 +66,7 @@ class StoryboardSync(DocumentSync):
    entity=entities[identity]
    if entity['kind']!='shot':continue
    if identity in created:patch.pop('document_id',None)
-   data={**entity['data'],**patch};raw=dict(data.get('fields',{}))
+   data={**entity['data'],**patch};raw=canonical_fields(data.get('fields',{}))
    if 'extra_fields' in patch:
     raw={key:value for key,value in raw.items() if key in SHOT_FIELDS.values()};raw.update(patch.pop('extra_fields'))
    for key,label in SHOT_FIELDS.items():

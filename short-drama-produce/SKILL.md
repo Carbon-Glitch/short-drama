@@ -9,7 +9,7 @@ license: MIT
 ## 目标与输入
 
 带着本场最想看到的一拍和本集建立的视觉气场去看回片：动作发生时，观众看得清吗？修手位以后，那点迟疑还在吗？画面本身脱不脱离“廉价 AI 感”、有没有让人停下来的质感？用当前文档与真实参考沿既有路线生产，选出能剪出这场戏的高水准素材。
-试拍或返修查[生成观察](references/generation-test-matrix.md)；回片时按对象查[素材质量](../short-drama-review/references/production-quality-gates.md)。
+回片按[导演自查](../short-drama-review/references/director-self-check.md)定位实际失效的一拍。试拍或返修查[生成观察](references/generation-test-matrix.md)；回片时按对象查[素材质量](../short-drama-review/references/production-quality-gates.md)。
 
 ## 生产流程
 
@@ -30,7 +30,7 @@ license: MIT
 | 配音 | 剧本原句、角色音色和表演要求；按既有接口字段传递 |
 | 音乐 | 已定音乐意图与曲段职责，后期落实真实时长和落点 |
 
-`source_entry` 选择当前条目。`reference_bindings` 按实际槽位与顺序说明身份、造型、地理、风格、构图、首帧和音色用途；只有实际选择的素材进入 job。接口细节与恢复方法见[执行契约](references/adapter-contract.md)及所选供应商资料。
+`source_entry` 选择当前条目。`reference_bindings` 按实际槽位与顺序说明身份、造型、地理、风格、构图、首帧和音色用途；只有实际选择的素材进入 job。接口细节与恢复方法见[执行契约](references/adapter-contract.md)及所选供应商资料。第三方工作流还需核对最终实际请求中的素材版本、上传回执、输入位置与正文标签；准确绑定不等于生成效果已通过。
 
 ## 命令
 
@@ -48,3 +48,5 @@ python scripts/production_tool.py audit <project>
 ## 完成
 
 实际素材已落盘并可追溯，本轮设计重点与视觉质感均已观察成立，采用版本与需定向修订处清楚。交给剪辑时说明哪段能用、该从哪一拍取、还缺哪一个反应。文件已生成、画面已看过、声音已听过，分别按真实进度说。
+
+提交快照保留当时的设计、完整选镜与参考版本；回片归属沿提交快照。按设计承接逐项观察实际动作、信息顺序和声音触发，在当前素材意见中记录兑现或返修的位置；采用是创作选择，生成成功只是素材已返回。

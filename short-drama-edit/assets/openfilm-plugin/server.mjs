@@ -34,6 +34,7 @@ export default studio=>{
   async function rootOf(id){const value=await studio.project(id);follow(value.path);return value.path;}
   return {
     ...deskRoutes(studio),
+    'GET /health':async()=>({build,pid:process.pid}),
     'GET /projects/:project/state':async({params})=>sd.state(await rootOf(params.project)),
     'POST /projects/:project/sync':async({params})=>sd.reconcile(await rootOf(params.project)),
     'POST /projects/:project/edit':async({params,req})=>{const body=await studio.readJson(req);return sd.patch(await rootOf(params.project),body.ops,{rev:body.rev,actor:'person'});},

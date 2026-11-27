@@ -1,3 +1,4 @@
+from document_contract import SHOT_DEPENDENCIES
 """Merge creative sections without replacing their stable IDs or adopted versions."""
 import hashlib
 import json
@@ -117,7 +118,7 @@ class DocumentSync:
     shots,unresolved=link_shots(state,preview['episode'],codes)
     operations.append({'type':'update','id':identity,'patch':{'shot_ids':shots,'unresolved_shot_codes':unresolved}})
     for old in set(entry['data'].get('shot_ids',[]))-set(shots):operations.append({'type':'unbind','source':old,'target':identity})
-    for sid in shots:operations.append({'type':'bind','source':sid,'target':identity,'fields':['action','duration','camera','movement','join','source_excerpt','visual_basis','sound','start','end','purpose','references','design_refs']})
+    for sid in shots:operations.append({'type':'bind','source':sid,'target':identity,'fields':SHOT_DEPENDENCIES})
   operations=self.prepare_operations(operations,entities,state,preview)
   operations=media_operations+operations
   if doc.get('_create'):operations.insert(0,{'type':'create','id':document,'kind':'document','data':doc['data']})

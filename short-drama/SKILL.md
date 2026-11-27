@@ -7,7 +7,7 @@ license: MIT
 读[共同底线](references/viewer-first.md)与[流程](references/creator-workflow.md)；具体工艺查[知识入口](references/craft-knowledge.md)。
 ## Quick Start
 当前创作统一使用 [creator-first 工作流](references/creator-workflow.md)：每集按需维护
-剧本.md视觉设定.md分镜.md图片提示词.md视频提示词.md，不建立并行的结构化创作真相。
+剧本.md、视觉设定.md、分镜.md、图片提示词.md、视频提示词.md。文件项目以这些文档为主稿；导演台管理项目通过浏览器或 CLI 编辑同一实体版本，Markdown 为派生阅读视图，外部原稿通过差异合并接入。
 具体写法见 [五份创作文档](references/creator-documents.md)。
 ## 路由
 | 用户要做什么 | owner / 行为 |

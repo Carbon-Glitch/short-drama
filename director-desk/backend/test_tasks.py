@@ -72,5 +72,12 @@ class TaskTests(unittest.TestCase):
         retry=self.queue.retry(task)
         self.assertEqual(self.queue.claim(retry,'reader')['task']['mode'],'script_review')
 
+    def test_new_context_child_during_work_requires_rebase(self):
+        state=self.store.apply(1,[{'type':'create','id':'ep','kind':'episode','data':{'name':'第一集'}},
+            {'type':'create','id':'sc','kind':'scene','data':{'parent_id':'ep','text':'原剧本'}}])
+        task=self.queue.create('写分镜',['ep'],'storyboard');self.queue.claim(task,'agent')
+        self.store.apply(state['project']['revision'],[{'type':'create','id':'new-design','kind':'design','data':{'parent_id':'ep','text':'用户新增的设计'}}])
+        with self.assertRaises(Conflict):self.queue.finish(task,'agent',[],'沿旧设计完成')
+
 
 if __name__=='__main__':unittest.main()

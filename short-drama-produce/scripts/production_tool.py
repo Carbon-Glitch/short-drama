@@ -145,7 +145,7 @@ REFERENCE_SUFFIX_RE = r"(?:png|jpe?g|webp)"
 REFERENCE_LINE_RE = re.compile(
     rf"(REF-[A-Z0-9][A-Z0-9-]{{0,79}})（顺序：([1-9]\d*)）· "
     rf"([^；\n]+?\.{REFERENCE_SUFFIX_RE})《([^》\n]+)》"
-    r"（(?:用途：[^；）\n]+；)?控制：([^；）\n]+)；不得控制：([^）\n]+)）",
+    r"（(?:用途：[^；）\n]+；)?控制：([^；）\n]+)(?:；不得控制：([^）\n]*))?）",
     re.IGNORECASE,
 )
 
@@ -156,7 +156,7 @@ AUDIO_REFERENCE_ROLE = "reference_audio"
 AUDIO_REFERENCE_LINE_RE = re.compile(
     r"(REF-[A-Z0-9][A-Z0-9-]{0,79})（顺序：([1-9]\d*)）· "
     r"([^；\n]+?\.(?:wav|mp3|m4a|aac|flac))《([^》\n]+)》"
-    r"（用途：[^；）\n]+；角色：([^；）\n]+)；控制：([^；）\n]+)；不得控制：([^）\n]+)）",
+    r"（用途：[^；）\n]+；角色：([^；）\n]+)；控制：([^；）\n]+)(?:；不得控制：([^）\n]*))?）",
     re.IGNORECASE,
 )
 
@@ -313,6 +313,17 @@ def _hash_project_file(root: Path, relative: str) -> str:
                 raise ValueError(f"job input exceeds the size limit: {relative}")
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def _creative_context(root: Path, source: str | None, entry: str | None):
+    if not source or not entry or PurePosixPath(source).name not in {"视频提示词.md", "图片提示词.md"}:
+        return None
+    import importlib.util
+    path = Path(__file__).resolve().parents[2] / "short-drama/scripts/creator_context.py"
+    spec = importlib.util.spec_from_file_location("sd_creator_context", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.for_entry(root, source, entry)
 
 
 def _snapshot_inputs(
@@ -684,9 +695,9 @@ def _string_list(value: object, *, label: str, limit: int = 32) -> list[str]:
     return list(value)
 
 
-def _scope_list(value: object, *, label: str) -> list[str]:
+def _scope_list(value: object, *, label: str, allow_empty: bool = False) -> list[str]:
     items = _string_list(value, label=label, limit=32)
-    if not items or any(not item.strip() or len(item) > 200 for item in items):
+    if (not items and not allow_empty) or any(not item.strip() or len(item) > 200 for item in items):
         raise ValueError(f"{label} must contain non-empty bounded text")
     normalized = [item.strip() for item in items]
     folded = [item.casefold() for item in normalized]
@@ -758,7 +769,7 @@ def _normalize_reference_bindings(value: object) -> list[dict[str, Any]]:
             binding.get("may_control"), label=f"{label}.may_control"
         )
         must_not_control = _scope_list(
-            binding.get("must_not_control"), label=f"{label}.must_not_control"
+            binding.get("must_not_control"), label=f"{label}.must_not_control", allow_empty=True
         )
         if {item.casefold() for item in may_control} & {
             item.casefold() for item in must_not_control
@@ -830,6 +841,12 @@ def _copyable_prompt(
 
 def _scope_items(value: str) -> list[str]:
     return [item.strip() for item in re.split(r"[、,，]", value) if item.strip()]
+
+
+def _excluded_scope_items(value: str | None) -> list[str]:
+    if not value or value.strip().casefold() in {"无", "none"}:
+        return []
+    return _scope_items(value)
 
 
 def _contains_ref_token(value: str) -> bool:
@@ -909,7 +926,7 @@ def _markdown_reference_bindings(
             "path": _relative_path(match.group(3)),
             "label": match.group(4).strip(),
             "may_control": _scope_items(match.group(5)),
-            "must_not_control": _scope_items(match.group(6)),
+            "must_not_control": _excluded_scope_items(match.group(6)),
         }
         for match in matches
     ]
@@ -943,7 +960,7 @@ def _markdown_audio_bindings(section: str) -> list[dict[str, Any]]:
                 "label": match.group(4).strip(),
                 "character": match.group(5).strip(),
                 "may_control": _scope_items(match.group(6)),
-                "must_not_control": _scope_items(match.group(7)),
+                "must_not_control": _excluded_scope_items(match.group(7)),
             }
             for match in matches
         ),
@@ -1149,6 +1166,8 @@ def _normalize_job(root: Path, raw: object) -> dict[str, Any]:
         "overwrite": raw.get("overwrite", False),
         "inputs": input_hashes,
     }
+    context = _creative_context(root, source, source_entry)
+    if context is not None: execution["creative_context"] = context
     if not isinstance(execution["overwrite"], bool):
         raise ValueError("overwrite must be a boolean")
     execution["fingerprint"] = sha256_bytes(_canonical(execution))
@@ -1156,11 +1175,53 @@ def _normalize_job(root: Path, raw: object) -> dict[str, Any]:
     return execution
 
 
-def prepare_job(root: Path, job_file: Path) -> dict[str, Any]:
+def entry_inputs(section: str, *, field: str, is_video: bool, declared: str = "", provider: str = "", adapter: str = "", heading: str = r"可复制(?:通用)?提示词", creator_supplied_ok: bool = False) -> dict[str, Any]:
+    """Resolve the same reference route for Markdown CLI and director desk."""
+    prompt = _copyable_prompt(section, heading)
+    bindings=_markdown_reference_bindings(section,field_name=field,creator_supplied_ok=creator_supplied_ok)
+    audio=_markdown_audio_bindings(section) if is_video else []
+    bindings+= [{**b,'order':len(bindings)+b['order'],'role':'reference_audio'} for b in audio]
+    purposes={}
+    for binding in bindings:
+        if binding.get('role')=='reference_audio':continue
+        match=re.search(re.escape(binding['slot_id'])+r'（顺序：.*?用途：([^；）]+)',section,re.S)
+        purposes[binding['slot_id']]=match[1].strip() if match else '身份'
+    full_reference=bool(audio) or any(p not in ('起始帧','结束帧') for p in purposes.values())
+    frame_purposes=[p for p in purposes.values() if p in ('起始帧','结束帧')]
+    if not declared:
+        mode_line=re.search(r'^- 生成方式：([^\n]+)',section,re.M)
+        declared=mode_line[1].strip() if mode_line else ''
+    if declared in ('reference','全能参考','多图参考') and bindings:full_reference=True
+    if is_video and not bindings and declared not in ('文生视频','纯文本','text','text_to_video'):
+        raise ValueError('请先选择全能参考所需素材；只有明确选择纯文本生成时才可不传参考')
+    dedicated=declared in ('纯首帧','首帧','first_frame','纯首尾帧','首尾帧','first_last_frame')
+    if is_video and dedicated and full_reference:
+        raise ValueError('首尾帧专用条件不能与音色或多图参考同时提交；请先选择控制路线并更新提示词')
+    if is_video and not full_reference:
+        if frame_purposes.count('起始帧')>1 or frame_purposes.count('结束帧')>1:
+            raise ValueError('首帧与尾帧各只能选择一张图片')
+        if '结束帧' in frame_purposes and '起始帧' not in frame_purposes:
+            raise ValueError('使用尾帧前，请先选择起始帧')
+    mode='reference' if full_reference else 'first_last_frame' if '结束帧' in frame_purposes else 'first_frame' if frame_purposes else 'text'
+    is_h3=provider=='minimax-h3' or adapter=='director-minimax-h3'
+    if is_video and is_h3:
+        if audio and not purposes:raise ValueError('H3音色参考需要至少一张画面参考')
+        base=bool(re.search(r'^\s*integrated_multimodal_description:',prompt,re.M))
+        full=bool(re.search(r'^\s*(?:subject_definitions|retention_analysis):',prompt,re.M))
+        if (mode=='reference' and base) or (mode!='reference' and full):
+            raise ValueError('H3提示词结构与参考模式不一致，请按当前参考重新编译提示词')
+    for binding in bindings:
+        if 'role' not in binding:
+            binding['role']='reference_image' if full_reference else {'起始帧':'first_frame','结束帧':'last_frame'}[purposes[binding['slot_id']]]
+    return {"prompt": prompt, "bindings": bindings, "mode": mode,
+            "frame_images_as_references": bool(frame_purposes and full_reference)}
+
+
+def prepare_payload(root: Path, raw: object) -> dict[str, Any]:
+    """Persist a validated job directly, without an intermediate input JSON file."""
     root = find_project(root)
-    if job_file.stat().st_size > MAX_JOB_BYTES:
-        raise ValueError("job file is too large")
-    raw = json.loads(job_file.read_text(encoding="utf-8"))
+    if len(_canonical(raw)) > MAX_JOB_BYTES:
+        raise ValueError("job input is too large")
     job = _normalize_job(root, raw)
     with _project_lock(root):
         if _active_run(root, str(job["job_id"])) is not None:
@@ -1174,6 +1235,54 @@ def prepare_job(root: Path, job_file: Path) -> dict[str, Any]:
     return _preview(job)
 
 
+def prepare_entry(root: Path, *, source: str, entry: str, adapter: str, output: str,
+                  parameters: dict[str, Any] | None = None, job_id: str | None = None,
+                  provider: str = "", mode: str = "") -> dict[str, Any]:
+    root = find_project(root)
+    if (root / ".short-drama/state/project.sqlite").is_file():
+        raise ValueError("导演台项目请用 cli.py generation-prepare，读取当前实体版本")
+    source = _relative_path(source)
+    modality = _canonical_creator_source_modality(source, root)
+    if modality not in {"image", "video"}:
+        raise ValueError("请选择图片提示词、视频提示词或分镜的规范路径")
+    document = _project_file(root, source).read_text(encoding="utf-8-sig")
+    section = _markdown_section(document, entry)
+    config = json.loads((root / PROJECT_FILE).read_text(encoding="utf-8-sig"))
+    profile = config.get("creator_authority", {}).get("production_profile", {})
+    choices = profile.get("choices", {}) if profile.get("status") == "accepted" else {}
+    target = choices.get("target_video_model", "")
+    normalize = lambda value: "seedance" if value in ("seedance", "seedance-2.5") else value
+    if modality == "video" and provider and target and normalize(provider) != normalize(target):
+        raise ValueError("生成服务与项目目标模型不同，请先更新路线与提示词")
+    provider = provider or target
+    _, heading, field = CREATOR_SOURCE_ENTRIES[Path(source).name]
+    inputs = entry_inputs(section, field=field, is_video=modality == "video", declared=mode,
+                          provider=provider, adapter=adapter, heading=heading,creator_supplied_ok=Path(source).name=="分镜.md")
+    params = dict(parameters or {})
+    if modality == "video" and "duration" not in params:
+        duration = re.search(r"^- (?:时长|总时长)：\s*(\d+(?:\.\d+)?)\s*(?:s|秒)", section, re.M)
+        if not duration: raise ValueError("条目缺少时长，请补充时长或 parameters.duration")
+        value = float(duration[1]); params["duration"] = int(value) if value.is_integer() else value
+    fmt = config.get("format", {})
+    params.setdefault("prompt_language", choices.get("video_prompt_language") if modality == "video" and choices.get("video_prompt_language") else fmt.get("prompt_language", config.get("language", "zh-CN")))
+    params.setdefault("ratio", fmt.get("aspect_ratio", "9:16"))
+    if modality == "video" and normalize(provider) == "seedance" and inputs["mode"] in ("first_frame", "first_last_frame"):
+        params["ratio"] = "adaptive"
+    result = prepare_payload(root, {"schema_version": JOB_SCHEMA, "job_id": job_id or uuid.uuid4().hex,
+        "modality": modality, "adapter": adapter, "prompt": inputs["prompt"], "source": source,
+        "source_entry": entry, "references": [b["path"] for b in inputs["bindings"]],
+        "reference_bindings": inputs["bindings"], "outputs": [output], "parameters": params,
+        "overwrite": False})
+    result["reference_mode"] = inputs["mode"]
+    return result
+
+
+def prepare_job(root: Path, job_file: Path) -> dict[str, Any]:
+    if job_file.stat().st_size > MAX_JOB_BYTES:
+        raise ValueError("job file is too large")
+    return prepare_payload(root, json.loads(job_file.read_text(encoding="utf-8")))
+
+
 def _validate_stored_job(
     root: Path, document: object, *, expected_job_id: str | None = None
 ) -> dict[str, Any]:
@@ -1182,7 +1291,7 @@ def _validate_stored_job(
         raise ValueError("stored job fields are invalid")
     stored_keys = set(document)
     legacy = stored_keys == LEGACY_STORED_JOB_KEYS
-    if not legacy and stored_keys != STORED_JOB_KEYS:
+    if not legacy and stored_keys not in (STORED_JOB_KEYS, STORED_JOB_KEYS | {"creative_context"}):
         raise ValueError("stored job fields are invalid")
     original = document
     document = dict(document)
@@ -1286,6 +1395,10 @@ def _validate_stored_job(
     execution_keys = (
         LEGACY_STORED_EXECUTION_KEYS if legacy else STORED_EXECUTION_KEYS
     )
+    if "creative_context" in original:
+        execution_keys = execution_keys | {"creative_context"}
+        if not isinstance(original["creative_context"], dict):
+            raise ValueError("stored creative context is invalid")
     execution = {key: original[key] for key in execution_keys}
     if (
         not isinstance(fingerprint, str)
@@ -1357,6 +1470,10 @@ def _inputs_current(root: Path, job: Mapping[str, Any]) -> bool:
     if not isinstance(inputs, Mapping):
         return False
     try:
+        if job.get("creative_context") is not None:
+            current = _creative_context(root, job.get("source"), job.get("source_entry"))
+            if current is None or current["fingerprint"] != job["creative_context"].get("fingerprint"):
+                return False
         return all(_hash_project_file(root, str(path)) == digest for path, digest in inputs.items())
     except (FileNotFoundError, OSError, ValueError):
         return False
@@ -2316,6 +2433,16 @@ def build_parser() -> argparse.ArgumentParser:
     prepare = commands.add_parser("prepare", help="Validate and preview a media job.")
     prepare.add_argument("project")
     prepare.add_argument("--job", required=True)
+    entry = commands.add_parser("prepare-entry", help="Prepare directly from a creator document entry")
+    entry.add_argument("project")
+    entry.add_argument("--source", required=True)
+    entry.add_argument("--entry", required=True)
+    entry.add_argument("--adapter", required=True)
+    entry.add_argument("--output", required=True)
+    entry.add_argument("--job-id")
+    entry.add_argument("--provider", default="")
+    entry.add_argument("--mode", default="")
+    entry.add_argument("--parameters", default="{}", help="JSON object, or - to read stdin")
     confirm = commands.add_parser("confirm", help="Confirm the exact prepared job.")
     confirm.add_argument("project")
     confirm.add_argument("--job-id", required=True)
@@ -2346,6 +2473,11 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if args.command == "prepare":
             result = prepare_job(Path(args.project), Path(args.job))
+        elif args.command == "prepare-entry":
+            parameters=json.load(sys.stdin) if args.parameters == "-" else json.loads(args.parameters)
+            if not isinstance(parameters,dict):raise ValueError("parameters must be an object")
+            result=prepare_entry(Path(args.project),source=args.source,entry=args.entry,adapter=args.adapter,
+                output=args.output,parameters=parameters,job_id=args.job_id,provider=args.provider,mode=args.mode)
         elif args.command == "confirm":
             result = confirm_job(
                 Path(args.project), job_id=args.job_id, confirmation=args.confirmation

@@ -62,4 +62,35 @@ class EditingTests(unittest.TestCase):
         self.editing.create(self.project,self.episode,state['project']['revision'])
         self.assertEqual(film.read_bytes(),before)
 
+    def test_design_reaches_timeline_and_source_changes_are_detected(self):
+        state=self.store.state();doc={'id':'visual'}
+        state=self.store.apply(state['project']['revision'],[{'type':'create','id':'visual','kind':'document','data':{'parent_id':self.episode,'name':'视觉设定.md','structured':True}}])
+        state=self.store.apply(state['project']['revision'],[
+            {'type':'create','id':'decision','kind':'design','data':{'parent_id':self.episode,'document_id':doc['id'],'code':'DESIGN-001','name':'先证据','text':'先读票再接手'}},
+            {'type':'update','id':'shot1','patch':{'design_intent':'DESIGN-001','reaction':'等门铃才伸手'}}])
+        runtime=Path.home()/'Documents/Codex/tools/short-drama-openfilm-0.4.1/node_modules/openfilm/package.json'
+        if not runtime.is_file():self.skipTest('installed OpenFilm runtime required')
+        state=self.editing.create(self.project,self.episode,state['project']['revision'])
+        ep=next(e for e in state['entities'] if e['id']==self.episode);film=self.store.root/ep['data']['film_path'];frozen=film.read_bytes()
+        self.assertIn('DESIGN-001',film.read_text(encoding='utf8'))
+        self.assertIn('先读票再接手',(film.parent/'视觉设定.md').read_text(encoding='utf8'))
+        from skill_paths import skills_root
+        helper=skills_root()/'short-drama/scripts/managed_sources.py'
+        def check():
+            return json.loads(subprocess.check_output([__import__('sys').executable,str(helper),str(film.parent)],env={**__import__('os').environ,'PYTHONIOENCODING':'utf-8'},text=True,encoding='utf8'))
+        self.assertTrue(check()['current'])
+        handoff=skills_root()/'short-drama-edit/scripts/openfilm/handoff.mjs'
+        script='import {collect} from '+json.dumps(handoff.as_uri())+';const s=await collect(process.argv[1]);console.log(JSON.stringify({current:s.managedSource.current,codes:s.requirements.filter(r=>r.designCode).map(r=>r.designCode)}));'
+        result=json.loads(subprocess.check_output(['node','--input-type=module','-e',script,str(film.parent)],text=True,encoding='utf8'))
+        self.assertEqual(result,{'current':True,'codes':['DESIGN-001']})
+        state=self.store.apply(state['project']['revision'],[{'type':'update','id':'decision','patch':{'text':'先翻票再响铃'}}])
+        self.assertFalse(check()['current'])
+        self.assertTrue(next(e for e in state['entities'] if e['kind']=='cut_binding')['stale'])
+        self.editing.sync_documents(self.project,self.episode,film.parent)
+        self.assertTrue(check()['current']);self.assertEqual(film.read_bytes(),frozen)
+        self.assertIn('先翻票再响铃',(film.parent/'视觉设定.md').read_text(encoding='utf8'))
+        draft=film.parent/'分镜.md';draft.write_text('用户手工改过的镜头',encoding='utf8')
+        with self.assertRaisesRegex(ValueError,'手工修改'):self.editing.sync_documents(self.project,self.episode,film.parent)
+        self.assertEqual(draft.read_text(encoding='utf8'),'用户手工改过的镜头')
+
 if __name__=='__main__':unittest.main()

@@ -4,6 +4,8 @@ import time
 from uuid import uuid4
 
 from store import Conflict, encoded
+from document_contract import validate_agent_fields
+from creative_context import context_ids, project_context
 
 CREATIVE_SKILLS={'write','design','storyboard','assets','image-prompts','video-prompts','review','develop','novel-analyze'}
 
@@ -47,11 +49,7 @@ class TaskQueue:
                 selected={identity for identity in selected if entities[identity]['kind'] in ('episode','scene')}
                 if not any(entities[identity]['kind']=='scene' for identity in selected):raise ValueError('请先写入剧本再首看')
             # Inputs affect the validity of a generated change even when they are read-only.
-            context=set(selected)
-            while True:
-                sources={d['source'] for d in state['dependencies'] if d['target'] in context} if mode=='edit' else set()
-                if sources<=context:break
-                context.update(sources)
+            context=context_ids(state,selected,skill) if mode=='edit' else set(selected)
             basis={identity:entities[identity]['revision'] for identity in context}
             identity=str(uuid4())
             db.execute('INSERT INTO agent_task(id,prompt,scope,basis,status,worker,lease_until,result,created,skill,mode) VALUES(?,?,?,?,?,?,?,?,?,?,?)',
@@ -78,6 +76,8 @@ class TaskQueue:
                     visible.append({'id':entity['id'],'kind':entity['kind'],'revision':entity['revision'],
                                     'data':{key:entity['data'][key] for key in keys if key in entity['data']}})
                 state={'project':{'revision':state['project']['revision']},'entities':visible,'dependencies':[]}
+            else:
+                state=project_context(state,set(task['basis']))
             return {'task':task,'project':state}
 
     def cancel(self,identity):
@@ -122,8 +122,22 @@ class TaskQueue:
                     raise Conflict(state)
             if any(identity not in entities or entities[identity]['revision']!=rev for identity,rev in task['basis'].items()):
                 raise Conflict(state)
+            if task.get('mode')=='edit':
+                current_scope=set(task['scope'])
+                while True:
+                    children={e['id'] for e in state['entities'] if e['data'].get('parent_id') in current_scope or e['data'].get('document_id') in current_scope}
+                    if children<=current_scope:break
+                    current_scope.update(children)
+                if context_ids(state,current_scope,task.get('skill',''))!=set(task['basis']):
+                    raise Conflict(state)
             allowed=set(task['scope'])
+            kinds={identity:entity['kind'] for identity,entity in entities.items()}
             for op in operations:
+                if op.get('type')=='create':
+                    validate_agent_fields(op.get('kind'),op.get('data',{}))
+                    kinds[op.get('id')]=op.get('kind')
+                elif op.get('type')=='update' and op.get('id') in kinds:
+                    validate_agent_fields(kinds[op['id']],op.get('patch',{}))
                 if op.get('type')=='create':
                     if op.get('data',{}).get('parent_id') not in allowed and op.get('data',{}).get('document_id') not in allowed:raise ValueError('新增对象超出任务范围')
                     if not op.get('id'):raise ValueError('新增对象需要稳定ID')

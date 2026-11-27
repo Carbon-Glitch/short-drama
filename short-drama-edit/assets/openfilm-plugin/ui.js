@@ -25,9 +25,9 @@ export default class ShortDrama extends HTMLElement {
     const summary=this.element('p',`${state.duration.toFixed(2)} 秒 · ${state.clips.length} 个轨道项 · 同一份 film.html`);this.box.append(summary);
     for(const doc of state.documents){
       const details=this.element('details');details.style.marginBottom='10px';details.append(this.element('summary',doc.name));
-      const textarea=this.element('textarea');textarea.value=doc.text;textarea.style.cssText='width:100%;min-height:260px;margin:8px 0;background:#202735;color:#eee;border:1px solid #566072;box-sizing:border-box;font:12px/1.6 monospace';
+      const textarea=this.element('textarea');textarea.value=doc.text;textarea.readOnly=doc.editable===false;textarea.style.cssText='width:100%;min-height:260px;margin:8px 0;background:#202735;color:#eee;border:1px solid #566072;box-sizing:border-box;font:12px/1.6 monospace';
       textarea.oninput=()=>{this.drafts.add(doc.name);this.dirty=true;};
-      const save=this.element('button','保存当前文档');save.onclick=async()=>{
+      const save=this.element('button',doc.editable===false?'前期内容请在导演台编辑':'保存当前文档');save.disabled=doc.editable===false;save.onclick=async()=>{
         try{const result=await this.api.put('projects/'+encodeURIComponent(this.projectId)+'/document',{name:doc.name,text:textarea.value,revision:doc.revision});doc.revision=result.revision;this.drafts.delete(doc.name);this.dirty=this.drafts.size>0;toast('已保存 '+doc.name);this.refresh();}
         catch(error){toast(error.message,{error:true});}
       };details.append(textarea,save);this.box.append(details);

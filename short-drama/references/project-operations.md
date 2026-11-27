@@ -18,6 +18,12 @@ python3 {技能目录}/scripts/project_tool.py init ./my-drama --title "示例�
 节奏档案写入 `creator_authority.rhythm_profile`，只在创作者接受后供下游算术核对。缺失或未接受时不核对；
 不要把套件默认数值当成跨项目门槛。
 
+## 按条目修改
+
+文件项目使用 `python scripts/entry_tool.py read <project> --document 剧集/EP001/分镜.md --entry SHOT-EP001-001` 读取条目与 `revision`；用同参数的 `update` 加 `--expected <revision>` 提交修改。标准输入传 `{"fields":{"运镜":"回头时缓推"}}`，或用 `{"text":"完整条目正文"}` 更新一个设计或提示词条目。
+
+导演台项目使用 `director-desk/backend/cli.py entry-read/entry-update --project <作品库项目目录> --entry <条目编号> --episode EP001`，更新时加 `--expected <项目版本>`。它与界面共用版本、引用、待复核标记和撤销历史；外部原稿通过导演台的差异合并接入。
+
 ## 创作台与旧 Dashboard
 
 新项目沿同一入口打开 OpenFilm 导演台。传项目根目录，按集切换；只有剧本或外部素材也能监测，不会因浏览创建剪辑稿。已有剪辑工程可从导演台进入原生时间线。用法、阶段暂停和跨 Agent 回执见[导演台](director-desk.md)。

@@ -11,6 +11,9 @@ from uuid import uuid4
 from store import Conflict
 from project_settings import edit_format
 from skill_paths import skills_root
+from document_contract import creative_basis
+from filesystem import temporary_directory
+import hashlib
 
 class Editing:
     def __init__(self,library,runtime=None):
@@ -58,6 +61,8 @@ class Editing:
             path=self.library.file(project,media['id']);info=self.probe(path)
             entries.append({'owner':owner['id'],'name':owner['data'].get('name',''),'media':media['id'],
                 'shots':members,'shot_codes':[entities[s]['data'].get('code',s) for s in members],
+                'design_codes':sorted({entities[did]['data']['code'] for sid in members for did in entities[sid]['data'].get('inherited_design_refs',[]) if did in entities and entities[did]['data'].get('code')}),
+                'source_basis':media['data'].get('production',{}).get('basis',{}),
                 'motion_code':owner['data'].get('code','') if owner['kind']=='submission' else '',
                 'at':round(clock,6),**info})
             clock+=info['duration']
@@ -80,24 +85,59 @@ class Editing:
             (folder/'.short-drama/initialization.log').write_text(result.stderr,encoding='utf8')
             raise ValueError('剪辑工程初始化未完成，请检查本机 OpenFilm 运行时')
 
+    def sync_documents(self,project,episode_id,folder):
+        from transfer import project_markdown
+        store=self.library.project(project);state=store.state()
+        episode=next(e for e in state['entities'] if e['id']==episode_id)
+        marker=folder/'.short-drama/managed-source.json'
+        prior=json.loads(marker.read_text(encoding='utf8')) if marker.is_file() else {}
+        for name,digest in prior.get('documents',{}).items():
+            path=folder/name
+            if path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest()!=digest:
+                raise ValueError('剪辑目录的前期阅读副本有手工修改，请先保留并合并至导演台：'+name)
+        cache=store.root/'.short-drama/cache';cache.mkdir(parents=True,exist_ok=True)
+        with temporary_directory(cache) as temp:
+            project_markdown(Path(temp),state)
+            source=Path(temp)/'剧集'/episode['data'].get('code','EP001')
+            hashes={}
+            for path in source.glob('*.md'):
+                dest=folder/path.name;content=path.read_bytes()
+                temporary=dest.with_suffix('.md.pending');temporary.write_bytes(content);temporary.replace(dest)
+                hashes[path.name]=hashlib.sha256(content).hexdigest()
+        meta=folder/'.short-drama';meta.mkdir(exist_ok=True)
+        settings=meta/'project.json';data=json.loads(settings.read_text(encoding='utf8')) if settings.is_file() else {}
+        data['projectRoot']=os.path.relpath(store.root,folder).replace('\\','/')
+        settings.write_text(json.dumps(data,ensure_ascii=False),encoding='utf8')
+        marker.write_text(json.dumps({'schema':1,'episode':episode_id,'project_root':data['projectRoot'],
+            'basis':creative_basis(state,episode_id),'documents':hashes},ensure_ascii=False),encoding='utf8')
+        return state
+
     def create(self,project,episode_id,revision):
         with self.lock:
             store=self.library.project(project);plan=self.plan(project,episode_id)
             if plan['revision']!=revision:raise Conflict(store.state())
-            if plan['existing']:return store.state()
+            if plan['existing']:
+                return self.sync_documents(project,episode_id,(store.root/plan['existing']).parent)
             if not plan['entries']:raise ValueError('先在视频制作中采用至少一个视频版本')
             code=plan['code'] if re.fullmatch(r'EP\d+',plan['code']) else 'EP001'
             folder=store.root/'editing'/uuid4().hex/code;(folder/'assets').mkdir(parents=True)
-            clips=[]
+            clips=[];bindings=[]
             for entry in plan['entries']:
                 source=self.library.file(project,entry['media']);relative='assets/'+entry['media']+source.suffix.lower()
                 shutil.copy2(source,folder/relative)
                 attrs={'data-shot-id':entry['shot_codes'][0],'data-sd-shot-ids':json.dumps(entry['shot_codes']),
-                       'data-sd-media-id':entry['media'],'data-sd-intent':'采用素材全长初剪，待按表演精修'}
+                       'data-sd-media-id':entry['media'],'data-sd-design-ids':json.dumps(entry['design_codes']),'data-sd-intent':'采用素材全长初剪，待按表演精修'}
                 if entry['motion_code']:attrs['data-motion-id']=entry['motion_code']
                 clips.append({'id':'CUT-'+entry['owner'],'src':relative,'time':[0,entry['duration']],
                               'at':entry['at'],'volume':1,'attrs':attrs})
+                binding_id='cut-'+uuid4().hex
+                bindings.extend([{'type':'create','id':binding_id,'kind':'cut_binding','data':{
+                    'parent_id':episode_id,'clip_id':'CUT-'+entry['owner'],'media_id':entry['media'],
+                    'source_id':entry['owner'],'design_codes':entry['design_codes'],'source_basis':entry['source_basis']}},
+                    {'type':'bind','source':entry['owner'],'target':binding_id,'fields':[]},
+                    {'type':'bind','source':entry['media'],'target':binding_id,'fields':['sha256']}])
             format=plan['format']
             self.initialize(folder,{'fps':format['fps'],'film':{'stage':{'w':format['width'],'h':format['height']},'tracks':[{'clips':clips}]}})
             if not (folder/'film.html').is_file():raise ValueError('没有生成有效剪辑工程')
-            return store.apply(revision,[{'type':'update','id':episode_id,'patch':{'film_path':(folder/'film.html').relative_to(store.root).as_posix()}}],actor='initial-edit')
+            self.sync_documents(project,episode_id,folder)
+            return store.apply(revision,[*bindings,{'type':'update','id':episode_id,'patch':{'film_path':(folder/'film.html').relative_to(store.root).as_posix()}}],actor='initial-edit')

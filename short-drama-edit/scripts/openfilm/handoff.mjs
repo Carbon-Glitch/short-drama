@@ -2,6 +2,7 @@
 import {readFile,stat} from 'node:fs/promises';
 import {existsSync} from 'node:fs';
 import {join,dirname,resolve} from 'node:path';
+import {fileURLToPath} from 'node:url';
 import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 import {hash,readJson,saveJson,native} from './core.mjs';
@@ -27,7 +28,7 @@ async function sourceIdentity(root,target){
   return {src,sourceHash:await fileHash(path)};
 }
 export async function collect(root){
-  const upstream={},requirements=[],references=[],productionNotes=[];
+  const upstream={},requirements=[],references=[],productionNotes=[],designLinks=[];
   let project=root;
   const settings=await readJson(join(root,'.short-drama/project.json'),{});
   if(settings.projectRoot)project=resolve(root,settings.projectRoot);
@@ -35,11 +36,18 @@ export async function collect(root){
   if(existsSync(join(project,'short-drama.json')))upstream['project:short-drama.json']=hash(await readFile(join(project,'short-drama.json')));
   for(const document of documents){
     let text;try{text=await readFile(join(root,document),'utf8');}catch(e){if(e.code==='ENOENT')continue;throw e;}
+    if(document==='视觉设定.md')for(const match of text.matchAll(/^##[ \t]+(DESIGN-[A-Za-z0-9-]+)[^\n]*\n([\s\S]*?)(?=^##[ \t]|$(?![\s\S]))/gm)){
+      requirements.push({id:'REQ-DESIGN-'+hash(match[1]).slice(0,16),document,section:match[1],designCode:match[1],
+        line:text.slice(0,match.index).split('\n').length,kind:'design',role:'experience',text:match[0].trim()});
+    }
     upstream[document]=hash(text);let section='',occurrences=new Map();
     for(const [index,line] of text.split(/\r?\n/).entries()){
       const heading=line.match(/^##\s+([^\s·]+)(?:\s*·)?/);if(heading)section=heading[1];
       if(heading&&document==='视觉设定.md')section=line.replace(/^##\s+/,'').trim();
       let kind=null,content=line.trim(),role;
+      if(document==='分镜.md'&&/^SHOT-/.test(section)&&/^[-*]\s*设计承接[：:]/.test(content))
+        designLinks.push({shot:section,designs:[...new Set(content.match(/DESIGN-[A-Za-z0-9-]+/g)||[])]});
+
       const note=content.match(/^[-*]\s*(生成安排|接镜|参考借鉴|设计转译|情绪节奏|出入状态)[：:]\s*(.+)$/);
       if(note)productionNotes.push({document,section,line:index+1,field:note[1],text:note[2]});
       if(note){ /* Read-only creative context, not a scene action or approval item. */ }
@@ -50,7 +58,7 @@ export async function collect(root){
         else if(dialogue&&section){kind='dialogue';content=dialogue[2];role='audio';}
         else if(section&&content&&!/^(#|\*\*|<!--)/.test(content)){kind='action';role='picture';}
       }else if(document==='分镜.md'&&heading&&/^SHOT-/.test(section)){kind='shot';role='picture';}
-      else if(document==='视觉设定.md'&&section){
+      else if(document==='视觉设定.md'&&section&&!/^DESIGN-/.test(section)){
         const design=content.match(/^[-*]\s*(设计重点|声音重点|调度设计)[：:]\s*(.+)$/);
         if(design){kind=design[1]==='调度设计'?'staging':'design';role=design[1]==='声音重点'?'audio':'picture';content=design[2];}
       }
@@ -66,7 +74,14 @@ export async function collect(root){
     }
   }
   for(const ref of references)if(ref.exists)upstream['ref:'+ref.path]=await fileHash(join(project,ref.path));
-  return {upstream,revision:hash(JSON.stringify(upstream)),requirements,references,productionNotes,projectRoot:project};
+  let managedSource=null;
+  if(existsSync(join(root,'.short-drama/managed-source.json'))){
+    const local=join(dirname(fileURLToPath(import.meta.url)),'managed_sources.py');
+    const helper=existsSync(local)?local:join(dirname(fileURLToPath(import.meta.url)),'../../../short-drama/scripts/managed_sources.py');
+    const {stdout}=await promisify(execFile)(process.env.PYTHON||'python',[helper,root],{windowsHide:true,env:{...process.env,PYTHONIOENCODING:'utf-8'}});
+    managedSource=JSON.parse(stdout);
+  }
+  return {upstream,revision:hash(JSON.stringify(upstream)),requirements,references,productionNotes,designLinks,managedSource,projectRoot:project};
 }
 
 async function targetsOf(root,film){
@@ -84,6 +99,7 @@ async function targetsOf(root,film){
 export async function inspectHandoff(root,film,bindings){
   const source=await collect(root),targets=await targetsOf(root,film),handoff=bindings.handoff||{},issues=[];
   const issue=(kind,detail={})=>issues.push({kind,severity:'error',...detail});
+  if(source.managedSource&&!source.managedSource.current)issue('managed_source_changed',{purpose:'导演台前期已更新，请从导演台重新打开剪辑以同步当前来源'});
   if(source.requirements.length&&!handoff.upstream)issue('handoff_unbound',{purpose:'将前期交付事项对应到当前工程',count:source.requirements.length});
   if(handoff.upstream)for(const [doc,revision] of Object.entries({...handoff.upstream,...source.upstream})){
     if(handoff.upstream[doc]!==source.upstream[doc])issue('upstream_changed',{document:doc,purpose:'前期内容已变化，核对受影响项'});
@@ -94,7 +110,7 @@ export async function inspectHandoff(root,film,bindings){
     if(binding?.disposition==='omitted'&&binding.reason?.trim())continue;
     if(!binding?.targets?.length){issue('requirement_unbound',{id:req.id,document:req.document,line:req.line,purpose:req.text});continue;}
     const resolved=binding.targets.map(key=>targets.get(key));
-    if(resolved.some(t=>!t?.active)||!resolved.some(t=>t?.roles.includes(req.role)))issue('requirement_target_missing',{id:req.id,purpose:req.text,targets:binding.targets});
+    if(resolved.some(t=>!t?.active)||!resolved.some(t=>req.role==='experience'?t?.roles.some(role=>['picture','audio','graphic'].includes(role)):t?.roles.includes(req.role)))issue('requirement_target_missing',{id:req.id,purpose:req.text,targets:binding.targets});
   }
   // Reverse lookup matters: a removed cue never appears in a forward cue traversal.
   for(const key of Object.keys(bindings.cues||{})){
@@ -112,7 +128,7 @@ export async function inspectHandoff(root,film,bindings){
 }
 
 export async function bindHandoff(root,film,payload){
-  const source=await collect(root);if(payload.revision!==source.revision)throw Error('前期版本变化，请读取 handoff 后更新映射');
+  const source=await collect(root);if(source.managedSource&&!source.managedSource.current)throw Error('请先从导演台同步当前前期来源');if(payload.revision!==source.revision)throw Error('前期版本变化，请读取 handoff 后更新映射');
   const path=join(root,'.short-drama/bindings.json'),bindings=await readJson(path,{schema:1,events:[],cues:{}});
   const previous=bindings.handoff||{};const targets=await targetsOf(root,film);
   const items={...(previous.items||{}),...(payload.items||{})};

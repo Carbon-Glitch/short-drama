@@ -29,7 +29,7 @@ def bootstrap():
     changed = []
     envelope=HERE.parents[1]/'hypit/scripts/music_envelope.py'
     if not envelope.is_file():envelope=HERE/'openfilm/music_envelope.py'
-    for source in [*(HERE.parents[1]/"short-drama/scripts"/n for n in ("director_desk.py","creator_views.py","creator_markdown_check.py")), *(HERE.parent / 'assets/openfilm-plugin').iterdir(), HERE / 'openfilm/core.mjs', HERE / 'openfilm/audio.mjs', HERE / 'openfilm/handoff.mjs', HERE / 'openfilm/duck_plan.py', envelope]:
+    for source in [*(HERE.parents[1]/"short-drama/scripts"/n for n in ("director_desk.py","creator_views.py","creator_markdown_check.py","creator_document.py","managed_sources.py")), HERE.parents[1]/'short-drama/references/document-contract.json', *(HERE.parent / 'assets/openfilm-plugin').iterdir(), HERE / 'openfilm/core.mjs', HERE / 'openfilm/audio.mjs', HERE / 'openfilm/handoff.mjs', HERE / 'openfilm/duck_plan.py', envelope]:
         if source.is_file():
             dest = target / source.name
             if not dest.exists() or dest.read_bytes() != source.read_bytes():
@@ -42,7 +42,7 @@ def bootstrap():
     loaded_path=home/'state/short-drama-loaded.json';run_path=home/'state/run.json'
     loaded=json.loads(loaded_path.read_text(encoding='utf-8')) if loaded_path.exists() else {}
     running=json.loads(run_path.read_text(encoding='utf-8')) if run_path.exists() else {}
-    return {'runtime': str(home), 'version': VERSION, 'deployed': changed,
+    return {'runtime': str(home), 'version': VERSION, 'deployed': changed, 'pluginBuild':build,
             'restartStudioIfRunning': bool(running) and (loaded.get('build')!=build or loaded.get('pid')!=running.get('pid'))}
 
 def run(command, root, *, payload=None, out=None, preview=False):

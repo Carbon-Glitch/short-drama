@@ -123,4 +123,21 @@ class WorkerTests(unittest.TestCase):
         self.assertEqual(self.queue.list()[0]['status'],'completed')
         self.assertEqual(self.store.state()['project']['revision'],revision)
 
+    def test_creative_stages_receive_self_check_and_early_performance(self):
+        from skill_paths import skills_root
+        skills=skills_root()
+        for stage in ('design','storyboard','video-prompts','review'):
+            payload={'task':{'scope':['entry'],'skill':stage,'prompt':'用 Seedance 2.5 处理当前内容','mode':'edit'},'project':{'entities':[{'id':'entry','kind':'shot','data':{}}]}}
+            text=AgentWorker.knowledge(payload,skills)
+            self.assertEqual(text.count('### short-drama-review/references/director-self-check.md'),1,stage)
+            self.assertIn('anti-AI test',text)
+            self.assertIn('内层拍段与外层镜长一起核对',text)
+            if stage!='review':
+                self.assertIn('眼任务指向对手',text)
+                self.assertIn('被打断的活是最强重音',text)
+        payload['task'].update(skill='review',mode='script_review')
+        text=AgentWorker.knowledge(payload,skills)
+        self.assertNotIn('### short-drama-review/references/director-self-check.md',text)
+        self.assertNotIn('### short-drama-video-prompts/references/performance-direction.md',text)
+
 if __name__=='__main__':unittest.main()

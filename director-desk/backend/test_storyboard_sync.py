@@ -45,4 +45,16 @@ class StoryboardSyncTests(unittest.TestCase):
   state=self.apply({c['key']:'current' for c in preview['changes']})
   self.assertTrue(any(e['id']==self.shot['id'] for e in state['entities']))
 
+ def test_multiline_new_field_conflict_is_explicit_and_preserves_other_dimensions(self):
+  self.path.write_text(self.original+'\n- 听者与反馈：先缩手\n  铃响后伸手。\n- 光色与材质：袖口处于冷暗部。',encoding='utf8')
+  self.apply()
+  state=self.store.state();self.store.apply(state['project']['revision'],[{'type':'update','id':self.shot['id'],'patch':{'reaction':'界面修改：先看眼睛再接。'}}])
+  self.path.write_text(self.path.read_text(encoding='utf8').replace('先缩手','原稿修改：先停住'),encoding='utf8')
+  preview=self.sync.preview(self.pid,self.doc['id']);change=next(c for c in preview['changes'] if c['field']=='reaction')
+  self.assertTrue(change['conflict'])
+  with self.assertRaises(ValueError):self.apply()
+  result=self.apply({change['key']:'source'});shot=next(e for e in result['entities'] if e['id']==self.shot['id'])
+  self.assertEqual(shot['data']['reaction'],'原稿修改：先停住\n铃响后伸手。')
+  self.assertEqual(shot['data']['lighting'],'袖口处于冷暗部。')
+
 if __name__=='__main__':unittest.main()

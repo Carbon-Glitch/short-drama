@@ -62,5 +62,39 @@ print(json.dumps({'provider_job_id':'local-contract-fixture','outputs':[{'target
         with self.assertRaises(ValueError):self.production.submit(self.project,prepared['id'],asynchronous=False)
         self.assertEqual(self.production.list(self.project)[0]['status'],'prepared')
 
+    def test_collect_uses_frozen_design_and_coverage_after_live_edit(self):
+        state=self.store.state();ep=next(e for e in state['entities'] if e['kind']=='episode')
+        ops=[{'type':'create','id':'scene','kind':'scene','data':{'parent_id':ep['id'],'code':'EP001-SC001'}},
+             {'type':'create','id':'visual','kind':'document','data':{'parent_id':ep['id'],'name':'视觉设定.md','structured':True}},
+             {'type':'create','id':'design','kind':'design','data':{'parent_id':ep['id'],'document_id':'visual','code':'DESIGN-001','name':'先证据','text':'先见车票再接手'}},
+             *[{'type':'create','id':i,'kind':'shot','data':{'parent_id':'scene','design_intent':'DESIGN-001' if i=='a' else ''}} for i in ('a','b')],
+             {'type':'update','id':'prompt','patch':{'shot_ids':['a'],'text':'- 设计承接：DESIGN-001\n- 参考：无\n### 可复制提示词\n> A hand passes a ticket.'}},
+             {'type':'bind','source':'a','target':'prompt','fields':['action']}]
+        self.store.apply(state['project']['revision'],ops)
+        prepared=self.production.prepare(self.project,'prompt','fixture',{})
+        context_path=self.store.root/prepared['preview']['creative_context']['path']
+        frozen=context_path.read_bytes()
+        self.assertIn('先见车票再接手',frozen.decode('utf8'))
+        with patch.object(self.production,'execute',return_value={'status':'deferred'}):
+            self.production.submit(self.project,prepared['id'],asynchronous=False)
+        state=self.store.state();self.store.apply(state['project']['revision'],[
+            {'type':'update','id':'prompt','patch':{'shot_ids':['b']}},
+            {'type':'update','id':'design','patch':{'text':'新决定'}}])
+        result=self.production.execute(self.project,prepared['id'])
+        self.assertNotIn('error',result,result)
+        state=self.store.state();media=next(e for e in state['entities'] if e['id']==result['media'][0])
+        self.assertEqual(media['data']['shot_id'],'a')
+        self.assertEqual(media['data']['production']['shot_ids'],['a'])
+        self.assertEqual(context_path.read_bytes(),frozen)
+        with self.assertRaisesRegex(ValueError,'不能覆盖'):
+            self.store.apply(state['project']['revision'],[{'type':'update','id':media['id'],'patch':{'production':{}}}])
+
+    def test_missing_explicit_design_is_not_silently_omitted(self):
+        state=self.store.state();entry=next(e for e in state['entities'] if e['id']=='prompt')
+        self.store.apply(state['project']['revision'],[{'type':'update','id':'prompt','patch':{'text':'- 设计承接：DESIGN-MISSING\n'+entry['data']['text']}}])
+        with self.assertRaisesRegex(ValueError,'设计承接未找到'):
+            self.production.prepare(self.project,'prompt','fixture',{})
+        self.assertEqual(self.production.list(self.project),[])
+
 
 if __name__=='__main__':unittest.main()

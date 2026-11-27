@@ -6,6 +6,7 @@ import re
 import shutil
 import subprocess
 import threading
+import sys
 
 VERSION='0.4.1'
 
@@ -18,6 +19,15 @@ class EditingRuntime:
 
     def environment(self):
         return dict(os.environ,SHORT_DRAMA_OPENFILM_HOME=str(self.root),OPENFILM_HOME=str(self.root/'state'))
+
+    def deploy_plugin(self):
+        from skill_paths import skills_root
+        if not (self.root/'node_modules/openfilm/package.json').is_file():raise ValueError('请先准备剪辑运行环境')
+        script=skills_root()/'short-drama-edit/scripts/openfilm_bridge.py'
+        result=subprocess.run([sys.executable,str(script),'setup'],env=self.environment(),capture_output=True,
+            text=True,encoding='utf8',timeout=60,creationflags=subprocess.CREATE_NO_WINDOW if os.name=='nt' else 0)
+        if result.returncode:raise ValueError('剪辑插件更新未完成，请检查本机运行环境')
+        return json.loads(result.stdout)
 
     def status(self):
         components=[]

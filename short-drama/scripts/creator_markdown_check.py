@@ -37,7 +37,7 @@ IMG_RE = re.compile(r"\b(IMG-[A-Z0-9-]+)《([^》]+)》（控制：([^）]+)）"
 REF_RE = re.compile(
     r"(REF-[A-Z0-9-]+)（顺序：([1-9]\d*)）· "
     r"([^；\n]+?\.(?:png|jpe?g|webp))《([^》\n]+)》"
-    r"（(?:用途：([^；）\n]+)；)?控制：([^；）]+)；不得控制：([^）]+)）",
+    r"（(?:用途：([^；）\n]+)；)?控制：([^；）]+)(?:；不得控制：([^）]*))?）",
     re.IGNORECASE,
 )
 # The same slot grammar, but the locator is a document entry instead of a file.
@@ -49,12 +49,11 @@ REF_RE = re.compile(
 PLAN_RE = re.compile(
     r"(PLAN-[A-Z0-9-]+)（顺序：([1-9]\d*)）· "
     r"((?:IMG|SHOT)-[A-Z0-9-]+)《([^》\n]+)》"
-    r"（(?:用途：([^；）\n]+)；)?控制：([^；）]+)；不得控制：([^）]+)）",
+    r"（(?:用途：([^；）\n]+)；)?控制：([^；）]+)(?:；不得控制：([^）]*))?）",
     re.IGNORECASE,
 )
-# One picture answers one question. 「同一张图承担两个作用时分开说明」 in
-# references/reference-roles.md is what makes a slot translatable into a
-# provider role, so the vocabulary is closed rather than free prose.
+# The purpose selects a provider role; compatible control duties may share a slot.
+# Keep the role vocabulary closed rather than duplicating pictures for each duty.
 REF_PURPOSES = (
     "身份",
     "造型状态",
@@ -74,7 +73,7 @@ AUDIO_SUFFIXES = ("wav", "mp3", "m4a", "aac", "flac")
 AUDIO_REF_RE = re.compile(
     r"(REF-[A-Z0-9-]+)（顺序：([1-9]\d*)）· "
     r"([^；\n]+?\.(?:" + "|".join(AUDIO_SUFFIXES) + r"))《([^》\n]+)》"
-    r"（用途：([^；）\n]+)；角色：([^；）\n]+)；控制：([^；）]+)；不得控制：([^）]+)）",
+    r"（用途：([^；）\n]+)；角色：([^；）\n]+)；控制：([^；）]+)(?:；不得控制：([^）]*))?）",
     re.IGNORECASE,
 )
 AUDIO_PURPOSE = "音色"
@@ -236,17 +235,18 @@ def _sections(document: str, kind: str) -> dict[str, str]:
 
 
 def _fields(section: str, *, owner: str, errors: list[str]) -> dict[str, str]:
-    pairs = re.findall(r"^- ([^：\n]+)：(.+)$", section, re.MULTILINE)
-    fields: dict[str, str] = {}
-    for key, value in pairs:
-        # `- **参考**：…` is ordinary Markdown and reads as the same field to a
-        # human. Taking the emphasis literally turned it into a different key,
-        # so the author got "缺少参考字段" while looking straight at 参考.
-        key = re.sub(r"^(?:\*\*|__|\*|_)(.+?)(?:\*\*|__|\*|_)$", r"\1", key.strip())
-        if key in fields:
-            errors.append(f"{owner}: 字段重复: {key}")
-        fields[key] = value
-    return fields
+    if not hasattr(_fields, 'parser'):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location('creator_document_parser', Path(__file__).with_name('creator_document.py'))
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        _fields.parser = module.split_fields
+    try:
+        return _fields.parser(section)[0]
+    except ValueError as error:
+        errors.append(f"{owner}: {error}")
+        return {}
+
 
 
 def _plain(value: str) -> str:
@@ -469,7 +469,7 @@ def _references(
         errors.append(f"{owner}: 绑定结束帧参考图时必须同时绑定起始帧")
     for index, (kind, group) in enumerate(zip(slot_kinds, groups)):
         slot, raw_locator, label = group[0], group[2], group[3]
-        may_control, must_not_control = group[5], group[6]
+        may_control, must_not_control = group[5], group[6] or ""
         if kind == "REF":
             _check_project_file(raw_locator, owner, project_root, errors)
         else:
@@ -478,10 +478,10 @@ def _references(
             )
         if not re.search(r"[\u4e00-\u9fff]", label):
             errors.append(f"{owner}: {kind} 缺少中文名称: {slot}")
-        if not may_control.strip() or not must_not_control.strip():
-            errors.append(f"{owner}: {kind} 必须同时声明控制与不得控制: {slot}")
+        if not may_control.strip():
+            errors.append(f"{owner}: {kind} 必须声明控制范围: {slot}")
         allowed = {item.strip() for item in re.split(r"[、,，]", may_control)}
-        prohibited = {item.strip() for item in re.split(r"[、,，]", must_not_control)}
+        prohibited = set() if must_not_control.strip().casefold() in {"", "无", "none"} else {item.strip() for item in re.split(r"[、,，]", must_not_control)}
         if "" in allowed or "" in prohibited or allowed & prohibited:
             errors.append(f"{owner}: {kind} 控制与不得控制范围冲突: {slot}")
     return kinds
@@ -702,11 +702,9 @@ def _audio_references(
         if not re.search(r"[\u4e00-\u9fff]", label):
             errors.append(f"{owner}: REF 缺少中文名称: {slot}")
         allowed = {item.strip() for item in re.split(r"[、,，]", may)}
-        prohibited = {item.strip() for item in re.split(r"[、,，]", must)}
+        prohibited = set() if not must or must.strip().casefold() in {"无", "none"} else {item.strip() for item in re.split(r"[、,，]", must)}
         if "" in allowed or "" in prohibited or allowed & prohibited:
             errors.append(f"{owner}: REF 控制与不得控制范围冲突: {slot}")
-        if not {"台词", "语气", "情绪"} <= prohibited:
-            errors.append(f"{owner}: 参考音频不得控制至少包含台词、语气、情绪: {slot}")
         if voices.has_visual and name not in voices.characters:
             errors.append(
                 f"{owner}: 参考音频的角色不是《视觉设定.md》里的人物条目: {name}"
@@ -1913,7 +1911,7 @@ def validate_documents(
             else:
                 visible_text = "\n".join(
                     fields.get(name, "")
-                    for name in ("景别/机位", "运镜", "起点", "唯一动作", "终点")
+                    for name in ("景别/机位", "运镜", "起点", "唯一动作", "动作与表演", "终点")
                 )
                 _check_named_coverage(
                     visible_text, shot_id, "镜头画面说明", basis, visual_entries, errors

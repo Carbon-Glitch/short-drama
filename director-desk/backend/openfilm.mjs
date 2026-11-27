@@ -14,5 +14,10 @@ const {openProject}=await import(pathToFileURL(join(packageRoot,'studio/server/p
 const folder=resolve(process.argv[2]);
 if(!existsSync(join(folder,'film.html')))throw Error('这一集还没有剪辑工程');
 const run=await ensureStudio(undefined,{fresh:runtimePatched});
+if(process.env.SHORT_DRAMA_PLUGIN_BUILD){
+  const response=await fetch(run.origin+'/api/plugins/short-drama/health',{headers:{'x-studio-key':run.key}});
+  const health=response.ok?await response.json():null;
+  if(health?.build!==process.env.SHORT_DRAMA_PLUGIN_BUILD)throw Error('剪辑服务仍是旧版，请先保存现有剪辑并重启 OpenFilm，再重新进入');
+}
 const project=await openProject(folder,{create:false});
 console.log(JSON.stringify({url:run.origin+'/open?'+new URLSearchParams({key:run.key,to:'/projects/'+project.id})}));

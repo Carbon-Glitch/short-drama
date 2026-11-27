@@ -1,3 +1,4 @@
+from document_contract import SHOT_FIELDS, render_fields, split_fields, canonical_fields
 """Portable editable projects and history backups, independent of machine runtime."""
 from collections import deque
 from contextlib import closing
@@ -117,7 +118,7 @@ def project_markdown(root,state):
         storyboard=['# 分镜']
         for i,scene in enumerate(scenes):
             scene_code=scene['data'].get('code',f'{code}-SC{i+1:03}')
-            script.append(f"## {scene_code} {scene['data']['name']}\n\n{scene['data'].get('text','')}")
+            script.append(f"## {scene_code} {scene['data'].get('name',scene_code)}\n\n{scene['data'].get('text','')}")
             if any(scene['data'].get(key) for key in ('blocking','generation_plan','director_review')):
                 plan='## 场景站位 · '+scene_code+'\n\n'+scene['data'].get('blocking','')
                 if scene['data'].get('generation_plan'):plan+='\n- 生成安排：'+scene['data']['generation_plan']
@@ -126,17 +127,17 @@ def project_markdown(root,state):
             shots=sorted((e for e in state['entities'] if e['kind']=='shot' and e['data'].get('parent_id')==scene['id']),key=lambda e:e['data'].get('order',0))
             for j,shot in enumerate(shots):
                 data=shot['data'];shot_code=data.get('code',f'SHOT-{code}-{i+1:02}-{j+1:03}')
-                fields=dict(data.get('fields',{}))
-                for key,label in {'action':'唯一动作','duration':'时长','camera':'景别/机位','sound':'声音','start':'起点','end':'终点','purpose':'目的','movement':'运镜','join':'接镜','source_excerpt':'来源','visual_basis':'视觉依据','image_plan':'图片提示词项','production_split':'制作分工'}.items():
+                fields=canonical_fields(data.get('fields',{}))
+                for key,label in SHOT_FIELDS.items():
                     if key in data:fields[label]=data[key]
                 fields['来源']=data.get('source_excerpt') or fields.get('来源') or scene_code
-                if data.get('design_refs'):
+                if data.get('design_refs') and not fields.get('视觉依据'):
                     resolved={e['id']:e for e in state['entities']}
                     fields['视觉依据']='《视觉设定.md》·'+'；'.join(LABELS[resolved[i]['kind']]+'「'+resolved[i]['data']['name']+'」' for i in data['design_refs'] if i in resolved and resolved[i]['kind'] in LABELS)
-                body=render_paths('\n'.join(f'- {key}：{value}' for key,value in fields.items()),state,shot)
+                body=render_paths(render_fields(fields),state,shot)
                 source=data.get('source_text','')
-                prose='\n'.join(line for line in source.splitlines() if not re.match(r'^[-*]\s*[^：:\n]+[：:]',line))
-                storyboard.append(f"## {shot_code} · {data['name']}\n{body}\n{prose}")
+                prose=split_fields(source)[1]
+                storyboard.append(f"## {shot_code} · {data.get('name',shot_code)}\n{body}\n{prose}")
         (folder/'剧本.md').write_text('\n\n'.join(script)+'\n',encoding='utf8')
         (folder/'分镜.md').write_text(mapped('\n\n'.join(storyboard))+'\n',encoding='utf8')
         for doc in state['entities']:
@@ -182,7 +183,7 @@ def export_project(store,destination,mode='editable',episode=None):
                     seeds.add(data['path']);expected[data['path']]=data['sha256']
                 if entity['kind']=='episode' and data.get('film_path'):
                     seeds.add(data['film_path'])
-                    for name in ('project.json','bindings.json'):
+                    for name in ('project.json','bindings.json','managed-source.json'):
                         path=(Path(data['film_path']).parent/'.short-drama'/name).as_posix()
                         if io_path(inside(store.root,path)).is_file():seeds.add(path)
         for relative in dependencies(store.root,seeds):

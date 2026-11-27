@@ -252,7 +252,6 @@ def _prompt_with_reference_contract(
             or not may_control
             or not all(isinstance(item, str) and item.strip() for item in may_control)
             or not isinstance(must_not_control, list)
-            or not must_not_control
             or not all(isinstance(item, str) and item.strip() for item in must_not_control)
         ):
             raise ValueError("reference binding semantics are invalid")
@@ -271,24 +270,18 @@ def _prompt_with_reference_contract(
             "must": ", ".join(item.strip() for item in must_not_control),
         }
         if language.startswith("zh"):
-            instructions.append(
-                f"{zh_reference_prefix} "
-                + (
-                    "{reference}（{label}），用途 {role}。允许控制：{may}。"
-                    "不得控制：{must}。".format(**values)
-                )
-            )
+            instruction = (f"{zh_reference_prefix} " + "{reference}（{label}），用途 {role}。允许控制：{may}。".format(**values))
+            if must_not_control:
+                instruction += "不得控制：{must}。".format(**values)
         elif language.startswith("en"):
-            instructions.append(
-                "Reference {reference} ({label}), role {role}. May control: {may}. "
-                "Must not control: {must}.".format(**values)
-            )
+            instruction = "Reference {reference} ({label}), role {role}. May control: {may}.".format(**values)
+            if must_not_control:
+                instruction += " Must not control: {must}.".format(**values)
         else:
-            instructions.append(
-                "[REF {order} | {label} | {role}] [+] {may} [-] {must}".format(
-                    **values
-                )
-            )
+            instruction = "[REF {order} | {label} | {role}] [+] {may}".format(**values)
+            if must_not_control:
+                instruction += " [-] {must}".format(**values)
+        instructions.append(instruction)
     if language.startswith("zh"):
         heading = zh_heading
     elif language.startswith("en"):

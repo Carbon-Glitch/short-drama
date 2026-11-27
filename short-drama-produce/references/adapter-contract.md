@@ -5,6 +5,18 @@ source selector declares only image references and character voice references. I
 video for continuation. Keep that route unsubmitted until the source interface supports both actual
 video and tail-frame inputs; do not omit the source selector to bypass this boundary.
 
+## 从条目准备
+
+图片、视频与分镜关键帧可直接从当前正文准备任务：
+
+```text
+python scripts/production_tool.py prepare-entry <project> --source 剧集/EP001/视频提示词.md --entry MOTION-EP001-001 --adapter <profile> --output 剧集/EP001/制作成果/video/take-001.mp4
+```
+
+工具读取准确正文、参考顺序、音色、控制模式与时长，保存正式任务并返回确认预览。额外参数可用 `--parameters` 传 JSON，或用 `--parameters -` 从标准输入读取。后续 `confirm/run/status/collect` 沿用返回的 job_id。`prepare --job` 继续支持已有外部任务文件。
+
+导演台项目用 `director-desk/backend/cli.py generation-prepare --project <作品库项目目录> --entry <条目编号> --episode EP001 --adapter <profile>`；与界面共用当前实体、任务记录和提交预览。
+
 ## Job file
 
 ```json
@@ -50,7 +62,7 @@ video and tail-frame inputs; do not omit the source selector to bypass this boun
   equal its copyable prompt after Markdown quote markers are removed.
 - `reference_bindings`: zero to sixteen ordered semantic bindings. Every entry has
   `slot_id`, contiguous `order`, project-relative `path`, Chinese `label`,
-  non-empty `role`, and non-empty `may_control` / `must_not_control` lists. When
+  non-empty `role` and `may_control`; `must_not_control` is a list that may be empty. Do not manufacture exclusions when no actual reference conflict exists. Markdown may omit the `不得控制` clause or use `不得控制：无`; both compile to `[]`, and no exclusion sentence is emitted. When
   `source_entry` is present, these fields must exactly match that entry's
   `参考` (IMG) or `输入参考图` (SHOT/MOTION) declaration (except `role`, which is
   production metadata). Allowed and prohibited scopes may not overlap.
@@ -244,3 +256,7 @@ The audit deliberately returns `quality_verdict: not_assessed`. A provider succe
 retry recovery, file presence, size, or checksum proves execution/custody only; it
 does not prove identity, performance, continuity, lip-sync, mix, edit, or audience
 quality. Those claims require an authorized observation and a separate review.
+
+## Third-party workflow reference handoff
+
+At the actual transport boundary, compare the selected file/version and content hash with the upload receipt, final input field/node and prompt label. Do not infer that a role reached the service from its UI name or preparation metadata. If upload adaptation rewrites the prompt, order or inputs, check that final request and keep its task receipt with the existing production record. File-path/size-only caches do not establish unchanged content. These checks verify declarations and serialization, not remote media identity or visual/audio quality; inspect the returned result separately. Reuse current records rather than adding another ledger or approval queue.

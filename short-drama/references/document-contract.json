@@ -1,0 +1,108 @@
+{
+  "version": 2,
+  "shot_fields": {
+    "source_excerpt": "来源",
+    "duration": "时长",
+    "purpose": "目的",
+    "camera": "景别/机位",
+    "movement": "运镜",
+    "start": "起点",
+    "action": "动作与表演",
+    "end": "终点",
+    "sound": "声音",
+    "join": "接镜",
+    "visual_basis": "视觉依据",
+    "image_plan": "图片提示词项",
+    "production_split": "制作分工",
+    "input_reference_text": "输入参考图",
+    "design_intent": "设计承接",
+    "timing": "节拍安排",
+    "composition": "构图与焦点",
+    "reaction": "听者与反馈",
+    "sound_cues": "声画触发",
+    "lighting": "光色与材质",
+    "graphics": "文字与效果"
+  },
+  "aliases": {
+    "景别": "景别/机位",
+    "景别与机位": "景别/机位",
+    "动作": "动作与表演",
+    "动作描述": "动作与表演",
+    "起始状态": "起点",
+    "结束状态": "终点",
+    "镜长": "时长",
+    "唯一动作": "动作与表演"
+  },
+  "ready_fields": [
+    "source_excerpt",
+    "purpose",
+    "camera",
+    "movement",
+    "start",
+    "action",
+    "end",
+    "sound",
+    "duration"
+  ],
+  "documents": {
+    "剧本.md": "## EP001-SC001 内 · 地点 · 时间",
+    "视觉设定.md": "## 场面设计 · EP001-SC001",
+    "分镜.md": "## SHOT-EP001-001 · 镜头名",
+    "图片提示词.md": "## IMG-EXAMPLE · 图片名",
+    "视频提示词.md": "## MOTION-EP001-001 · 片段名"
+  },
+  "templates": {
+    "剧本.md": "# EP001 集名\n\n## EP001-SC001 内 · 地点 · 时间\n\n人物行动。\n\n角色（表演提示）：对白。\n",
+    "视觉设定.md": "# EP001 视觉设定\n\n## 体验设计\n- 观众入口：\n- 情感心脏：\n- 持续期待：\n\n## 视觉主张与影像风格\n\n## 场面设计 · EP001-SC001\n- 情绪节奏：\n- 信息与注意：\n- 调度设计：\n- 设计重点：\n- 声音重点：\n- 出入状态：\n\n## 人物 · 角色名\n- 识别锚点：\n- 本集造型：\n\n## 地点 · 地点名\n- 空间：\n- 光态：\n\n## 资产实现\n",
+    "分镜.md": "# EP001 分镜\n\n## 场景站位 · EP001-SC001\n- 固定锚点：\n- 共用光影：\n- 生成安排：\n\n## SHOT-EP001-001 · 镜头名\n- 来源：\n- 时长：\n- 目的：\n- 景别/机位：\n- 运镜：\n- 起点：\n- 动作与表演：\n- 终点：\n- 声音：\n- 接镜：\n- 视觉依据：\n- 图片提示词项：\n- 制作分工：\n- 输入参考图：\n- 设计承接：\n- 节拍安排：\n- 构图与焦点：\n- 听者与反馈：\n- 声画触发：\n- 光色与材质：\n- 文字与效果：\n",
+    "图片提示词.md": "# EP001 图片提示词\n\n## IMG-EXAMPLE · 图片名\n- 设计承接：\n- 视觉依据：\n- 用途：\n- 参考：无外部参考\n\n### 可复制提示词\n> 图片正文\n",
+    "视频提示词.md": "# EP001 视频提示词\n\n## MOTION-EP001-001 · 片段名\n- 分镜：SHOT-EP001-001\n- 输入参考图：\n- 参考音频：无\n\n### 可复制提示词\n> 按目标模型方言编写正文\n"
+  },
+  "shot_groups": [
+    {
+      "id": "story",
+      "label": "观看与表演",
+      "fields": [
+        "source_excerpt",
+        "design_intent",
+        "purpose",
+        "duration",
+        "timing",
+        "start",
+        "action",
+        "reaction",
+        "end"
+      ]
+    },
+    {
+      "id": "camera",
+      "label": "摄影与光影",
+      "fields": [
+        "camera",
+        "composition",
+        "movement",
+        "lighting"
+      ]
+    },
+    {
+      "id": "sound",
+      "label": "声音与文字",
+      "fields": [
+        "sound",
+        "sound_cues",
+        "graphics",
+        "join"
+      ]
+    },
+    {
+      "id": "production",
+      "label": "参考与制作",
+      "fields": [
+        "visual_basis",
+        "image_plan",
+        "input_reference_text",
+        "production_split"
+      ]
+    }
+  ]
+}

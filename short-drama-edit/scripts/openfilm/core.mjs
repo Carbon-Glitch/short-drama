@@ -228,7 +228,7 @@ export async function state(root,{issues=null}={}){
     source:clip.time,speed:clip.speed||1,locked:!!track.locked,disabled:!!clip.disabled,attrs:clip.attrs||{}}));
   const documents=[];
   for(const name of ['剧本.md','视觉设定.md','分镜.md','图片提示词.md','视频提示词.md']){
-    try{const text=await readFile(join(current.root,name),'utf8');documents.push({name,text,revision:hash(text)});}catch(e){if(e.code!=='ENOENT')throw e;}
+    try{const text=await readFile(join(current.root,name),'utf8');documents.push({name,text,revision:hash(text),editable:!existsSync(join(current.root,'.short-drama/managed-source.json'))});}catch(e){if(e.code!=='ENOENT')throw e;}
   }
   let projectRoot=current.root;
   while(!existsSync(join(projectRoot,'short-drama.json'))&&dirname(projectRoot)!==projectRoot)projectRoot=dirname(projectRoot);
@@ -266,6 +266,7 @@ export async function report(root,value){
 }
 
 export async function updateDocument(root,name,text,revision){
+  if(existsSync(join(root,'.short-drama/managed-source.json')))throw Error('前期文档由导演台维护，请回导演台修改；剪辑时间线继续在此编辑');
   if(!['剧本.md','视觉设定.md','分镜.md','图片提示词.md','视频提示词.md'].includes(name))throw Error('Choose an existing creative document');
   const file=join(root,name);const current=await readFile(file,'utf8').catch(()=> '');
   if(revision&&hash(current)!==revision)throw Error('Document changed; read its current content');

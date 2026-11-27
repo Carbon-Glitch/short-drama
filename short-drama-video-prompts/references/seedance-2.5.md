@@ -62,7 +62,7 @@ metadata_reviewed_at: 2026-11-24
 [官方接口契约] 提示词意图必须与 job 的 omni_reference_task_type 一致；参数依据[2.5官方说明](https://docs.byteplus.com/en/docs/ModelArk/seedance-2-5)：
 reference：基于素材生成新视频，写“参考 @视频1 的运镜/动作”或具体素材职责。
 edit：直接点名 @视频1，写“保留 A、B，只修改 C”；API 参数为 ratio: adaptive、duration: -1。极其适合在保住好表演和好运镜的前提下，定向升级局部灯光氛围、道具颜色、背景冷暖或微调情绪，避免整段推倒重抽。
-extend：写“在 @视频1 的基础上续写 N 秒”，从实际终点描述唯一动作和新终点；API 使用 ratio: adaptive。
+extend：写“在 @视频1 的基础上续写 N 秒”，从实际终点描述后续动作过程和新终点；API 使用 ratio: adaptive。
 连续创作可另绑实际尾帧为 @图片1，只控制新段开场。需要无缝接下去时可优先试延长，实际接缝仍须观察；
 记录见[OBS-SD25-EXTEND](model-observations.md#obs-sd25-extend)。
 提示词与 job 的任务类型不一致时可能报不匹配；任务类型是创作选择，不由 adapter 猜。
